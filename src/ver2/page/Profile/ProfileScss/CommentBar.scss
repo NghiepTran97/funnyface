@@ -1,0 +1,112 @@
+.comment-bar {
+    width: 302px;
+    height: 679px;
+    gap: 20px;
+    p {
+        font-family: 'Quicksand';
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 30px;
+        text-align: left;
+    }
+    .comment-item-group {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        .comment-items {
+            display: flex;
+            padding: 4px 0 4px 8px;
+            gap: 4px;
+            .box-comments {
+                flex: 1;
+                display: flex;
+                gap: 8px;
+                .avatar-users-box {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                    }
+                }
+                .group-content-comment {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    h2 {
+                        font-family: 'Quicksand';
+                        font-size: 14px;
+                        font-weight: 700;
+                        line-height: 18px;
+                        text-align: left;
+                    }
+                    p {
+                        font-family: 'Quicksand';
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 18px;
+                        text-align: left;
+                        height: 35px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    .times {
+                        font-family: 'Quicksand';
+                        font-size: 12px;
+                        font-weight: 500;
+                        line-height: 15px;
+                        text-align: left;
+                        color: #696969;
+                    }
+                }
+            }
+            .box-more {
+                width: 24px;
+                height: 24px;
+                
+            }
+        }
+        .pagination-comments {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            .prev, .next {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                color: #000;
+                background-color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .icon-btn-change {
+                    font-size: 18px;
+                }
+            }
+            .pagination-page {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                font-family: 'Quicksand';
+                font-size: 18px;
+                font-weight: 700;
+                line-height: 23px;
+                text-align: left;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .active-page {
+                background-color: #1DB954;
+            }
+            .not-active {
+                background-color: #333333;
+            }
+        }
+    }
+}

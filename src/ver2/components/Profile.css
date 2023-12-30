@@ -1,0 +1,50 @@
+.line {
+    left: 10%;
+    right: 10%;
+    border-bottom: 1px solid #C6C6C6;
+}
+.event {
+    width: 1100px;
+}
+.input_name {
+    height: 52px;
+    margin-bottom: 12px;
+}
+.input_name input {
+    height: 100%;
+    padding: 12px;
+    outline: none;
+}
+.btn {
+    height: 62px;
+    font-size: 24px;
+}
+.header_profile {
+    margin: 0 auto;
+    
+}
+.btn_close {
+    position: absolute;
+    font-size: 24px;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.time_btn {
+    display: flex;
+    flex-direction: column-reverse;
+    padding-bottom: 20px;
+}
+
+@media screen and (max-width:1920px) {
+    .wrapper-body {
+        width: 1195px;
+    }
+}
+@media screen and (max-width:2132px) {
+    .wrapper-body {
+        margin: 0 auto !important;
+        width: 100%;
+    }
+}

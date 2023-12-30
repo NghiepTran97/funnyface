@@ -1,0 +1,110 @@
+.profile-body {
+    background-color: #191919;
+    width: 1031px;
+    margin-left: 20px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    .cover {
+        position: relative;
+        .update-image-box {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-25%);
+            background-color: #343434;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            p {
+                color: #fff;
+                font-family: 'Quicksand';
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 20px;
+                text-align: left;
+                
+            }
+        }
+        .change-cover-box {
+            position: absolute;
+            bottom: 8px;
+            right: 20px;
+            background-color: #484848;
+            border-radius: 8px;
+            padding: 4px;
+            gap: 4px;
+            p {
+                color: #fff;
+                font-family: 'Quicksand';
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 20px;
+                text-align: left;
+            }
+        }
+    }
+    .information-profile {
+        padding: 0 24px;
+        
+        .information-profile-box {
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            gap: 9px;
+            border-bottom: 0.5px solid #c6c6c6;
+            padding-bottom: 9px;
+            .information {
+                display: flex;
+                justify-content: space-between;
+                p {
+                    font-family: 'Quicksand';
+                    font-size: 24px;
+                    font-weight: 700;
+                    line-height: 30px;
+                    text-align: left;
+                }
+                .setting {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    button {
+                        border-radius: 16px;
+                        background-color: #fff;
+                        color: #000;
+                        font-family: 'Quicksand';
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 20px;
+                        text-align: left;
+                        padding: 10px 40px;
+                    }
+                }
+            }
+            .interraction {
+                display: flex;
+                gap: 48px;
+                .interraction-items {
+                    display: flex;
+                    gap: 8px;
+                    font-family: 'Quicksand';
+                    font-size: 20px;
+                    line-height: 25px;
+                    text-align: left;
+                    p {
+                        font-weight: 700;
+                    }
+                    span {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}
