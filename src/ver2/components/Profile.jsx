@@ -11,12 +11,13 @@ import img2 from '../components/image/Rectangle4958.png'
 import EventListProfile from './EventListProfile'
 import HistoryCommentList from './HistoryCommentList'
 import ManagerAcount from './ManagerAcount'
+import {useForm} from 'react-hook-form'
 
 export default function Profile() {
   const { id } = useParams()
   const user = JSON.parse(localStorage.getItem('user-info'))
   const token = user?.token
-
+ 
   const userId = id || user?.id_user
 
   const [data, setData] = useState([])
@@ -25,6 +26,7 @@ export default function Profile() {
   const [showModals, setShowModals] = React.useState(false)
   const [showModals22, setShowModals22] = React.useState(false)
   const [imgdata, setImgData] = useState(false)
+  const [showChangeCover, setShowChangeCover] = React.useState(false)
 
   const [showManagerAccount, setShowManagerAccount] = React.useState(false)
 
@@ -97,6 +99,9 @@ export default function Profile() {
       console.log(error)
     }
   }
+  const handleChangeCover = () => {
+    setShowChangeCover(true)
+  }
 
   const openModals = () => {
     setShowModals(true)
@@ -129,6 +134,21 @@ export default function Profile() {
   };
   const handleUploadImage = () => {
     inputRef.current.click();
+  };
+  //changeCover
+  const inputRefCover = useRef(null);
+  const handleFileChangeCover = (event) => {
+    const selectedFileCover = event.target.files[0];
+    if (selectedFileCover) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        document.getElementById('imagePreviewCover').src = reader.result;
+      };
+      reader.readAsDataURL(selectedFileCover);
+    }
+  };
+  const handleUploadImageCover = () => {
+    inputRefCover.current.click();
   };
   // Check height
   const y = window.innerHeight
@@ -415,6 +435,11 @@ export default function Profile() {
       setIsLoading(false)
     }
   }
+  //saveeditprofile
+  const saveEditProfile = async() => {
+    handlePickAvatar();
+    handleUploadAvatar();
+  }
 
   // ---- END
 
@@ -488,7 +513,38 @@ export default function Profile() {
             className=" absolute bottom-10 left-20 lg:ml-1 ml-40 lg:w-[130px] lg:h-[130px] w-[160px] h-[160px] border border-white rounded-full object-cover"
             alt=""
           />
+          <div className='editcover' onClick={() => handleChangeCover()}>
+            <img src='./images/profile/camera.png'/>
+            <span>Change cover</span>
+          </div>
         </div>
+
+        {showChangeCover ? (
+          <div className='changecover'>
+            <div className='title'>
+              <h1>Change Cover</h1>
+              <div>
+                <img src='./images/profile/vector.png' className='' onClick={() => setShowChangeCover(false)}/>
+              </div>
+            </div>
+            <div className='change-group'>
+              <img
+                onClick={handleUploadImageCover}
+                id="imagePreviewCover"
+                alt=""
+              />
+              <button className='bg-success'>Save</button>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChangeCover}
+                ref={inputRefCover}
+                style={{ display: 'none' }}
+              />
+            </div>
+          </div>
+        ) : null}
+        
         {setIsLoading ? renderLoading() : null}
         <div className="line border-[#C6C6C6]">
           <div className="flex mt-12 container wrapper">
@@ -589,7 +645,7 @@ export default function Profile() {
                                   Upload image
                                 </button>
                                 <button
-                                  // onClick={() => openModals()}
+                                  onClick={() => saveEditProfile()}
                                   className="w-1/2 ml-2 text-white rounded-lg bg-lime-500 btn shadow-gray-500"
                                 >
                                   Save
