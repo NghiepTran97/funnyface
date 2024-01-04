@@ -6,12 +6,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../css/AddEvent.css";
 import RenderRandomWaitImage from "../../../components/randomImages";
-import "./MyVideo.css";
+import "./MyImage.css";
 
-import { VideoItem } from "../../../components/VideoItem/VideoItem";
+import { ImageItem } from "../../../components/ImageItem/ImageItem";
 import Header from "../../../components/Header/Header";
 
-function MyVideo() {
+function MyImage() {
   const [isLoading, setIsLoading] = useState(false);
   const [randomImages, setRandomImages] = useState(null);
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
@@ -52,10 +52,10 @@ function MyVideo() {
   }
 
   //
-  const [videos, setVideos] = useState([]);
+  const [images, setImages] = useState([]);
   const [count, setCount] = useState(1);
 
-  const getVideos = async () => {
+  const getImages = async () => {
     const { data, status } = await axios.get(
       `https://metatechvn.store/lovehistory/video/${count}`,
       {
@@ -72,12 +72,12 @@ function MyVideo() {
     }
 
     if (status === 200) {
-      setVideos(data.list_sukien_video);
+      setImages(data.list_sukien_video);
     }
   };
 
   useEffect(() => {
-    getVideos();
+    getImages();
   }, [count, token]);
 
   const renderLoading = () => {
@@ -110,19 +110,19 @@ function MyVideo() {
         }}
       />
 
-      <div className="my-video">
+      <div className="my-image">
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
         {isLoading ? renderLoading() : ""}
 
-        <div className="my-video-container">
-          {videos &&
-            videos.map((video) => (
-              <VideoItem
-                {...video.sukien_video[0]}
-                type="video swap"
-                key={video.id_video}
+        <div className="my-image-container">
+          {images &&
+            images.map((image) => (
+              <ImageItem
+                {...image.sukien_image[0]}
+                type="image swap"
+                key={image.id_video}
               />
             ))}
         </div>
@@ -210,4 +210,4 @@ function MyVideo() {
   );
 }
 
-export default MyVideo;
+export default MyImage;

@@ -17,31 +17,31 @@ import anh5 from "../../ver2/components/image/anhlogin5.png";
 
 function ListImgs() {
   return (
-    <div className="flex gap-[10px] mb-[20px]">
+    <div className="overflow-x-scroll flex gap-[10px] mb-[20px] justify-center">
       <img
         src={anh1}
         alt="image"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[150px]"
+        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
       <img
         src={anh2}
         alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[150px]"
+        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
       <img
         src={anh3}
         alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[150px]"
+        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
       <img
         src={anh4}
         alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[150px]"
+        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
       <img
         src={anh5}
         alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[150px]"
+        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
     </div>
   );
@@ -185,7 +185,7 @@ export default function Register() {
         accept="image/*"
         onChange={handleUploadImgChange}
       />
-      <div className="h-screen   slab lg:flex lg:items-center">
+      <div className="h-screen slab lg:flex lg:items-center">
         <div className="w-[60%] h-[100%] lg:block hidden bg-[#D9D9D9]"></div>
 
         <div className="w-[40%] h-[100%] absolute right-0 top-0">
@@ -452,7 +452,7 @@ export default function Register() {
       </div>
       {showModal && (
         <div
-          className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50"
+          className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 px-12"
           onClick={setOpenUploadModal}
         >
           <div
