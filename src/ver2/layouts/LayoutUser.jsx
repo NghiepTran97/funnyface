@@ -1,14 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router'
 import SideBar from '../components/SideBar'
 import '../css/Layout.css'
+import {useDispatch, useSelector} from "react-redux";
+import { updateAuthUser } from '../../auth/authSlice';
+import profileApi from '../../api/profile';
+
 const LayoutUser = () => {
+  
+
   const [width, setWidth] = useState('315px')
   
   const getWidthSideBar = (data) => {
     setWidth(data)
   }
-
 
   return (
     <>

@@ -21,6 +21,16 @@ export default function Profile() {
   const userId = id || user?.id_user
 
   const [data, setData] = useState([])
+  const [urlAvatar, setUrlAvatar] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+  } = useForm({
+    defaultValues: {
+      name: '',
+    }
+  })
   // const [userName, setUserName] = useState([]);
   const [showModal, setShowModal] = React.useState(false)
   const [showModals, setShowModals] = React.useState(false)
@@ -34,6 +44,7 @@ export default function Profile() {
     setData({ ...data, user_name: value })
   }
   console.log(data);
+  console.log(data.link_avatar);
   // const [showEvent, setShowEvent] = React.useState(false);
   const [listEvent, setListEvent] = useState([])
 
@@ -71,7 +82,7 @@ export default function Profile() {
         }
       )
       setImgData(data.list_img)
-      console.log(imgdata)
+      console.log(data.link_avatar)
     } catch (error) {
       console.error('Error fetching data:', error)
       // alert("Server error getList 8-12 images");
@@ -121,6 +132,20 @@ export default function Profile() {
     setShowModal(false)
   }
   //uploadimage
+  {/*const inputRef = useRef(null);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        document.getElementById('imagePreview').src = reader.result;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+  const handleUploadImage = () => {
+    inputRef.current.click();
+  };*/}
   const inputRef = useRef(null);
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -224,7 +249,7 @@ export default function Profile() {
     setImgError([])
     setImageVerify([])
   }
-
+  
   const onChangeImage = async (event) => {
     const files = event.target.files
     if (files.length < 8) {
@@ -436,9 +461,12 @@ export default function Profile() {
     }
   }
   //saveeditprofile
-  const saveEditProfile = async() => {
+  {/*const saveEditProfile = async() => {
     handlePickAvatar();
     handleUploadAvatar();
+  }*/}
+  const update = async () => {
+
   }
 
   // ---- END
@@ -458,7 +486,7 @@ export default function Profile() {
     }
   }
   const nic = listEvent
-  console.log(nic)
+  
   // --- END
 
   useEffect(() => {
@@ -514,7 +542,9 @@ export default function Profile() {
             alt=""
           />
           <div className='editcover' onClick={() => handleChangeCover()}>
-            <img src='./images/profile/camera.png'/>
+            <div>
+              <img src='./images/profile/camera.png'/>
+            </div>
             <span>Change cover</span>
           </div>
         </div>
@@ -584,7 +614,9 @@ export default function Profile() {
               )}
               {showModal ? (
                 <>
-                  <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+                  <form className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+                    onSubmit={handleSubmit(update)}
+                  >
                     <div className="relative lg:w-[1000px] h-[600px] mt-60 max-w-3xl">
                       <div className="border-0 w-[672px] h-[303px] rounded-lg shadow-lg relative bg-[#323232] outline-none focus:outline-none">
                         <div className="relative flex-auto p-6">
@@ -619,7 +651,7 @@ export default function Profile() {
                                 id="imagePreview"
                                 alt=""
                                 src={
-                                  data.link_avatar == '1'
+                                  data.link_avatar ===1
                                     ? 'https://i.ibb.co/WHmrzPt/106287976-917734608745320-4594528301123064306-n.jpg'
                                     : data.link_avatar
                                 }
@@ -645,7 +677,7 @@ export default function Profile() {
                                   Upload image
                                 </button>
                                 <button
-                                  onClick={() => saveEditProfile()}
+                                  //onClick={() => saveEditProfile()}
                                   className="w-1/2 ml-2 text-white rounded-lg bg-lime-500 btn shadow-gray-500"
                                 >
                                   Save
@@ -654,8 +686,11 @@ export default function Profile() {
                                   type="file"
                                   accept="image/*"
                                   onChange={handleFileChange}
-                                  ref={inputRef}
                                   style={{ display: 'none' }}
+                                  ref={inputRef}
+                                  {...register ('images', {
+                                  
+                                  })}
                                 />
                               </div>
                               {/*{showModals ? (
@@ -787,7 +822,7 @@ export default function Profile() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </form>
                   <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
                 </>
               ) : null}

@@ -61,8 +61,6 @@ const HistoryCommentList = (props) => {
     );
   }
   const dataSort = datas;
-  console.log(dataSort);
-  console.log(dataSort.id_toan_bo_su_kien);
 
   const deleteComment = async (idComment) => {
     try {
