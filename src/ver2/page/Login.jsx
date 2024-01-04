@@ -21,7 +21,7 @@ export default function Login() {
   const [email_or_username, usernameupdate] = useState("");
   const [password, passwordupdate] = useState("");
   const [loading, isLoading] = useState(false);
-  
+
   const [rememberMe, setRememberMe] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const handleClick = () => {
@@ -38,7 +38,7 @@ export default function Login() {
         toast.error(rep.data.message);
       } else {
         navigate("/");
-        // toast.success("Login success")
+        toast.success("Login success");
         window.location.reload();
         rep.data = JSON.stringify(rep.data);
         localStorage.setItem("user-info", rep.data);
@@ -64,9 +64,6 @@ export default function Login() {
   const forgot = () => {
     navigate("/forgot");
   };
-  
-
-  
 
   const ProceedLogin = async (e) => {
     e.preventDefault();
@@ -78,7 +75,7 @@ export default function Login() {
       try {
         const response = await axios.post(
           "https://metatechvn.store/login",
-          formData,
+          formData
         );
         if (response.data.message) {
           toast.error(response.data.message);
@@ -97,8 +94,6 @@ export default function Login() {
       }
     }
   };
-
-  
 
   // const showReset = () => {
   //   setReset(true);
@@ -122,13 +117,17 @@ export default function Login() {
     if (email_or_username === "" || email_or_username === null) {
       result = false;
       // toast.warning("Please Enter Username");
-      window.document.querySelector(".err_message").innerHTML = "You did some thing wrong!"
-      window.document.querySelector(".border_input").style.border = "1px solid #F03E3E"
+      window.document.querySelector(".err_message").innerHTML =
+        "You did some thing wrong!";
+      window.document.querySelector(".border_input").style.border =
+        "1px solid #F03E3E";
     }
     if (password === "" || password === null) {
       result = false;
-      window.document.querySelector(".err_pass_message").innerHTML = "You did some thing wrong!"
-      window.document.querySelector(".border_pass").style.border = "1px solid #F03E3E"
+      window.document.querySelector(".err_pass_message").innerHTML =
+        "You did some thing wrong!";
+      window.document.querySelector(".border_pass").style.border =
+        "1px solid #F03E3E";
     }
     return result;
   };
@@ -221,7 +220,7 @@ export default function Login() {
                             className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
                             onChange={(e) => usernameupdate(e.target.value)}
                           />
-                        </div>                       
+                        </div>
                       </div>
                       <div className="text-[#F03E3E] mt-2 ml-6 text-xl err_message"></div>
                       <div className="border_pass">
@@ -268,7 +267,10 @@ export default function Login() {
                           className="text-3xl text-white mr-4 cursor-pointer"
                         />
                         <span className="text-3xl text-white">Remember me</span>
-                        <b className="text-xl text-green-400 mb-3 ml-auto cursor-pointer" onClick={forgot}>
+                        <b
+                          className="text-xl text-green-400 mb-3 ml-auto cursor-pointer"
+                          onClick={forgot}
+                        >
                           Forgot password?
                         </b>
                       </div>
@@ -280,7 +282,7 @@ export default function Login() {
                         className=" rounded-lg mr-[16px] w-[450px] h-[35px] text-white text-4xl bg-[#1DB954]"
                         disabled={loading}
                       >
-                        {loading ? 'Loading...' : 'Log in'}
+                        {loading ? "Loading..." : "Log in"}
                       </button>
                       {/* <p className="text-3xl text-white mt-12">
                       Do you want to{" "}
@@ -376,8 +378,15 @@ export default function Login() {
               </div>
             </form>
             <div className="flex mt-5 w-full m-auto mx-auto justify-center">
-              <div className="text-[#6F767E] text-2xl mr-2">Don’t have an account?</div>
-              <div className="text-[#1DB954] text-2xl cursor-pointer" onClick={redirect}>Sign up</div>
+              <div className="text-[#6F767E] text-2xl mr-2">
+                Don’t have an account?
+              </div>
+              <div
+                className="text-[#1DB954] text-2xl cursor-pointer"
+                onClick={redirect}
+              >
+                Sign up
+              </div>
             </div>
           </div>
         </div>
