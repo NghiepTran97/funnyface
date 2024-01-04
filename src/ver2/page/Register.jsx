@@ -176,7 +176,6 @@ export default function Register() {
 
   return (
     <div>
-      <Loading status={isLoading} />
       <label htmlFor={inputId} ref={labelRef} className="d-none" />
       <input
         id={inputId}
@@ -227,7 +226,7 @@ export default function Register() {
                           </div>
                         </div>
                       ) : (
-                        <div className=" justify-center w-[120px] h-[120px] rounded-full bg-[#343434] items-center">
+                        <div className="flex justify-center w-[120px] h-[120px] rounded-full bg-[#343434] items-center">
                           <div
                             alt=""
                             className="flex flex-col justify-center items-center cursor-pointer"
@@ -239,7 +238,6 @@ export default function Register() {
                               viewBox="0 0 36 36"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className="mt-9"
                             >
                               <path
                                 d="M27 9C26.085 9 25.245 8.475 24.825 7.665L23.745 5.49C23.055 4.125 21.255 3 19.725 3H16.29C14.745 3 12.945 4.125 12.255 5.49L11.175 7.665C10.755 8.475 9.91501 9 9.00001 9C5.74501 9 3.16501 11.745 3.37501 14.985L4.15501 27.375C4.33501 30.465 6.00001 33 10.14 33H25.86C30 33 31.65 30.465 31.845 27.375L32.625 14.985C32.835 11.745 30.255 9 27 9ZM15.75 10.875H20.25C20.865 10.875 21.375 11.385 21.375 12C21.375 12.615 20.865 13.125 20.25 13.125H15.75C15.135 13.125 14.625 12.615 14.625 12C14.625 11.385 15.135 10.875 15.75 10.875ZM18 27.18C15.21 27.18 12.93 24.915 12.93 22.11C12.93 19.305 15.195 17.04 18 17.04C20.805 17.04 23.07 19.305 23.07 22.11C23.07 24.915 20.79 27.18 18 27.18Z"
@@ -253,56 +251,7 @@ export default function Register() {
                           </div>
                         </div>
                       )}
-                      {showModal && (
-                        <div
-                          className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none px-12"
-                          onClick={setOpenUploadModal}
-                        >
-                          <div
-                            className="flex flex-col justify-center items-center rounded-lg px-8 py-8 text-white shadow-lg bg-[#323232] text-5xl relative"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <div className="flex">
-                              <span>Upload image</span>
-                              <div
-                                className="flex justify-center items-center text-2xl bg-white rounded-full text-black cursor-pointer absolute top-6 right-6 px-3 py-2"
-                                onClick={setOpenUploadModal}
-                              >
-                                x
-                              </div>
-                            </div>
 
-                            <div className="flex flex-col gap-4">
-                              <div className="flex gap-2 items-center">
-                                <FaCircleCheck className="text-green-600 text-4xl" />
-                                <span>Good photos</span>
-                              </div>
-                              <span className="text-3xl text-wrap">
-                                Close-up selfies, same subject, variety of
-                                background, expressions and face angles
-                              </span>
-                              <ListImgs />
-                              <div className="flex gap-2 items-center">
-                                <IoIosCloseCircle className="text-red-600" />
-                                <span>Bad photos</span>
-                              </div>
-                              <span className="text-3xl text-wrap">
-                                Group pics, face small or not visible, sunglass,
-                                animal
-                              </span>
-                              <ListImgs />
-                            </div>
-
-                            <button
-                              type="button"
-                              className="text-3xl px-8 py-4 bg-[#1DB954] rounded-lg"
-                              onClick={handleUploadImg}
-                            >
-                              Upload image
-                            </button>
-                          </div>
-                        </div>
-                      )}
                       <div className="border_input ">
                         <div className="input_login flex justify-items-center items-center">
                           <FaUser className="text-white text-2xl items-start mr-2" />
@@ -501,6 +450,56 @@ export default function Register() {
           </div>
         </div>
       </div>
+      {showModal && (
+        <div
+          className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50"
+          onClick={setOpenUploadModal}
+        >
+          <div
+            className="flex flex-col justify-center items-center rounded-lg px-8 py-8 text-white opacity-100 bg-[#323232] text-5xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex">
+              <span>Upload image</span>
+              <div
+                className="flex justify-center items-center text-2xl bg-white rounded-full text-black cursor-pointer absolute top-6 right-6 px-3 py-2"
+                onClick={setOpenUploadModal}
+              >
+                x
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-2 items-center">
+                <FaCircleCheck className="text-green-600 text-4xl" />
+                <span>Good photos</span>
+              </div>
+              <span className="text-3xl text-wrap">
+                Close-up selfies, same subject, variety of background,
+                expressions and face angles
+              </span>
+              <ListImgs />
+              <div className="flex gap-2 items-center">
+                <IoIosCloseCircle className="text-red-600" />
+                <span>Bad photos</span>
+              </div>
+              <span className="text-3xl text-wrap">
+                Group pics, face small or not visible, sunglass, animal
+              </span>
+              <ListImgs />
+            </div>
+
+            <button
+              type="button"
+              className="text-3xl px-8 py-4 bg-[#1DB954] rounded-lg"
+              onClick={handleUploadImg}
+            >
+              Upload image
+            </button>
+          </div>
+        </div>
+      )}
+      <Loading status={isLoading} />
     </div>
   );
 }
