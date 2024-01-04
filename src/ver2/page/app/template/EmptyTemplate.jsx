@@ -6,11 +6,11 @@ import { toast } from "react-toastify";
 function EmptyTemplate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
-  const [eventName, setEventName] = useState('');
-  const [eventContent, setEventContent] = useState('');
-  const [nameMale, setNameMale] = useState('');
-  const [nameFemale, setNameFemale] = useState('');
-  const [imageLink, setImageLink] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [eventContent, setEventContent] = useState("");
+  const [nameMale, setNameMale] = useState("");
+  const [nameFemale, setNameFemale] = useState("");
+  const [imageLink, setImageLink] = useState("");
   const { id } = useParams();
   const user = JSON.parse(localStorage.getItem("user-info"));
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
@@ -30,9 +30,8 @@ function EmptyTemplate() {
       // Tạo URL cho ảnh đã chọn
       const imageUrl = URL.createObjectURL(selectedImage);
       setImageSrc(imageUrl);
-      
     }
-    console.log(selectedImage)
+    console.log(selectedImage);
   };
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -41,37 +40,38 @@ function EmptyTemplate() {
       noidung_su_kien: eventContent,
       ten_nam: nameMale,
       ten_nu: nameFemale,
-      link_img:"https://www.thegioididong.com/game-app/facebook-mang-xa-hoi-pho-bien-nhat-219963",
-      link_video:null,
-      id_template:1,
-      id_user:9,
-      device_them_su_kien:"iphone",
-      ip_them_su_kien:"11111111"
+      link_img:
+        "https://www.thegioididong.com/game-app/facebook-mang-xa-hoi-pho-bien-nhat-219963",
+      link_video: null,
+      id_template: 1,
+      id_user: 9,
+      device_them_su_kien: "iphone",
+      ip_them_su_kien: "11111111",
     };
-    console.log(eventData)
-    
-  
+    console.log(eventData);
+
     try {
-      const response = await fetch(`https://sakaivn.online/lovehistory/add/${id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(eventData),
-      });
-      console.log(response)
+      const response = await fetch(
+        `https://sakaivn.online/lovehistory/add/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(eventData),
+        }
+      );
+      console.log(response);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       closeModal();
     } catch (error) {
-      console.error('Error posting data:', error);
+      console.error("Error posting data:", error);
     }
   };
-  
-
 
   return (
     <div
@@ -104,7 +104,6 @@ function EmptyTemplate() {
 
       {/* Modal */}
       {isModalOpen && (
-
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-20 ">
           <div className=" p-8 rounded-lg shadow-lg w-[80%] max-w-[90%] h-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-300">
             <button
@@ -115,7 +114,9 @@ function EmptyTemplate() {
             </button>
             <h2 className="text-2xl font-bold mb-4 text-center">Add Event</h2>
             <div className="text-center">
-              <label className="block mb-2 text-2xl text-left ml-[10%]">Name Event:</label>
+              <label className="block mb-2 text-2xl text-left ml-[10%]">
+                Name Event:
+              </label>
               <input
                 type="text"
                 id="eventNameInput"
@@ -123,7 +124,9 @@ function EmptyTemplate() {
                 onChange={(e) => setEventName(e.target.value)}
                 className="border rounded p-3 w-[80%] justify-center"
               />
-              <label className="block mb-2 text-2xl text-left ml-[10%]">Noi dung event</label>
+              <label className="block mb-2 text-2xl text-left ml-[10%]">
+                Noi dung event
+              </label>
               <textarea
                 type="text"
                 id="eventContentInput"
@@ -133,7 +136,6 @@ function EmptyTemplate() {
               />
             </div>
             <div className="flex flex-row mt-10 w-full h-[30%]">
-
               <div className="col-4 text-center justify-center items-center mt-20 ">
                 Male
                 <input
@@ -147,7 +149,10 @@ function EmptyTemplate() {
               <div className="col-4 text-center mt-10">
                 <div className="flex justify-center">
                   <div className="relative w-72 h-72">
-                    <label htmlFor="imageInput" className="block w-full h-full cursor-pointer">
+                    <label
+                      htmlFor="imageInput"
+                      className="block w-full h-full cursor-pointer"
+                    >
                       <input
                         type="file"
                         id="imageInput"
@@ -157,10 +162,18 @@ function EmptyTemplate() {
                       />
                       {/* Hiển thị khung tròn bọc ngoài */}
                       <div className="absolute inset-0 bg-cover bg-center rounded-full hover:bg-opacity-20 transition-all duration-300">
-                        <div className="w-full h-full bg-cover bg-center rounded-full" style={{ backgroundImage: `url(${tron1})` }}></div>
+                        <div
+                          className="w-full h-full bg-cover bg-center rounded-full"
+                          style={{ backgroundImage: `url(${tron1})` }}
+                        ></div>
                       </div>
                       {/* Hiển thị ảnh chọn hoặc mặc định */}
-                      <div className="absolute inset-0 bg-cover bg-center rounded-full" style={{ backgroundImage: `url(${imageSrc || "about:blank"})` }}></div>
+                      <div
+                        className="absolute inset-0 bg-cover bg-center rounded-full"
+                        style={{
+                          backgroundImage: `url(${imageSrc || "about:blank"})`,
+                        }}
+                      ></div>
                     </label>
                   </div>
                 </div>
@@ -176,7 +189,9 @@ function EmptyTemplate() {
                 />
               </div>
             </div>
-            <div className="flex justify-center"> {/* Wrap the button with a flex container */}
+            <div className="flex justify-center">
+              {" "}
+              {/* Wrap the button with a flex container */}
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded items-center"
                 onClick={handleFormSubmit}
@@ -186,9 +201,8 @@ function EmptyTemplate() {
             </div>
           </div>
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 

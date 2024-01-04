@@ -11,11 +11,11 @@ import RenderRandomWaitImage from "../../../components/randomImages";
 
 import add from "../../../components/image/add.png";
 import pen from "../../../components/image/edit-2.png";
-import "./MakeVideo.css";
+import "./MakeImage.css";
 import Swal from "sweetalert2";
 import Header from "../../../components/Header/Header";
 
-function MakeVideo() {
+function MakeImage() {
   const [image1, setImage1] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showImg, setShowImg] = useState({ img1: null });
@@ -135,7 +135,7 @@ function MakeVideo() {
     }
   };
 
-  const [tenVideo, setTenVideo] = useState();
+  const [tenImage, setTenImage] = useState();
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
@@ -175,8 +175,8 @@ function MakeVideo() {
   };
 
   const fetchData = async () => {
-    if (!tenVideo.trim() || !showImg.img1) {
-      toast.warning("Enter Name Video!");
+    if (!tenImage.trim() || !showImg.img1) {
+      toast.warning("Enter Name Image!");
       return;
     }
 
@@ -185,7 +185,7 @@ function MakeVideo() {
       const device = await getMyDetailUser();
 
       const response = await axios.get(
-        `https://lhvn.online/getdata/genvideo?id_video=${id}&device_them_su_kien=${device.browser}&ip_them_su_kien=${device.ip}&id_user=${idUser}&image=${imageVid}&ten_video=${tenVideo}`,
+        `https://lhvn.online/getdata/genvideo?id_video=${id}&device_them_su_kien=${device.browser}&ip_them_su_kien=${device.ip}&id_user=${idUser}&image=${imageVid}&ten_video=${tenImage}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -200,7 +200,7 @@ function MakeVideo() {
       });
 
       const idEvent = response.data.sukien_video.id_sukien_video;
-      navigate(`/videos/detail-video/${idEvent}`);
+      navigate(`/images/detail-image/${idEvent}`);
 
       // toast.success("Successful");
     } catch (error) {
@@ -234,13 +234,13 @@ function MakeVideo() {
     <>
       <Header
         data={{
-          title: "create a video",
+          title: "create a image",
           myCollection: true,
           download: true,
         }}
       />
 
-      <div className="make-video">
+      <div className="make-image">
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
@@ -251,15 +251,15 @@ function MakeVideo() {
               <img src={pen} alt="edit" />
               <input
                 type="text"
-                placeholder="Video title"
-                value={tenVideo}
-                onChange={(e) => setTenVideo(e.target.value)}
+                placeholder="Image title"
+                value={tenImage}
+                onChange={(e) => setTenImage(e.target.value)}
               />
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="relative responsiveImg create-video">
-                <img className="create-video-add" src={add} alt="" />
+              <div className="relative responsiveImg create-image">
+                <img className="create-image-add" src={add} alt="" />
 
                 <div
                   className="responsiveImg absolute cursor-pointer w-full h-full rounded-[50%] bg-center bg-no-repeat bg-cover bottom-0 "
@@ -288,7 +288,7 @@ function MakeVideo() {
 
             <button
               onClick={() => fetchData()}
-              className="flex items-center justify-center transition-transform duration-300 start-video "
+              className="flex items-center justify-center transition-transform duration-300 start-image "
             >
               Start
             </button>
@@ -297,7 +297,7 @@ function MakeVideo() {
           <div className="p-4 lg:w-1/2">
             <div className="flex flex-col">
               <div className="flex items-center justify-center">
-                <div className="make-video__video">
+                <div className="make-image__image">
                   <video controls>
                     <source src={link} type="video/mp4" />
                     Trình duyệt của bạn không hỗ trợ thẻ video.
@@ -312,4 +312,4 @@ function MakeVideo() {
   );
 }
 
-export default MakeVideo;
+export default MakeImage;

@@ -1,81 +1,81 @@
-import React, { useEffect, useState } from 'react'
-import 'slick-carousel/slick/slick-theme.css'
-import 'slick-carousel/slick/slick.css'
+import React, { useEffect, useState } from "react";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 
-import axios from 'axios'
-import { useParams } from 'react-router'
-import no_avatar from '../../../components/image/no-avatar.png'
-import CommonEvent from '../../app/CommonEvent'
-import EmptyTemplate from '../../app/template/EmptyTemplate'
+import axios from "axios";
+import { useParams } from "react-router";
+import no_avatar from "../../../components/image/no-avatar.png";
+import CommonEvent from "../../app/CommonEvent";
+import EmptyTemplate from "../../app/template/EmptyTemplate";
 
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import headerbg from '../../../../ver2/components/image/bg-header.png'
-import Header from '../../../components/Header/Header'
-import './EventResult.css'
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import headerbg from "../../../../ver2/components/image/bg-header.png";
+import Header from "../../../components/Header/Header";
+import "./EventResult.css";
 
 export default function EventResult() {
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState('')
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
-  const params = useParams()
-  const id = params.id
-  const stt_su_kien = params.stt
+  const params = useParams();
+  const id = params.id;
+  const stt_su_kien = params.stt;
 
-  const [dataUser1, setDataUser1] = useState(null)
+  const [dataUser1, setDataUser1] = useState(null);
 
-  const [isActive, setIsActive] = useState(1)
-  const [isOpenSidebar, setIsOpenSidebar] = useState(false)
+  const [isActive, setIsActive] = useState(1);
+  const [isOpenSidebar, setIsOpenSidebar] = useState(false);
 
-  const [dataComment, setDataComment] = useState([])
+  const [dataComment, setDataComment] = useState([]);
 
   // Show cmt
-  const [showMoreStates, setShowMoreStates] = useState({})
+  const [showMoreStates, setShowMoreStates] = useState({});
   const showCmt = (id) => {
     setShowMoreStates((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
-    }))
-  }
+    }));
+  };
 
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  const id_user = userInfo?.id_user
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const id_user = userInfo?.id_user;
 
   const fetchDataUser = async () => {
     try {
       const response = await axios.get(
         `https://metatechvn.store/lovehistory/${id}`
-      )
-      setDataUser1(response.data.sukien)
-      console.log(response.data.sukien)
+      );
+      setDataUser1(response.data.sukien);
+      console.log(response.data.sukien);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const redirect = (e) => {
-    setIsActive(e)
-    setIsOpenSidebar(false)
-  }
+    setIsActive(e);
+    setIsOpenSidebar(false);
+  };
 
   useEffect(() => {
-    fetchDataUser()
-    const currentTab = parseInt(stt_su_kien)
-    setIsActive(currentTab)
-  }, [])
+    fetchDataUser();
+    const currentTab = parseInt(stt_su_kien);
+    setIsActive(currentTab);
+  }, []);
 
   const handleOpenImagePopup = (imageUrl) => {
-    setSelectedImage(imageUrl)
-    setIsImagePopupOpen(true)
-  }
+    setSelectedImage(imageUrl);
+    setIsImagePopupOpen(true);
+  };
 
   return (
     <>
       <Header
         data={{
           background: `center/cover no-repeat url(${headerbg})`,
-          title: 'events',
+          title: "events",
           download: true,
           events: true,
           myEvent: true,
@@ -86,11 +86,11 @@ export default function EventResult() {
           <div
             className={`lg:w-1/4 z-[10] lg:block ${
               isOpenSidebar
-                ? 'col-span-8 sm:col-span-6 transition-all transform duration-300 ease-linear block opacity-100 absolute top-0 left-0 bottom-0 h-full overflow-auto'
-                : 'transition-all transform hidden duration-300 ease-out '
+                ? "col-span-8 sm:col-span-6 transition-all transform duration-300 ease-linear block opacity-100 absolute top-0 left-0 bottom-0 h-full overflow-auto"
+                : "transition-all transform hidden duration-300 ease-out "
             }`}
             style={{
-              overflowY: 'auto',
+              overflowY: "auto",
             }}
           >
             <ul className="events-menu">
@@ -101,8 +101,8 @@ export default function EventResult() {
               </li>
 
               {dataUser1 &&
-                dataUser1.map((item) => (
-                  <li className="events-menu-item" key={item.id}>
+                dataUser1.map((item, index) => (
+                  <li className="events-menu-item" key={index}>
                     <NavLink
                       to={`/events/${id}/${item.so_thu_tu_su_kien}`}
                       onClick={() => redirect(item.so_thu_tu_su_kien)}
@@ -120,12 +120,9 @@ export default function EventResult() {
               ) : (
                 dataUser1 &&
                 dataUser1.map(
-                  (item) =>
+                  (item, index) =>
                     isActive === item.so_thu_tu_su_kien && (
-                      <CommonEvent
-                        key={item.so_thu_tu_su_kien}
-                        stt={item.so_thu_tu_su_kien}
-                      />
+                      <CommonEvent key={index} stt={item.so_thu_tu_su_kien} />
                     )
                 )
               )}
@@ -137,8 +134,8 @@ export default function EventResult() {
                     key={index}
                     className={`cursor-pointer flex  text-center justify-center items-center hover:bg-[#782353] rounded-3xl lg:py-10 lg:px-36 py-6 px-2 ${
                       isActive === item.so_thu_tu_su_kien
-                        ? 'bg-[#782353] text-white'
-                        : ''
+                        ? "bg-[#782353] text-white"
+                        : ""
                     }`}
                     onClick={() => redirect(item.so_thu_tu_su_kien)}
                   >
@@ -149,13 +146,13 @@ export default function EventResult() {
 
             <div className="flex flex-col pt-10 mb-16 w-full font-[Montserrat] ">
               {dataComment.map((item, index) => {
-                const isShowingFullText = showMoreStates[item.id_comment]
+                const isShowingFullText = showMoreStates[item.id_comment];
                 if (index < 1) {
                   return (
                     <div className="flex flex-col px-4 py-3 mx-4 border border-gray-400 rounded-md shadow-md gap-y-4 hover:bg-gray-100">
                       <div className="flex items-center gap-x-4">
                         {item.avatar_user &&
-                        item.avatar_user.startsWith('http') ? (
+                        item.avatar_user.startsWith("http") ? (
                           <img
                             src={item.avatar_user}
                             alt=""
@@ -170,12 +167,12 @@ export default function EventResult() {
                         )}
                         <div className="flex-grow">
                           <h3 className="text-3xl font-semibold">
-                            {item.user_name ? item.user_name : 'Guest'}
+                            {item.user_name ? item.user_name : "Guest"}
                           </h3>
                           <div className="text-2xl font-normal break-words">
                             <span
                               className={
-                                isShowingFullText ? 'text-base' : 'text-xl'
+                                isShowingFullText ? "text-base" : "text-xl"
                               }
                             >
                               {isShowingFullText
@@ -186,9 +183,9 @@ export default function EventResult() {
                               <span
                                 className="text-base cursor-pointer hover:underline"
                                 onClick={() => showCmt(item.id_comment)}
-                                style={{ color: 'blue' }}
+                                style={{ color: "blue" }}
                               >
-                                {isShowingFullText ? 'UnLess' : 'Show more'}
+                                {isShowingFullText ? "UnLess" : "Show more"}
                               </span>
                             )}
                           </div>
@@ -217,7 +214,7 @@ export default function EventResult() {
                         </div>
                       </div>
                     </div>
-                  )
+                  );
                 }
               })}
               {dataComment.length > 10 && (
@@ -245,11 +242,11 @@ export default function EventResult() {
               src={selectedImage}
               alt="Ảnh lớn"
               className="h-auto mx-auto w-100 z-99999"
-              style={{ maxHeight: '80vh' }}
+              style={{ maxHeight: "80vh" }}
             />
           </div>
         </div>
       )}
     </>
-  )
+  );
 }

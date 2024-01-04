@@ -40,7 +40,7 @@ function OnBoard() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full py-5 font-[Quicksand] font-bold mt-[120px]  ">
+        <div className="flex items-center justify-between w-full py-5 font-[Quicksand] font-bold mt-[120px]">
           <div className="justify-self-start text-[40px] lg:text-[80px] mr-[160px] leading-normal break-words  text-white">
             Bring any image to video.
           </div>

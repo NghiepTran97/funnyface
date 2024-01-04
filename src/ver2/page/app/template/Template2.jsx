@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router'
-import CmtPopup from '../CmtPopup'
-import Moment from 'react-moment'
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import CmtPopup from "../CmtPopup";
+import Moment from "react-moment";
 
-import bgTemplate2 from '../../../components/image/bg-template2.png'
-import frameTemplate2 from '../../../components/image/frame-template2.png'
+import bgTemplate2 from "../../../components/image/bg-template2.png";
+import frameTemplate2 from "../../../components/image/frame-template2.png";
 
-import comment from '../../../components/image/comment.png'
-import view from '../../../components/image/view.png'
+import comment from "../../../components/image/comment.png";
+import view from "../../../components/image/view.png";
 
-import './Template.css'
+import "./Template.css";
 
 function Template2(props) {
-  const handleChangeValue = props?.onChangeValue
+  const handleChangeValue = props?.onChangeValue;
 
-  const { stt, id } = useParams()
-  const data = props.data
+  const { stt, id } = useParams();
+  const data = props.data;
 
-  const [isOpenPopup, setIsOpenPopup] = useState(false)
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
   // const user = JSON.parse(window.localStorage.getItem('user-info'))
   // const token = user?.token
 
@@ -45,21 +45,21 @@ function Template2(props) {
   // }
 
   useEffect(() => {
-    document.addEventListener('DOMContentLoaded', function () {
-      const ogImageMeta = document.querySelector('meta[property="og:image"]')
-      ogImageMeta.setAttribute('content', data?.link_da_swap)
-    })
-  }, [])
+    document.addEventListener("DOMContentLoaded", function () {
+      const ogImageMeta = document.querySelector('meta[property="og:image"]');
+      ogImageMeta.setAttribute("content", data?.link_da_swap);
+    });
+  }, []);
 
   return (
     <>
       <div
         className={`template template2 ${
-          data ? 'cursor-pointer' : 'template-empty'
+          data ? "cursor-pointer" : "template-empty"
         }`}
         style={{ background: `center/cover no-repeat url(${bgTemplate2})` }}
         onClick={() => {
-          setIsOpenPopup(true)
+          setIsOpenPopup(true);
         }}
       >
         <div className="template-main">
@@ -118,7 +118,7 @@ function Template2(props) {
             <img
               className="template-image__swap"
               src={data?.link_da_swap || props.image}
-              alt="image swap"
+              alt="swap"
             />
           )}
         </div>
@@ -133,7 +133,7 @@ function Template2(props) {
         />
       )}
     </>
-  )
+  );
 }
 
-export default Template2
+export default Template2;

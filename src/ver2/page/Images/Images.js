@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import "./Videos.css";
+import "./Images.css";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import filterApp from "../../components/image/filter-app.png";
 import Header from "../../components/Header/Header";
-import { VideoItem } from "../../components/VideoItem/VideoItem";
+import { ImageItem } from "../../components/ImageItem/ImageItem";
 
-const Videos = () => {
+const Images = () => {
   const [category, setCategory] = useState(0);
-  const [listVideo, setListVideo] = useState([]);
+  const [listImage, setListImage] = useState([]);
   const [count, setCount] = useState(1);
   const totalPages = 40;
 
@@ -57,8 +57,8 @@ const Videos = () => {
           toast.error(errorMessage);
         } else {
           // Nếu không trùng, cập nhật state như bình thường
-          setListVideo(response.data.list_sukien_video);
-          console.log("list video", response.data);
+          setListImage(response.data.list_sukien_video);
+          console.log("list image", response.data);
         }
       })
       .catch((error) => {
@@ -80,20 +80,20 @@ const Videos = () => {
     <>
       <Header
         data={{
-          title: "videos",
+          title: "images",
           myCollection: true,
           download: true,
         }}
       />
-      <div className="video-list">
-        <div className="video-list-main">
-          <div class="video-list-category">
-            <div className="video-list-filterIcon">
+      <div className="image-list">
+        <div className="image-list-main">
+          <div class="image-list-category">
+            <div className="image-list-filterIcon">
               <img src={filterApp} alt="" />
             </div>
 
             <Select
-              className="video-list-select"
+              className="image-list-select"
               value={category}
               onChange={handleChangeCategory}
             >
@@ -106,10 +106,10 @@ const Videos = () => {
             </Select>
           </div>
 
-          <ul className="video-list-content">
-            {listVideo &&
-              listVideo.map((video) => (
-                <VideoItem {...video} type="video goc" key={video.id} />
+          <ul className="image-list-content">
+            {listImage &&
+              listImage.map((image) => (
+                <ImageItem {...image} type="image goc" key={image.id} />
               ))}
           </ul>
         </div>
@@ -165,4 +165,4 @@ const Videos = () => {
   );
 };
 
-export default Videos;
+export default Images;
