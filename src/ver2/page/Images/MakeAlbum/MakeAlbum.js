@@ -201,7 +201,7 @@ function MakeAlbum() {
     <>
       <Header
         data={{
-          title: "create a album",
+          title: "Create an album",
           myCollection: true,
           download: true,
         }}
