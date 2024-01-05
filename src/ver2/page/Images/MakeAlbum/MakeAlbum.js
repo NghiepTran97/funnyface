@@ -164,10 +164,9 @@ function MakeAlbum() {
   };
 
   const fetchData = async () => {
-    if (!tenImage.trim() || !showImg.img1) {
-      toast.warning("Enter Name Album!");
-      return;
-    }
+    if (!tenImage.trim()) return toast.warning("Enter Name Album!");
+
+    if (!showImg.img1) return toast.warning("Image require!");
 
     setIsLoading(true);
 

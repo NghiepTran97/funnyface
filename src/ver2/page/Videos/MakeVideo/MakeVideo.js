@@ -143,7 +143,7 @@ function MakeVideo() {
     }
   };
 
-  const [tenVideo, setTenVideo] = useState();
+  const [tenVideo, setTenVideo] = useState("");
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
@@ -183,10 +183,9 @@ function MakeVideo() {
   };
 
   const fetchData = async () => {
-    if (!tenVideo.trim() || !showImg.img1) {
-      toast.warning("Enter Name Video!");
-      return;
-    }
+    if (!tenVideo.trim()) return toast.warning("Enter Name Video!");
+
+    if (!showImg.img1) return toast.warning("Image require!");
 
     setIsLoading(true);
     try {
