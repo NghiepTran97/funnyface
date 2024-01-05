@@ -8,62 +8,37 @@ import Select from "@mui/material/Select";
 import filterApp from "../../components/image/filter-app.png";
 import Header from "../../components/Header/Header";
 import { ImageItem } from "../../components/ImageItem/ImageItem";
+import { AlbumItem } from "../../components/AlbumItem/AlbumItem";
 
 const Images = () => {
-  const [category, setCategory] = useState(0);
-  const [listImage, setListImage] = useState([]);
+  const [category, setCategory] = useState("Albums");
+  const [listItems, setListItems] = useState([]);
   const [count, setCount] = useState(1);
-  const totalPages = 40;
+  const totalPages = 23;
 
-  const [categoryList, setCategoryList] = useState([]);
+  const categoryList = ["Albums", "Images"];
 
-  useEffect(() => {
-    const categories = [];
-    Promise.all([
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=1`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=2`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=3`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=4`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=5`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=6`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=7`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=8`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=9`),
-      axios.get(`https://metatechvn.store/lovehistory/listvideo/1?category=10`),
-    ]).then((values) => {
-      values.map(({ data }) => {
-        const category = {
-          value: data.list_sukien_video[0].id_categories,
-          name: data.list_sukien_video[0].name_categories,
-          id: data.list_sukien_video[0].id,
-        };
+  const getData = async () => {
+    try {
+      const albumsApi = `https://api.mangasocial.online/get/list_image/1?album=${count}`;
+      const imagesApi = `https://api.mangasocial.online/get/list_image/1?album=${count}`;
 
-        return categories.push(category);
-      });
-      setCategoryList(categories);
-    });
-  }, []);
+      const response = await axios.get(
+        category === "Images" ? imagesApi : albumsApi
+      );
+
+      if (response.status === 200) {
+        setListItems(response.data.list_sukien_video);
+        console.log("list items", response.data);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log({ error: error.message });
+    }
+  };
 
   useEffect(() => {
-    axios
-      .get(
-        `https://metatechvn.store/lovehistory/listvideo/${count}?category=${category}`
-      )
-      .then((response) => {
-        const errorMessage = "exceed the number of pages!!!";
-
-        if (response.data === errorMessage) {
-          // Nếu response.data trùng với chuỗi thông báo, hiển thị alert
-          toast.error(errorMessage);
-        } else {
-          // Nếu không trùng, cập nhật state như bình thường
-          setListImage(response.data.list_sukien_video);
-          console.log("list image", response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    getData();
   }, [count, category]);
 
   const handlePageChange = (page) => {
@@ -73,7 +48,7 @@ const Images = () => {
   };
 
   const handleChangeCategory = (e) => {
-    setCategory(Number.parseInt(e.target.value));
+    setCategory(e.target.value);
   };
 
   return (
@@ -97,21 +72,29 @@ const Images = () => {
               value={category}
               onChange={handleChangeCategory}
             >
-              <MenuItem value={0}>Category</MenuItem>
-              {categoryList.map(({ id, name, value }) => (
-                <MenuItem key={id} value={value}>
-                  {name}
+              {categoryList.map((item, index) => (
+                <MenuItem key={index} value={item}>
+                  {item}
                 </MenuItem>
               ))}
             </Select>
           </div>
 
-          <ul className="image-list-content">
-            {listImage &&
-              listImage.map((image) => (
-                <ImageItem {...image} type="image goc" key={image.id} />
-              ))}
-          </ul>
+          {category === "Images" ? (
+            <ul className="image-list-content max-h-[80vh] overflow-y-scroll">
+              {listItems &&
+                listItems.map((image, index) => (
+                  <ImageItem {...image} type="source" key={index} />
+                ))}
+            </ul>
+          ) : (
+            <ul className="image-list-content max-h-[80vh] overflow-y-scroll">
+              {listItems &&
+                listItems.map((album, index) => (
+                  <AlbumItem {...album} type="source" key={index} />
+                ))}
+            </ul>
+          )}
         </div>
         <div className="overflow-x-auto d-none">
           <div className="pagination text-4xl flex justify-start items-center my-6">

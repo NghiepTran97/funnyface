@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import "./ImageItem.css";
+import "./AlbumItem.css";
 
-export const ImageItem = (props) => {
+export const AlbumItem = (props) => {
   const { type } = props;
 
   return (
@@ -11,8 +11,9 @@ export const ImageItem = (props) => {
         <Link
           to={
             type === "swap"
-              ? `/images/detail-image/${props.id_saved}`
-              : `/images/make-image?link=${props.image}&id=${props.id}`
+              ? `/images/detail-album/${props.id_saved}`
+              : // : `/images/make-album?link=${props.image}&id=${props.id}`
+                `/images/make-album?link=${props.image}&id=${1}`
           }
         >
           <div className="h-[450px]">

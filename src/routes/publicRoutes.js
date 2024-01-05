@@ -6,7 +6,9 @@ import MyVideo from "../ver2/page/Videos/MyVideo/MyVideo";
 import Videos from "../ver2/page/Videos/Videos";
 
 import DetailImage from "../ver2/page/Images/DetailImage/DetailImage";
+import DetailAlbum from "../ver2/page/Images/DetailAlbum/DetailAlbum";
 import MakeImage from "../ver2/page/Images/MakeImage/MakeImage";
+import MakeAlbum from "../ver2/page/Images/MakeAlbum/MakeAlbum";
 import MyImage from "../ver2/page/Images/MyImage/MyImage";
 import Images from "../ver2/page/Images/Images";
 
@@ -45,7 +47,9 @@ export const publicRoutes = (
     <Route path="/images">
       <Route index element={<Images />} />
       <Route path="make-image" element={<MakeImage />} />
+      <Route path="make-album" element={<MakeAlbum />} />
       <Route path="detail-image/:id" element={<DetailImage />} />
+      <Route path="detail-album/:id" element={<DetailAlbum />} />
       <Route path="my-image" element={<MyImage />} />
     </Route>
 

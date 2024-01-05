@@ -6,28 +6,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../css/AddEvent.css";
-import RenderRandomWaitImage from "../../../components/randomImages";
 
 import add from "../../../components/image/add.png";
 import pen from "../../../components/image/edit-2.png";
-import "./MakeVideo.css";
+import "./MakeAlbum.css";
 import Swal from "sweetalert2";
 import Header from "../../../components/Header/Header";
 import Loading from "../../../../Loading/Loading";
+import DetailAlbum from "../DetailAlbum/DetailAlbum";
 
-function MakeVideo() {
+function MakeAlbum() {
   const [image1, setImage1] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showImg, setShowImg] = useState({ img1: null });
-  const [randomImages, setRandomImages] = useState(null);
+  const randomImage = "";
+  const [imageUpload, setImageUpload] = useState("");
+  const [event, setEvent] = useState(null);
+
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
   const token = userInfo && userInfo.token;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const ID_DEFAULT = 2;
-  const VIDEO_DEFAULT =
-    "https://github.com/sonnh7289/funnyvideo_faceFunny/raw/main/catbanh2.mp4";
+  const ID_DEFAULT = 1;
 
   const loadModels = async () => {
     setIsLoading(true);
@@ -48,23 +49,6 @@ function MakeVideo() {
   }, []);
 
   const idUser = userInfo && userInfo.id_user;
-
-  const getMyDetailUser = async () => {
-    try {
-      const { data } = await axios.get("https://api.ipify.org/?format=json");
-      if (data.ip) {
-        const browser = window.navigator.userAgent;
-        return {
-          browser: browser,
-          ip: data.ip,
-        };
-      }
-      return false;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  };
 
   const closeUploadImg = async () => {
     setImage1(null);
@@ -90,15 +74,13 @@ function MakeVideo() {
         .withFaceExpressions();
 
       if (detections.length > 1) return detections;
-      if (detections2.length == 0) return detections2;
-      if (detections2.length == 1) return detections2;
+      if (detections2.length === 0) return detections2;
+      if (detections2.length === 1) return detections2;
       return detections;
     } catch (error) {
       console.log(error);
     }
   };
-
-  const [imageVid, setImageVid] = useState("");
 
   const handleChangeImage = async (event, setImage, atImg) => {
     let file = event.target.files[0];
@@ -108,7 +90,7 @@ function MakeVideo() {
     setIsLoading(true);
     try {
       const res = await validImage(URL.createObjectURL(file));
-      if (res.length == 0) {
+      if (res.length === 0) {
         setIsLoading(false);
         closeUploadImg();
         return Swal.fire(
@@ -126,15 +108,15 @@ function MakeVideo() {
           "warning"
         );
       }
-
+      console.log(1);
       setIsLoading(false);
       if (atImg == "img1") {
         let send = showImg;
         send.img1 = URL.createObjectURL(file);
         setShowImg(send);
         setImage(file);
-        const imagevid = await uploadImage(file);
-        setImageVid(imagevid);
+        const img = await uploadImage(file);
+        setImageUpload(img);
       }
     } catch (error) {
       console.log(error);
@@ -143,12 +125,12 @@ function MakeVideo() {
     }
   };
 
-  const [tenVideo, setTenVideo] = useState("");
+  const [tenImage, setTenImage] = useState("");
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id") || ID_DEFAULT;
-  const link = queryParams.get("link") || VIDEO_DEFAULT;
+  const link = queryParams.get("link") || randomImage;
 
   const uploadImage = async (image1) => {
     if (idUser === null) {
@@ -161,7 +143,6 @@ function MakeVideo() {
 
     try {
       if (image1) {
-        // Gửi cả hai hình ảnh lên server
         const apiResponse = await axios.post(
           `https://metatechvn.store/upload-gensk/${idUser}?type=src_vid`,
           formData,
@@ -183,20 +164,19 @@ function MakeVideo() {
   };
 
   const fetchData = async () => {
-    if (!tenVideo.trim()) return toast.warning("Enter Name Video!");
+    if (!tenImage.trim()) return toast.warning("Enter Name Album!");
 
     if (!showImg.img1) return toast.warning("Image require!");
 
     setIsLoading(true);
-    try {
-      const device = await getMyDetailUser();
 
+    try {
       const response = await axios.get(
-        `https://lhvn.online/getdata/genvideo?id_video=${id}&device_them_su_kien=${device.browser}&ip_them_su_kien=${device.ip}&id_user=${idUser}&image=${imageVid}&ten_video=${tenVideo}`,
+        `https://api.mangasocial.online/getdata/swap/listimage?device_them_su_kien=gdgdgf&ip_them_su_kien=dfbdfbdf&id_user=${idUser}&list_folder=album_${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            link1: imageUpload,
           },
         }
       );
@@ -205,47 +185,45 @@ function MakeVideo() {
         type: "SET_RESPONSE_DATA",
         payload: response.data,
       });
+      // console.log({ dataSwapped: response.data });
+      // const idEvent = response.data.sukien_2_image.id_toan_bo_su_kien;
+      // navigate(`/images/detail-album/${idEvent}`);
+      setEvent(response.data);
 
-      const idEvent = response.data.sukien_video.id_sukien_video;
-      navigate(`/videos/detail-video/${idEvent}`);
-
-      // toast.success("Successful");
+      toast.success("Swapped successful");
     } catch (error) {
       toast.warning(error.message);
       setIsLoading(false);
     }
   };
 
-  return (
+  return !event ? (
     <>
       <Header
         data={{
-          title: "create a video",
+          title: "create a album",
           myCollection: true,
           download: true,
         }}
       />
 
-      <div className="make-video">
-        {randomImages !== null && (
-          <RenderRandomWaitImage images1={randomImages} />
-        )}
+      <div className="make-album">
         <Loading status={isLoading} />
         <div className="flex flex-col lg:flex-row lg:items-center">
           <div className="p-4 lg:w-1/2">
-            <div className="flex items-center justify-center name-video">
+            <div className="flex items-center justify-center name-album">
               <img src={pen} alt="edit" />
               <input
                 type="text"
-                placeholder="Video title"
-                value={tenVideo}
-                onChange={(e) => setTenVideo(e.target.value)}
+                placeholder="Album title"
+                value={tenImage}
+                onChange={(e) => setTenImage(e.target.value)}
               />
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="relative responsiveImg create-video">
-                <img className="create-video-add" src={add} alt="" />
+              <div className="relative responsiveImg create-album">
+                <img className="create-album-add" src={add} alt="" />
 
                 <div
                   className="responsiveImg absolute cursor-pointer w-full h-full rounded-[50%] bg-center bg-no-repeat bg-cover bottom-0 "
@@ -274,7 +252,7 @@ function MakeVideo() {
 
             <button
               onClick={() => fetchData()}
-              className="flex items-center justify-center transition-transform duration-300 start-video "
+              className="flex items-center justify-center transition-transform duration-300 start-album "
             >
               Start
             </button>
@@ -283,11 +261,12 @@ function MakeVideo() {
           <div className="p-4 lg:w-1/2">
             <div className="flex flex-col">
               <div className="flex items-center justify-center">
-                <div className="make-video__video">
-                  <video controls>
-                    <source src={link} type="video/mp4" />
-                    Trình duyệt của bạn không hỗ trợ thẻ video.
-                  </video>
+                <div className="make-album__album w-[400px] h-[600px]">
+                  <img
+                    src={link}
+                    alt="Sample"
+                    className="w-full h-full bg-cover"
+                  />
                 </div>
               </div>
             </div>
@@ -295,7 +274,9 @@ function MakeVideo() {
         </div>
       </div>
     </>
+  ) : (
+    <DetailAlbum event={event} />
   );
 }
 
-export default MakeVideo;
+export default MakeAlbum;
