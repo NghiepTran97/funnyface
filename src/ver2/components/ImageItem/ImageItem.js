@@ -3,10 +3,18 @@ import { Link } from "react-router-dom";
 import "./ImageItem.css";
 
 export const ImageItem = (props) => {
+  const imageRef = useRef();
+  const [height, setHeight] = useState("450px");
+
   const { type } = props;
 
+  useEffect(() => {
+    const width = imageRef.current.offsetWidth;
+    setHeight(Math.trunc(width * 1.7));
+  }, [imageRef.current]);
+
   return (
-    <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 component-image">
+    <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:1/5 component-image">
       <div className="component-image-wrap relative">
         <Link
           to={
@@ -15,10 +23,12 @@ export const ImageItem = (props) => {
               : `/images/make-image?link=${props.image}&id=${props.id}`
           }
         >
-          <div className="h-[450px]">
+          <div style={{ height }}>
             <img
               src={type === "swap" ? props.link_da_swap : props.image}
               alt={type}
+              loading="lazy"
+              ref={imageRef}
               className="w-full h-full bg-cover"
             />
           </div>

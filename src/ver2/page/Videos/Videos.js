@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "./Videos.css";
 
+import Paginations from "../../components/Paginations";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import filterApp from "../../components/image/filter-app.png";
@@ -12,8 +13,8 @@ import { VideoItem } from "../../components/VideoItem/VideoItem";
 const Videos = () => {
   const [category, setCategory] = useState(0);
   const [listVideo, setListVideo] = useState([]);
-  const [count, setCount] = useState(1);
-  const totalPages = 40;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.ceil(listVideo.length / 20);
 
   const [categoryList, setCategoryList] = useState([]);
 
@@ -47,7 +48,7 @@ const Videos = () => {
   useEffect(() => {
     axios
       .get(
-        `https://metatechvn.store/lovehistory/listvideo/${count}?category=${category}`
+        `https://metatechvn.store/lovehistory/listvideo/1?category=${category}`
       )
       .then((response) => {
         const errorMessage = "exceed the number of pages!!!";
@@ -58,21 +59,16 @@ const Videos = () => {
         } else {
           // Nếu không trùng, cập nhật state như bình thường
           setListVideo(response.data.list_sukien_video);
-          console.log("list video", response.data);
+          // console.log("list video", response.data);
         }
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [count, category]);
-
-  const handlePageChange = (page) => {
-    // Kiểm tra giới hạn trang để đảm bảo rằng trang không vượt quá giới hạn
-    const newPage = Math.min(Math.max(1, page), totalPages);
-    setCount(newPage);
-  };
+  }, [category]);
 
   const handleChangeCategory = (e) => {
+    setPage(1);
     setCategory(Number.parseInt(e.target.value));
   };
 
@@ -85,80 +81,45 @@ const Videos = () => {
           download: true,
         }}
       />
-      <div className="video-list">
+      <div className="max-h-[120vh] overflow-y-scroll rounded-lg">
         <div className="video-list-main">
-          <div class="video-list-category">
-            <div className="video-list-filterIcon">
-              <img src={filterApp} alt="" />
-            </div>
+          <div class="video-list-category flex justify-between items-center">
+            <div>
+              <div className="video-list-filterIcon">
+                <img src={filterApp} alt="" />
+              </div>
 
-            <Select
-              className="video-list-select"
-              value={category}
-              onChange={handleChangeCategory}
-            >
-              <MenuItem value={0}>Category</MenuItem>
-              {categoryList.map(({ id, name, value }) => (
-                <MenuItem key={id} value={value}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
+              <Select
+                className="video-list-select"
+                value={category}
+                onChange={handleChangeCategory}
+              >
+                <MenuItem value={0}>Category</MenuItem>
+                {categoryList.map(({ id, name, value }) => (
+                  <MenuItem key={id} value={value}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div className="flex gap-4 items-center">
+              <span className="text-white text-4xl font-semibold">Page:</span>
+              <Paginations
+                page={page}
+                setPage={setPage}
+                totalPages={totalPages}
+              />
+            </div>
           </div>
 
           <ul className="video-list-content">
             {listVideo &&
-              listVideo.map((video) => (
-                <VideoItem {...video} type="video goc" key={video.id} />
-              ))}
+              listVideo
+                .slice(20 * (page - 1), 20 * page)
+                .map((video) => (
+                  <VideoItem {...video} type="video goc" key={video.id} />
+                ))}
           </ul>
-        </div>
-        <div className="overflow-x-auto d-none">
-          <div className="pagination text-4xl flex justify-start items-center my-6">
-            <button
-              onClick={() => handlePageChange(count - 1)}
-              disabled={count === 1}
-              className="py-2 px-3 bg-[#ff9f9f] rounded hover:bg-[#ff9f9f8c]"
-            >
-              <svg
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-              >
-                <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8z" />
-                <path d="M13.293 7.293 8.586 12l4.707 4.707 1.414-1.414L11.414 12l3.293-3.293-1.414-1.414z" />
-              </svg>
-            </button>
-
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={`mx-1 text-white font-medium py-2 px-3 rounded ${
-                  count === index + 1 ? "bg-red-700" : "bg-[#ff9f9f]"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => handlePageChange(count + 1)}
-              disabled={count === totalPages}
-              className="py-2 px-3 bg-[#ff9f9f] rounded hover:bg-[#ff9f9f8c]"
-            >
-              <svg
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-              >
-                <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8z" />
-                <path d="M9.293 8.707 12.586 12l-3.293 3.293 1.414 1.414L15.414 12l-4.707-4.707-1.414 1.414z" />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     </>

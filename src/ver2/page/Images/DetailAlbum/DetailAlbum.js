@@ -130,7 +130,7 @@ const DetailAlbum = ({ event }) => {
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-scroll w-2/3 flex flex-wrap gap-[10px] box-border">
+          <div className="max-h-[80vh] overflow-y-scroll w-2/3 flex flex-wrap gap-[10px] box-border">
             {event["link anh da swap"].map((item, index) => {
               return (
                 <div

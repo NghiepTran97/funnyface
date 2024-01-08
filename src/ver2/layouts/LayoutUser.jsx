@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import { Outlet } from 'react-router'
-import SideBar from '../components/SideBar'
-import '../css/Layout.css'
+import React, { useState } from "react";
+import { Outlet } from "react-router";
+import SideBar from "../components/SideBar";
+import "../css/Layout.css";
 const LayoutUser = () => {
-  const [width, setWidth] = useState('315px')
-  
-  const getWidthSideBar = (data) => {
-    setWidth(data)
-  }
+  const [width, setWidth] = useState("315px");
 
+  const getWidthSideBar = (data) => {
+    setWidth(data);
+  };
 
   return (
     <>
@@ -16,13 +15,13 @@ const LayoutUser = () => {
         <SideBar onRecive={getWidthSideBar} />
         <div
           style={{ marginLeft: width }}
-          className="future-main flex flex-col w-full mx-8 w-full"
+          className="future-main flex flex-col w-full mx-8 w-full pb-10"
         >
           <Outlet />
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default LayoutUser
+export default LayoutUser;

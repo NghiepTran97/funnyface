@@ -153,7 +153,7 @@ function MakeAlbum() {
             },
           }
         );
-        return apiResponse.data; // Trả về dữ liệu từ API
+        return apiResponse.data;
       }
 
       return null;
