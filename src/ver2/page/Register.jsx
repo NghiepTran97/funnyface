@@ -1,14 +1,20 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import { FaCircleCheck } from "react-icons/fa6";
-import { IoIosCloseCircle } from "react-icons/io";
-import { MdEmail } from "react-icons/md";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 import Loading from "../../Loading/Loading";
-import "../css/Header.css";
+import { FaCircleCheck } from "react-icons/fa6";
+import { IoIosCloseCircle } from "react-icons/io";
+import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import background from "../../ver2/components/image/login/background.png";
+import cameraIcon from "../../ver2/components/image/login/cameraIcon.svg";
+import imageIcon from "../../ver2/components/image/login/imageIcon.svg";
 import anh1 from "../../ver2/components/image/anhlogin1.png";
 import anh2 from "../../ver2/components/image/anhlogin2.png";
 import anh3 from "../../ver2/components/image/anhlogin3.png";
@@ -20,7 +26,7 @@ function ListImgs() {
     <div className="overflow-x-scroll flex gap-[10px] mb-[20px] justify-center">
       <img
         src={anh1}
-        alt="image"
+        alt="example"
         className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
       />
       <img
@@ -48,51 +54,65 @@ function ListImgs() {
 }
 
 export default function Register() {
-  const navigate = useNavigate();
-
-  const [user_name, usernamechange] = useState("");
-  const [email, emailchange] = useState("");
-  const [password, passwordchange] = useState("");
-  const [repassword, rePasswordchange] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [imageSrc, setImageSrc] = useState("");
   const [imageName, setImageName] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showPass, setShowPass] = useState({ pass: false, confirm: false });
+  const [passwordShow, setPasswordShow] = useState({
+    pass: false,
+    confirm: false,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const labelRef = useRef();
   const inputId = useId();
 
+  const signInWithGoogle = async (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    try {
+      const rep = await axios.get("https://metatechvn.store/login/user");
+      if (rep.data.message) {
+        toast.error(rep.data.message);
+      } else {
+        navigate("/");
+        toast.success("Login success");
+        window.location.reload();
+        rep.data = JSON.stringify(rep.data);
+        localStorage.setItem("user-info", rep.data);
+      }
+    } catch (error) {
+      return toast.error("Login false !!!");
+    }
+    setIsLoading(false);
+  };
+
   const handleShow = (show) => {
-    setShowPass({ ...showPass, ...show });
-  };
-
-  const setOpenUploadModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const server = "https://metatechvn.store";
-  const redirect = () => {
-    navigate("/login");
-  };
-  const forgot = () => {
-    navigate("/forgot");
+    setPasswordShow({ ...passwordShow, ...show });
   };
 
   const isValidate = () => {
     try {
       if (
-        [user_name, email, password, repassword, imageName].some(
+        [username, email, password, confirmPassword, imageName].some(
           (item) => !item || !item.trim()
         )
-      )
-        throw new Error("Please fill in all fields!");
+      ) {
+        toast.warn("Please fill in all fields!");
+        return;
+      }
 
       if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email))
-        throw new Error("Please enter the valid email");
+        throw new Error("Invalid email");
 
-      if (password !== repassword) throw new Error("Password does not match");
+      if (password !== confirmPassword)
+        throw new Error("Password does not match");
 
       return true;
     } catch (error) {
@@ -101,32 +121,33 @@ export default function Register() {
     }
   };
 
-  const handlesubmit = async (e) => {
+  const handleSignUp = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const formData = new FormData();
     if (isValidate()) {
-      setIsLoading(true);
       await uploadImg();
       formData.append("link_avatar", `https://i.ibb.co/vjVvZL5/${imageName}`);
-      formData.append("user_name", user_name);
+      formData.append("user_name", username);
       formData.append("password", password);
       formData.append("email", email);
+
       try {
-        const response = await axios.post(`${server}/register/user`, formData);
+        const response = await axios.post(
+          "https://metatechvn.store/register/user",
+          formData
+        );
 
         console.log(response.data);
         if (response.data.account) {
-          navigate("/");
+          navigate("/login");
           toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
         }
       } catch (error) {
-        console.log("sda", error);
-      } finally {
-        setIsLoading(false);
+        toast.error(error.message);
       }
     }
+    setIsLoading(false);
   };
 
   const handleUploadImgChange = async (e) => {
@@ -166,10 +187,6 @@ export default function Register() {
     localStorage.setItem("rememberMe", rememberMe.toString());
   }, [rememberMe]);
 
-  const handleRememberMeChange = () => {
-    setRememberMe(!rememberMe);
-  };
-
   useEffect(() => {
     sessionStorage.clear();
   }, []);
@@ -185,275 +202,280 @@ export default function Register() {
         accept="image/*"
         onChange={handleUploadImgChange}
       />
-      <div className="h-screen slab lg:flex lg:items-center">
-        <div className="w-[60%] h-[100%] lg:block hidden bg-[#D9D9D9]"></div>
+      <div className="min-h-screen flex overflow-srcoll">
+        <div className="bg-gradient-to-b from-[#1A542F] to-[#000000] hidden lg:flex w-[55%] justify-center items-center">
+          <Swiper
+            slidesPerView={1}
+            modules={[Pagination]}
+            pagination={{ dynamicBullets: true }}
+            scrollbar={{ draggable: true }}
+            className="w-[80%] h-[80%] mySwiper"
+          >
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+          </Swiper>
+        </div>
 
-        <div className="w-[40%] h-[100%] absolute right-0 top-0">
-          <div className="bg-black flex flex-col w-[100%] h-[100%] z-30 opacity-75 ">
-            <form className="" onSubmit={handlesubmit}>
-              <div className="flex flex-col ">
-                <div
-                  className="text-8xl text-white text-center mb-5 items-center mt-10"
-                  style={{ fontFamily: "Starborn" }}
-                >
-                  Funny Face
-                </div>
-                <div className="flex flex-col items-center text-left  mx-16">
-                  <div className="flex flex-col items-center text-white mt-0 lg:w-[400px] lg:h-[35px] w-[300px] h-[35px]">
-                    <div className="text-5xl text-left">Sign up</div>
-                    <p className="text-3xl mt-3 text-left">
-                      Sign up with email address
-                    </p>
-                  </div>
-                  <div className="">
-                    <div className="input_group flex flex-col items-center mt-20">
-                      {imageName ? (
-                        <div className="border_input ">
-                          <div className="input_login flex justify-items-center items-center">
-                            <input
-                              type="text"
-                              value={imageName}
-                              className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                              disabled
-                            />
-                            <button
-                              type="button"
-                              className="text-green-600 text-2xl"
-                              onClick={handleUploadImg}
-                            >
-                              Change
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex justify-center w-[120px] h-[120px] rounded-full bg-[#343434] items-center">
-                          <div
-                            alt=""
-                            className="flex flex-col justify-center items-center cursor-pointer"
-                            onClick={setOpenUploadModal}
-                          >
-                            <svg
-                              width="36"
-                              height="36"
-                              viewBox="0 0 36 36"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M27 9C26.085 9 25.245 8.475 24.825 7.665L23.745 5.49C23.055 4.125 21.255 3 19.725 3H16.29C14.745 3 12.945 4.125 12.255 5.49L11.175 7.665C10.755 8.475 9.91501 9 9.00001 9C5.74501 9 3.16501 11.745 3.37501 14.985L4.15501 27.375C4.33501 30.465 6.00001 33 10.14 33H25.86C30 33 31.65 30.465 31.845 27.375L32.625 14.985C32.835 11.745 30.255 9 27 9ZM15.75 10.875H20.25C20.865 10.875 21.375 11.385 21.375 12C21.375 12.615 20.865 13.125 20.25 13.125H15.75C15.135 13.125 14.625 12.615 14.625 12C14.625 11.385 15.135 10.875 15.75 10.875ZM18 27.18C15.21 27.18 12.93 24.915 12.93 22.11C12.93 19.305 15.195 17.04 18 17.04C20.805 17.04 23.07 19.305 23.07 22.11C23.07 24.915 20.79 27.18 18 27.18Z"
-                                fill="white"
-                              />
-                            </svg>
+        <div className="w-full lg:w-[45%] flex flex-col justify-center items-center gap-5 py-14">
+          <div
+            className="w-[80%] text-5xl md:text-8xl text-white text-center items-center"
+            style={{ fontFamily: "Starborn" }}
+          >
+            Funny Face
+          </div>
 
-                            <div className="text-white text-xl mt-1">
-                              Upload image
-                            </div>
-                          </div>
-                        </div>
-                      )}
+          <form
+            className="w-[80%] flex flex-col text-white gap-5 mt-5"
+            onSubmit={handleSignUp}
+          >
+            <span className="text-4xl md:text-5xl font-semibold">Sign up</span>
+            <span className="text-2xl md:text-3xl">
+              Sign up with email address
+            </span>
 
-                      <div className="border_input ">
-                        <div className="input_login flex justify-items-center items-center">
-                          <FaUser className="text-white text-2xl items-start mr-2" />
-                          <input
-                            type="text"
-                            value={user_name}
-                            placeholder="Username"
-                            className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                            onChange={(e) => usernamechange(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                      <div className="border_input ">
-                        <div className="input_login flex justify-items-center items-center">
-                          <MdEmail className="text-white text-2xl items-start mr-2" />
-                          <input
-                            type="text"
-                            value={email}
-                            placeholder="Email"
-                            className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                            onChange={(e) => emailchange(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                      <div className="border_input">
-                        <div className="input_login flex justify-items-center items-center">
-                          <FaLock className="text-white text-2xl mr-2" />
-                          <input
-                            type={showPass.pass ? "text" : "password"}
-                            value={repassword}
-                            placeholder="Password"
-                            className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                            onChange={(e) => rePasswordchange(e.target.value)}
-                          />
-                          <span
-                            onClick={() => handleShow({ pass: !showPass.pass })}
-                          >
-                            {showPass.pass ? (
-                              <FaEye className="text-white text-3xl" />
-                            ) : (
-                              <FaEyeSlash className="text-white text-3xl" />
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="border_input">
-                        <div className="input_login flex justify-items-center items-center">
-                          <FaLock className="text-white text-2xl mr-2" />
-                          <input
-                            type={showPass.confirm ? "text" : "password"}
-                            value={password}
-                            placeholder="Enter the password"
-                            className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                            onChange={(e) => passwordchange(e.target.value)}
-                          />
-                          <span
-                            onClick={() =>
-                              handleShow({ confirm: !showPass.confirm })
-                            }
-                          >
-                            {showPass.confirm ? (
-                              <FaEye className="text-white text-3xl" />
-                            ) : (
-                              <FaEyeSlash className="text-white text-3xl" />
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-4 flex w-full">
-                        <input
-                          type="checkbox"
-                          checked={rememberMe}
-                          onChange={handleRememberMeChange}
-                          className="text-3xl text-white mr-4 cursor-pointer"
-                        />
-                        <span className="text-3xl text-white">Remember me</span>
-                        <b
-                          className="text-xl text-green-400 mb-3 ml-auto cursor-pointer"
-                          onClick={forgot}
-                        >
-                          Forgot password?
-                        </b>
-                      </div>
-                    </div>
-                    <div className="mt-10 ml-4 w-full">
-                      <button
-                        type="submit"
-                        className=" rounded-lg mr-[16px] w-[450px] h-[35px] text-white text-4xl bg-[#1DB954]"
-                      >
-                        Sign up
-                      </button>
-                      {/* <p className="text-3xl text-white mt-12">
-                      Do you want to{" "}
-                      <b className="cursor-pointer" onClick={showReset}>
-                        reset password?
-                      </b>
-                    </p> */}
-                    </div>
-                  </div>
-                  <div className="flex items-center mt-3">
-                    <hr className="flex-grow w-[187px] h-[10px] border-t-2 text-4xl text-gray-500 z-50" />
-                    <span className="mx-4 text-gray-500 text-2xl">Or</span>
-                    <hr className="flex-grow w-[187px] h-[10px] text-4xl border-t-2 text-gray-500 z-50" />
-                  </div>
-                  <div className="flex flex-col items-center mt-9">
-                    <div className="text-3xl text-white mt-3">Log in with</div>
-                    <div className="flex mt-3 gap-8">
-                      <button
-                        // onClick={signInWithGoogle()}
-                        className="w-[220px] h-[48px] rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
-                      >
-                        <svg
-                          width="25"
-                          height="25"
-                          viewBox="0 0 25 25"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="mr-9"
-                        >
-                          <g clipPath="url(#clip0_343_3151)">
-                            <g clipPath="url(#clip1_343_3151)">
-                              <path
-                                d="M24.245 12.77C24.245 11.98 24.175 11.23 24.055 10.5H12.755V15.01H19.225C18.935 16.49 18.085 17.74 16.825 18.59V21.59H20.685C22.945 19.5 24.245 16.42 24.245 12.77Z"
-                                fill="#4285F4"
-                              />
-                              <path
-                                d="M12.755 24.5C15.995 24.5 18.705 23.42 20.685 21.59L16.825 18.59C15.745 19.31 14.375 19.75 12.755 19.75C9.625 19.75 6.975 17.64 6.025 14.79H2.045V17.88C4.015 21.8 8.065 24.5 12.755 24.5Z"
-                                fill="#34A853"
-                              />
-                              <path
-                                d="M6.02501 14.79C5.77501 14.07 5.645 13.3 5.645 12.5C5.645 11.7 5.78501 10.93 6.02501 10.21V7.12H2.045C1.225 8.74 0.755005 10.56 0.755005 12.5C0.755005 14.44 1.225 16.26 2.045 17.88L6.02501 14.79Z"
-                                fill="#FBBC05"
-                              />
-                              <path
-                                d="M12.755 5.25C14.525 5.25 16.105 5.86 17.355 7.05L20.775 3.63C18.705 1.69 15.995 0.5 12.755 0.5C8.065 0.5 4.015 3.2 2.045 7.12L6.025 10.21C6.975 7.36 9.625 5.25 12.755 5.25Z"
-                                fill="#EA4335"
-                              />
-                            </g>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_343_3151">
-                              <rect
-                                width="24"
-                                height="24"
-                                fill="white"
-                                transform="translate(0.5 0.5)"
-                              />
-                            </clipPath>
-                            <clipPath id="clip1_343_3151">
-                              <rect
-                                width="24"
-                                height="24"
-                                fill="white"
-                                transform="translate(0.5 0.5)"
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-                        <span className="text-4xl">Google</span>
-                      </button>
-                      <button
-                        // onClick={signInWithFacebook()}
-                        className="w-[220px] h-[48px] rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
-                      >
-                        <svg
-                          width="26"
-                          height="25"
-                          viewBox="0 0 26 25"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="mr-9"
-                        >
-                          <path
-                            d="M25.0733 12.5733C25.0733 5.90546 19.6679 0.5 13 0.5C6.33212 0.5 0.926666 5.90536 0.926666 12.5733C0.926666 18.5994 5.34173 23.5943 11.1135 24.5V16.0633H8.04805V12.5733H11.1135V9.91343C11.1135 6.88755 12.9161 5.21615 15.6738 5.21615C16.9948 5.21615 18.3764 5.45195 18.3764 5.45195V8.42313H16.854C15.3541 8.42313 14.8865 9.35381 14.8865 10.3086V12.5733H18.2349L17.6996 16.0633H14.8865V24.5C20.6583 23.5943 25.0733 18.5995 25.0733 12.5733Z"
-                            fill="#1877F2"
-                          />
-                        </svg>
-                        <span className="text-4xl">Facebook</span>
-                      </button>
-                    </div>
-                  </div>
+            {imageName ? (
+              <div className="border border-gray-400 pl-4 rounded-lg">
+                <div className="text-white flex justify-items-center items-center gap-2">
+                  <img
+                    src={imageIcon}
+                    alt="Icon"
+                    className="w-[24px] h-[24px]"
+                  />
+                  <input
+                    type="text"
+                    value={imageName}
+                    className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-3xl"
+                    disabled
+                  />
+                  <button
+                    type="button"
+                    className="text-green-600 text-2xl"
+                    onClick={handleUploadImg}
+                  >
+                    Change
+                  </button>
                 </div>
               </div>
-            </form>
-            <div className="flex mt-3 w-full m-auto mx-auto justify-center">
-              <div className="text-[#6F767E] text-2xl mr-2">
-                You have an account?
-              </div>
+            ) : (
               <div
-                className="text-[#1DB954] text-2xl cursor-pointer"
-                onClick={redirect}
+                className="flex flex-col justify-center items-center self-center bg-gray-700 px-8 py-5 rounded-full cursor-pointer gap-3"
+                onClick={() => setShowModal(true)}
               >
-                Log in
+                <img src={cameraIcon} alt="Upload" />
+                <span className="text-xl">Upload image</span>
+              </div>
+            )}
+            <div className="border border-gray-400 pl-4 rounded-lg">
+              <div className="text-white flex justify-items-center items-center gap-2">
+                <FaUser className="text-white text-3xl items-start mr-2" />
+                <input
+                  type="text"
+                  value={username}
+                  placeholder="Username"
+                  className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-3xl"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
             </div>
-          </div>
+
+            <div className="border border-gray-400 pl-4 rounded-lg">
+              <div className="text-white flex justify-items-center items-center gap-2">
+                <MdEmail className="text-white text-2xl md:text-4xl items-start mr-2" />
+                <input
+                  type="text"
+                  value={email}
+                  placeholder="Email"
+                  className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-3xl"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-between border_pass text-white border border-gray-400 pl-4 rounded-lg">
+              <div className="relative flex justify-items-center items-center gap-2 flex-grow-1">
+                <FaLock className="text-white text-3xl mr-2" />
+                <input
+                  type={passwordShow.pass ? "text" : "password"}
+                  value={password}
+                  placeholder="Password"
+                  className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-3xl"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <span
+                  onClick={() =>
+                    setPasswordShow({
+                      ...passwordShow,
+                      pass: !passwordShow.pass,
+                    })
+                  }
+                  className="h-full flex justify-center items-center absolute top-0 right-4"
+                >
+                  {passwordShow.pass ? (
+                    <FaEye className="text-white text-3xl" />
+                  ) : (
+                    <FaEyeSlash className="text-white text-3xl" />
+                  )}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex justify-between border_pass text-white border border-gray-400 pl-4 rounded-lg">
+              <div className="relative flex justify-items-center items-center gap-2 flex-grow-1">
+                <FaLock className="text-white text-3xl mr-2" />
+                <input
+                  type={passwordShow.confirm ? "text" : "password"}
+                  value={confirmPassword}
+                  placeholder="Confirm password"
+                  className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-3xl"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <span
+                  onClick={() =>
+                    setPasswordShow({
+                      ...passwordShow,
+                      confirm: !passwordShow.confirm,
+                    })
+                  }
+                  className="h-full flex justify-center items-center absolute top-0 right-4"
+                >
+                  {passwordShow.confirm ? (
+                    <FaEye className="text-white text-3xl" />
+                  ) : (
+                    <FaEyeSlash className="text-white text-3xl" />
+                  )}
+                </span>
+              </div>
+            </div>
+
+            <button
+              className="bg-green-400 text-white rounded-lg py-4 font-semibold text-3xl"
+              onClick={(e) => handleSignUp(e)}
+            >
+              Sign up
+            </button>
+
+            <div className="flex items-center w-full mt-4">
+              <div className="flex-grow-1 bg-gray-800 h-[1px]" />
+              <span className="mx-4 text-white text-3xl font-semibold">Or</span>
+              <div className="flex-grow-1 bg-gray-800 h-[1px]" />
+            </div>
+
+            <div className="flex flex-col justify-center items-center text-white gap-3">
+              <span className="text-3xl font-semibold">Log in with</span>
+              <div className="flex justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={signInWithGoogle}
+                  className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
+                >
+                  <svg
+                    width="25"
+                    height="25"
+                    viewBox="0 0 25 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-9"
+                  >
+                    <g clipPath="url(#clip0_343_3151)">
+                      <g clipPath="url(#clip1_343_3151)">
+                        <path
+                          d="M24.245 12.77C24.245 11.98 24.175 11.23 24.055 10.5H12.755V15.01H19.225C18.935 16.49 18.085 17.74 16.825 18.59V21.59H20.685C22.945 19.5 24.245 16.42 24.245 12.77Z"
+                          fill="#4285F4"
+                        />
+                        <path
+                          d="M12.755 24.5C15.995 24.5 18.705 23.42 20.685 21.59L16.825 18.59C15.745 19.31 14.375 19.75 12.755 19.75C9.625 19.75 6.975 17.64 6.025 14.79H2.045V17.88C4.015 21.8 8.065 24.5 12.755 24.5Z"
+                          fill="#34A853"
+                        />
+                        <path
+                          d="M6.02501 14.79C5.77501 14.07 5.645 13.3 5.645 12.5C5.645 11.7 5.78501 10.93 6.02501 10.21V7.12H2.045C1.225 8.74 0.755005 10.56 0.755005 12.5C0.755005 14.44 1.225 16.26 2.045 17.88L6.02501 14.79Z"
+                          fill="#FBBC05"
+                        />
+                        <path
+                          d="M12.755 5.25C14.525 5.25 16.105 5.86 17.355 7.05L20.775 3.63C18.705 1.69 15.995 0.5 12.755 0.5C8.065 0.5 4.015 3.2 2.045 7.12L6.025 10.21C6.975 7.36 9.625 5.25 12.755 5.25Z"
+                          fill="#EA4335"
+                        />
+                      </g>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_343_3151">
+                        <rect
+                          width="24"
+                          height="24"
+                          fill="white"
+                          transform="translate(0.5 0.5)"
+                        />
+                      </clipPath>
+                      <clipPath id="clip1_343_3151">
+                        <rect
+                          width="24"
+                          height="24"
+                          fill="white"
+                          transform="translate(0.5 0.5)"
+                        />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span className="text-2xl md:text-4xl">Google</span>
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
+                >
+                  <svg
+                    width="26"
+                    height="25"
+                    viewBox="0 0 26 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-9"
+                  >
+                    <path
+                      d="M25.0733 12.5733C25.0733 5.90546 19.6679 0.5 13 0.5C6.33212 0.5 0.926666 5.90536 0.926666 12.5733C0.926666 18.5994 5.34173 23.5943 11.1135 24.5V16.0633H8.04805V12.5733H11.1135V9.91343C11.1135 6.88755 12.9161 5.21615 15.6738 5.21615C16.9948 5.21615 18.3764 5.45195 18.3764 5.45195V8.42313H16.854C15.3541 8.42313 14.8865 9.35381 14.8865 10.3086V12.5733H18.2349L17.6996 16.0633H14.8865V24.5C20.6583 23.5943 25.0733 18.5995 25.0733 12.5733Z"
+                      fill="#1877F2"
+                    />
+                  </svg>
+                  <span className="text-2xl md:text-4xl">Facebook</span>
+                </button>
+              </div>
+              <div className="flex justify-center items-center gap-3">
+                <span className="text-3xl text-gray-400">
+                  You have an account?
+                </span>
+                <button
+                  type="button"
+                  className="text-3xl text-green-400"
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       {showModal && (
         <div
-          className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 px-12"
-          onClick={setOpenUploadModal}
+          className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 px-12 z-10"
+          onClick={() => setShowModal(false)}
         >
           <div
             className="flex flex-col justify-center items-center rounded-lg px-8 py-8 text-white opacity-100 bg-[#323232] text-5xl relative"
@@ -463,7 +485,7 @@ export default function Register() {
               <span>Upload image</span>
               <div
                 className="flex justify-center items-center text-2xl bg-white rounded-full text-black cursor-pointer absolute top-6 right-6 px-3 py-2"
-                onClick={setOpenUploadModal}
+                onClick={() => setShowModal(false)}
               >
                 x
               </div>
