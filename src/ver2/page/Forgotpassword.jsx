@@ -1,144 +1,137 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import "../css/Header.css";
 import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+
+import background from "../../ver2/components/image/login/background.png";
+import backIcon from "../../ver2/components/image/login/backIcon.svg";
 import { MdEmail } from "react-icons/md";
 
 export default function ForgotPassword() {
-  // const [reset, setReset] = useState(false);
-  const [emailReset, setEmailReset] = useState("");
-  const [loading, isLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const backLogin = () => {
-    navigate("/login");
-  };
-  
-
-  const sendReset = async (e) => {
+  const handleSendReset = async (e) => {
     e.preventDefault();
-    // const param = {
-    //     email: emailReset
-    // }
+
+    if (!email || !email.trim()) {
+      toast.warn("Please fill your email...");
+      return;
+    }
+
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("email", emailReset);
+    formData.append("email", email);
 
     try {
-      isLoading(true);
       const response = await axios.post(
         "https://metatechvn.store/reset",
-        formData,        
+        formData
       );
-      console.log("okoko", response);
-      if (
-        response.data.message
-      ) {
+
+      if (response.data.message) {
         toast.success(response.data.message);
-        isLoading(false);
-        navigate("/reset");
+        navigate("/login");
       }
     } catch (error) {
-      console.log("sda", error);
-    } finally {
-      isLoading(false);
+      if (error.message === "Request failed with status code 404")
+        toast.error("No user found with email you filled");
+      else toast.error(error.message);
     }
+    setIsLoading(false);
   };
 
   return (
-    <div className="h-screen   slab lg:flex lg:items-center">
-      <div className="w-[60%] h-[100%] lg:block hidden bg-[#D9D9D9]"></div>
-      <div className="w-[40%] h-[100%] absolute right-0 top-0">
-        <div className="bg-black flex flex-col w-[100%] h-[100%] z-30 opacity-75 ">
-          <form className="" onSubmit={sendReset}>
-            <div className="flex flex-col">
-              <div
-                className="text-8xl text-white text-center items-center mt-56"
-                style={{ fontFamily: "Starborn" }}
-              >
-                Funny Face
-              </div>
-              <div className="flex flex-col items-center text-left  mx-16">
-                <div className="text-white mt-20 lg:w-[400px] lg:h-[35px] w-[300px] h-[35px]">
-                  <div className="text-4xl text-left">Forgot Password</div>
-                  <p className="text-2xl mt-12 text-left">
-                    Don't worry, we've sent you the password reset link via
-                    email.
-                  </p>
-                </div>
-                <div className="mt-24">
-                  <div className="input_group">
-                    <div className="border_input ">
-                      <div className="input_login flex justify-items-center items-center">
-                        <MdEmail className="text-white text-2xl items-start mr-2" />
-                        <input
-                          type="text"
-                          value={emailReset}
-                          placeholder="Email"
-                          className="lg:w-[400px] lg:h-[35px] w-[300px] h-[35px] text-white text-2xl"
-                          onChange={(e) => setEmailReset(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-10 ml-4 w-full">
-                    <button
-                      type="submit"
-                      className=" rounded-lg mr-[16px] w-[450px] h-[35px] text-white text-4xl bg-[#1DB954]"
-                      disabled={loading}
-                      // onClick={resetPassword}
-                    >
-                      {loading ? 'Loading...' : 'Continue'}
-                    </button>
-                    {/* <p className="text-3xl text-white mt-12">
-                      Do you want to{" "}
-                      <b className="cursor-pointer" onClick={showReset}>
-                        reset password?
-                      </b>
-                    </p> */}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-          <div className="flex mt-5 w-full m-auto mx-auto justify-center">
-            <div className="mr-2 cursor-pointer" onClick={backLogin}>
-              <svg
-                width="25"
-                height="25"
-                viewBox="0 0 25 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.07 6.42993L4 12.4999L10.07 18.5699"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M21 12.5H4.17004"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="text-white text-3xl">
-              Forgot Password
-            </div>
-            {/* <div
-                  className="text-[#1DB954] text-2xl cursor-pointer"
-                  onClick={redirect}
-                >
-                  Log in
-                </div> */}
+    <div>
+      <div className="h-screen flex">
+        <div className="bg-gradient-to-b from-[#1A542F] to-[#000000] hidden lg:flex w-[55%] h-full justify-center items-center">
+          <Swiper
+            slidesPerView={1}
+            modules={[Pagination]}
+            pagination={{ dynamicBullets: true }}
+            scrollbar={{ draggable: true }}
+            className="w-[80%] h-[80%] mySwiper"
+          >
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+            <SwiperSlide className="w-full h-full">
+              <img
+                src={background}
+                alt="Background"
+                className="w-full h-[90%] bg-cover"
+              />
+            </SwiperSlide>
+          </Swiper>
+        </div>
+
+        <div className="w-full lg:w-[45%] h-full flex flex-col justify-center items-center gap-10">
+          <div
+            className="text-8xl text-white text-center items-center"
+            style={{ fontFamily: "Starborn" }}
+          >
+            Funny Face
           </div>
+
+          <form
+            className="w-[80%] flex flex-col text-white gap-5 mt-20"
+            onSubmit={handleSendReset}
+          >
+            <span className="text-5xl font-semibold">Forgot Password</span>
+            <span className="text-4xl">
+              Don't worry, we'll send you the password reset via email.
+            </span>
+
+            <div className="border_input border border-gray-400 px-4 py-3 rounded-lg">
+              <div className="text-white flex justify-items-center items-center gap-2">
+                <MdEmail className="text-white text-4xl items-start mr-2" />
+                <input
+                  type="email"
+                  value={email}
+                  placeholder="Email"
+                  className="flex-grow-1 border-none outline-none bg-inherit text-4xl"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button
+              className="bg-green-400 text-white rounded-lg py-4 font-semibold text-3xl"
+              onClick={(e) => handleSendReset(e)}
+            >
+              Reset password
+            </button>
+
+            <button
+              type="button"
+              className="flex items-center text-4xl font-semibold text-white self-center gap-2"
+              onClick={() => navigate("/login")}
+            >
+              <img
+                src={backIcon}
+                alt="Back"
+                className="w-[28px] h-[28px] md:w-[32px] md:h-[32px]"
+              />
+              <span>Back to login</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>

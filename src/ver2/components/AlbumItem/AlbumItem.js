@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 import "./AlbumItem.css";
 
 export const AlbumItem = (props) => {
+  const albumRef = useRef();
+  const [height, setHeight] = useState("450px");
+
   const { type } = props;
+
+  useEffect(() => {
+    const width = albumRef.current.offsetWidth;
+    setHeight(Math.trunc(width * 1.7));
+  }, [albumRef.current]);
 
   return (
     <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 component-image">
@@ -16,10 +24,12 @@ export const AlbumItem = (props) => {
                 `/images/make-album?link=${props.image}&id=${1}`
           }
         >
-          <div className="h-[450px]">
+          <div style={{ height }}>
             <img
               src={type === "swap" ? props.link_da_swap : props.image}
               alt={type}
+              loading="lazy"
+              ref={albumRef}
               className="w-full h-full bg-cover"
             />
           </div>
