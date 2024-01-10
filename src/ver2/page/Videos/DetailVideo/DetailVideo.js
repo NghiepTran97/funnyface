@@ -1,42 +1,64 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
-import './DetailVideo.css'
-import Header from '../../../components/Header/Header'
-import { Link } from 'react-router-dom'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import "./DetailVideo.css";
+import JSZip from "jszip";
+import JSZipUtils from "jszip-utils";
+import { saveAs } from "file-saver";
+import Header from "../../../components/Header/Header";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loading from "../../../../Loading/Loading";
 
 const DetailVideo = () => {
-  const { id } = useParams()
-  const [data, setData] = useState('')
-  const [video, setVideo] = useState('')
-  const [videoGoc, SetVideoGoc] = useState('')
+  const { id } = useParams();
+  const [data, setData] = useState("");
+  const [video, setVideo] = useState("");
+  const [videoGoc, SetVideoGoc] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [idUser, setIdUser] = useState(null)
+  const zip = new JSZip();
+
+  const [idUser, setIdUser] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `https://metatechvn.store/lovehistory/sukien/video/${id}`
-        )
+        );
 
-        setIdUser(response.data.sukien_video[0].id_user)
-        setData(response.data.sukien_video[0])
-        setVideo(response.data.sukien_video[0].link_vid_swap)
-        SetVideoGoc(response.data.sukien_video[0].link_video_goc)
-        console.log('Video Value:', video)
-        console.log(response.data)
+        setIdUser(response.data.sukien_video[0].id_user);
+        setData(response.data.sukien_video[0]);
+        setVideo(response.data.sukien_video[0].link_vid_swap);
+        SetVideoGoc(response.data.sukien_video[0].link_video_goc);
+        console.log("Video Value:", video);
+        console.log(response.data);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    fetchData()
-  }, [id])
+    fetchData();
+  }, [id]);
+
+  const handleDownloadVideo = async () => {
+    setIsLoading(true);
+    try {
+      const fileName = video.split("/").pop();
+
+      await saveAs(video, fileName);
+    } catch (error) {
+      toast.error("Error: " + error.message);
+      console.log({ err: error.message });
+    }
+    setIsLoading(false);
+  };
+
   return (
     <>
       <Header
         data={{
-          title: 'create a video',
+          title: "create a video",
           myCollection: true,
           download: true,
         }}
@@ -65,8 +87,11 @@ const DetailVideo = () => {
               <button className="detail-btn detail-save" type="button">
                 Save to my collection
               </button>
-              <div className="detail-btn detail-download">
-                <a href="">Download video</a>
+              <div
+                className="detail-btn detail-download cursor-pointer"
+                onClick={handleDownloadVideo}
+              >
+                Download video
               </div>
             </div>
           </div>
@@ -82,8 +107,9 @@ const DetailVideo = () => {
           </div>
         </div>
       </div>
+      <Loading status={isLoading} />
     </>
-  )
-}
+  );
+};
 
-export default DetailVideo
+export default DetailVideo;

@@ -1,7 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    colors: {
+      green: {
+        400: "#1DB954",
+        ...colors.green,
+      },
+      "custom-gray": "#32323280",
+      ...colors,
+    },
     fontFamily: { sans: ["Quicksan", "ui-sans-serif", "system-ui"] },
     extend: {
       colors: {

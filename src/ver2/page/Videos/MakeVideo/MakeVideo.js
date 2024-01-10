@@ -1,156 +1,163 @@
-import axios from 'axios'
-import * as faceapi from 'face-api.js'
-import React, { useEffect, useState } from 'react'
-import ReactLoading from 'react-loading'
-import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import '../../../css/AddEvent.css'
-import RenderRandomWaitImage from '../../../components/randomImages'
+import axios from "axios";
+import * as faceapi from "face-api.js";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../css/AddEvent.css";
+import RenderRandomWaitImage from "../../../components/randomImages";
 
-import add from '../../../components/image/add.png'
-import pen from '../../../components/image/edit-2.png'
-import './MakeVideo.css'
-import Swal from 'sweetalert2'
-import Header from '../../../components/Header/Header'
+import add from "../../../components/image/add.png";
+import pen from "../../../components/image/edit-2.png";
+import "./MakeVideo.css";
+import Swal from "sweetalert2";
+import Header from "../../../components/Header/Header";
+import Loading from "../../../../Loading/Loading";
 
 function MakeVideo() {
-  const [image1, setImage1] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [showImg, setShowImg] = useState({ img1: null })
-  const [randomImages, setRandomImages] = useState(null)
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  const token = userInfo && userInfo.token
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const [image1, setImage1] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showImg, setShowImg] = useState({ img1: null });
+  const [randomImages, setRandomImages] = useState(null);
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const token = userInfo && userInfo.token;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const ID_DEFAULT = 2
+  const ID_DEFAULT = 2;
   const VIDEO_DEFAULT =
-    'https://github.com/sonnh7289/funnyvideo_faceFunny/raw/main/catbanh2.mp4'
+    "https://github.com/sonnh7289/funnyvideo_faceFunny/raw/main/catbanh2.mp4";
+
+  const loadModels = async () => {
+    setIsLoading(true);
+    try {
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+      await faceapi.nets.faceExpressionNet.loadFromUri("/models");
+      await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
+    } catch (error) {
+      toast.error("Error while loading models: " + error.message);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-      faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-      faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-      faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-      faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
-    ]).then(() => {})
-  }, [])
+    loadModels();
+  }, []);
 
-  const idUser = userInfo && userInfo.id_user
+  const idUser = userInfo && userInfo.id_user;
 
   const getMyDetailUser = async () => {
     try {
-      const { data } = await axios.get('https://api.ipify.org/?format=json')
+      const { data } = await axios.get("https://api.ipify.org/?format=json");
       if (data.ip) {
-        const browser = window.navigator.userAgent
+        const browser = window.navigator.userAgent;
         return {
           browser: browser,
           ip: data.ip,
-        }
+        };
       }
-      return false
+      return false;
     } catch (error) {
-      console.log(error)
-      return false
+      console.log(error);
+      return false;
     }
-  }
+  };
 
   const closeUploadImg = async () => {
-    setImage1(null)
-    setIsLoading(false)
-    setShowImg({ img1: null })
-    document.querySelector('#img1').value = ''
-    return
-  }
+    setImage1(null);
+    setIsLoading(false);
+    setShowImg({ img1: null });
+    document.querySelector("#img1").value = "";
+    return;
+  };
 
   const validImage = async (image) => {
     try {
-      const imageElement = document.createElement('img')
-      imageElement.src = image
-      const netInput = imageElement
+      const imageElement = document.createElement("img");
+      imageElement.src = image;
+      const netInput = imageElement;
 
       let detections = await faceapi
         .detectAllFaces(netInput, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
-        .withFaceExpressions()
+        .withFaceExpressions();
       const detections2 = await faceapi
         .detectAllFaces(netInput, new faceapi.SsdMobilenetv1Options())
         .withFaceLandmarks()
-        .withFaceExpressions()
+        .withFaceExpressions();
 
-      if (detections.length > 1) return detections
-      if (detections2.length == 0) return detections2
-      if (detections2.length == 1) return detections2
-      return detections
+      if (detections.length > 1) return detections;
+      if (detections2.length == 0) return detections2;
+      if (detections2.length == 1) return detections2;
+      return detections;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const [imageVid, setImageVid] = useState('')
+  const [imageVid, setImageVid] = useState("");
 
   const handleChangeImage = async (event, setImage, atImg) => {
-    let file = event.target.files[0]
+    let file = event.target.files[0];
     if (!file) {
-      return
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await validImage(URL.createObjectURL(file))
+      const res = await validImage(URL.createObjectURL(file));
       if (res.length == 0) {
-        setIsLoading(false)
-        closeUploadImg()
+        setIsLoading(false);
+        closeUploadImg();
         return Swal.fire(
-          'Oops...',
-          'No faces can be recognized in the photo!',
-          'warning'
-        )
+          "Oops...",
+          "No faces can be recognized in the photo!",
+          "warning"
+        );
       }
       if (res.length > 1) {
-        setIsLoading(false)
-        closeUploadImg()
+        setIsLoading(false);
+        closeUploadImg();
         return Swal.fire(
-          'Oops...',
-          'Photos must contain only one face!',
-          'warning'
-        )
+          "Oops...",
+          "Photos must contain only one face!",
+          "warning"
+        );
       }
 
-      setIsLoading(false)
-      if (atImg == 'img1') {
-        let send = showImg
-        send.img1 = URL.createObjectURL(file)
-        setShowImg(send)
-        setImage(file)
-        const imagevid = await uploadImage(file)
-        setImageVid(imagevid)
+      setIsLoading(false);
+      if (atImg == "img1") {
+        let send = showImg;
+        send.img1 = URL.createObjectURL(file);
+        setShowImg(send);
+        setImage(file);
+        const imagevid = await uploadImage(file);
+        setImageVid(imagevid);
       }
     } catch (error) {
-      console.log(error)
-      setIsLoading(false)
-      closeUploadImg()
+      console.log(error);
+      setIsLoading(false);
+      closeUploadImg();
     }
-  }
+  };
 
-  const [tenVideo, setTenVideo] = useState()
-  const location = useLocation()
+  const [tenVideo, setTenVideo] = useState("");
+  const location = useLocation();
 
-  const queryParams = new URLSearchParams(location.search)
-  const id = queryParams.get('id') || ID_DEFAULT
-  const link = queryParams.get('link') || VIDEO_DEFAULT
-  const history = useNavigate()
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get("id") || ID_DEFAULT;
+  const link = queryParams.get("link") || VIDEO_DEFAULT;
 
   const uploadImage = async (image1) => {
     if (idUser === null) {
-      toast.warning('Login is required')
-      navigate('/login')
+      toast.warning("Login is required");
+      navigate("/login");
     }
 
-    const formData = new FormData()
-    formData.append('src_img', image1)
+    const formData = new FormData();
+    formData.append("src_img", image1);
 
     try {
       if (image1) {
@@ -161,81 +168,59 @@ function MakeVideo() {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
-        )
-        return apiResponse.data // Trả về dữ liệu từ API
+        );
+        return apiResponse.data; // Trả về dữ liệu từ API
       }
 
-      return null
+      return null;
     } catch (error) {
-      toast.warning(error)
-      return null
+      toast.warning(error);
+      return null;
     }
-  }
+  };
 
   const fetchData = async () => {
-    if (!tenVideo.trim() || !showImg.img1) {
-      toast.warning('Enter Name Video!')
-      return
-    }
+    if (!tenVideo.trim()) return toast.warning("Enter Name Video!");
 
-    setIsLoading(true)
+    if (!showImg.img1) return toast.warning("Image require!");
+
+    setIsLoading(true);
     try {
-      const device = await getMyDetailUser()
+      const device = await getMyDetailUser();
 
       const response = await axios.get(
         `https://lhvn.online/getdata/genvideo?id_video=${id}&device_them_su_kien=${device.browser}&ip_them_su_kien=${device.ip}&id_user=${idUser}&image=${imageVid}&ten_video=${tenVideo}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
-      )
+      );
 
       dispatch({
-        type: 'SET_RESPONSE_DATA',
+        type: "SET_RESPONSE_DATA",
         payload: response.data,
-      })
+      });
 
-      const idEvent = response.data.sukien_video.id_sukien_video
-      history(`videos/detail-video/${idEvent}`)
+      const idEvent = response.data.sukien_video.id_sukien_video;
+      navigate(`/videos/detail-video/${idEvent}`);
 
       // toast.success("Successful");
     } catch (error) {
-      toast.warning(error.message)
-      setIsLoading(false)
+      toast.warning(error.message);
+      setIsLoading(false);
     }
-  }
-
-  const renderLoading = () => {
-    if (isLoading) {
-      return (
-        <div className="fixed top-0 min-w-[100%] h-[100vh] z-30">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'right',
-              alignItems: 'center',
-            }}
-            className="absolute z-20 opacity-100 -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
-          >
-            <ReactLoading type={'bars'} color={'#C0C0C0'} />
-          </div>
-        </div>
-      )
-    }
-    return null
-  }
+  };
 
   return (
     <>
       <Header
         data={{
-          title: 'create a video',
+          title: "create a video",
           myCollection: true,
           download: true,
         }}
@@ -245,7 +230,7 @@ function MakeVideo() {
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
-        {isLoading ? renderLoading() : ''}
+        <Loading status={isLoading} />
         <div className="flex flex-col lg:flex-row lg:items-center">
           <div className="p-4 lg:w-1/2">
             <div className="flex items-center justify-center name-video">
@@ -273,15 +258,15 @@ function MakeVideo() {
 
                 <input
                   onChange={(e) => {
-                    handleChangeImage(e, setImage1, 'img1')
+                    handleChangeImage(e, setImage1, "img1");
                   }}
                   type="file"
                   accept="image/*"
                   id="img1"
                   className={
                     image1
-                      ? ' opacity-0 responsiveImg cursor-pointer w-full h-full rounded-[50%]  bg-center bg-no-repeat bg-cover'
-                      : ' opacity-0 cursor-pointer w-full h-full rounded-[50%] absolute bg-center bg-no-repeat bg-black'
+                      ? " opacity-0 responsiveImg cursor-pointer w-full h-full rounded-[50%]  bg-center bg-no-repeat bg-cover"
+                      : " opacity-0 cursor-pointer w-full h-full rounded-[50%] absolute bg-center bg-no-repeat bg-black"
                   }
                 />
               </div>
@@ -310,7 +295,7 @@ function MakeVideo() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default MakeVideo
+export default MakeVideo;

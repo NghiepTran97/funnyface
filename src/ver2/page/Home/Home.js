@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-import CommentsHistory from '../../components/CommentsHistory/CommentsHistory'
-import EventHistory from '../../components/EventHistory/EventHistory'
-import './Home.css'
-import Header from '../../components/Header/Header'
-import { VideoItem } from '../../components/VideoItem/VideoItem'
-import bannerHome from '../../components/image/home-banner.png'
+import CommentsHistory from "../../components/CommentsHistory/CommentsHistory";
+import EventHistory from "../../components/EventHistory/EventHistory";
+import "./Home.css";
+import Header from "../../components/Header/Header";
+import { VideoItem } from "../../components/VideoItem/VideoItem";
+import bannerHome from "../../components/image/home-banner.png";
 
 function Home() {
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  const token = userInfo && userInfo.token
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const token = userInfo && userInfo.token;
 
-  const [videos, setVideos] = useState([])
-  const [count, setCount] = useState(1)
+  const [videos, setVideos] = useState([]);
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
-    getVideos()
-  }, [count, token])
+    getVideos();
+  }, [count, token]);
 
   const getVideos = async () => {
     const { data, status } = await axios.get(
@@ -27,26 +27,26 @@ function Home() {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       }
-    )
-    const errorMessage = 'exceed the number of pages!!!'
+    );
+    const errorMessage = "exceed the number of pages!!!";
 
     if (data === errorMessage) {
-      toast.error(errorMessage)
+      toast.error(errorMessage);
     }
 
     if (status === 200) {
-      setVideos(data.list_sukien_video)
+      setVideos(data.list_sukien_video);
     }
-  }
+  };
 
   return (
     <div>
       <Header
         data={{
-          background: '#32323280',
+          background: "#32323280",
           download: true,
         }}
       />
@@ -69,7 +69,9 @@ function Home() {
 
             <div className="home-episodes-head">
               <h3 className="home-title">episodes for you</h3>
-              <Link to="/videos">Show all</Link>
+              <Link to="/videos" className="text-3xl">
+                Show all
+              </Link>
             </div>
 
             <div className="home-episodes-main">
@@ -100,7 +102,7 @@ function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

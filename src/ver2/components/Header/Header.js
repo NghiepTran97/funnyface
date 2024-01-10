@@ -1,159 +1,217 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft'
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight'
-import DownloadIcon from '@mui/icons-material/Download'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import React, { useEffect, useState } from 'react'
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import DownloadIcon from "@mui/icons-material/Download";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import React, { useEffect, useState } from "react";
 
-import { Link, useParams } from 'react-router-dom'
-import axios from 'axios'
-import Modal from 'react-modal'
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import Modal from "react-modal";
 
-import './Header.css'
+import SideBarMobile from "../SideBar/SideBarMobile";
+import "./Header.css";
 
-import boysmall from '../image/boy-small.png'
-import girlsmall from '../image/girl-small.png'
-import Clock from '../ClockEvent/CLockEvent'
+import sideBarIcon from "../../components/image/sideBar/SideBarIcon.svg";
+import sideBarIconActive from "../../components/image/sideBar/SideBarIconActive.svg";
+import boysmall from "../image/boy-small.png";
+import girlsmall from "../image/girl-small.png";
+import Clock from "../ClockEvent/CLockEvent";
 
 const Header = ({ data }) => {
-  const [isSticky, setSticky] = useState(false)
+  const [isSticky, setSticky] = useState(false);
+  const [openSideBarMobile, setOpenSideBarMobile] = useState(false);
+  const [sideBarHover, setSideBarHover] = useState(false);
 
-  const { id } = useParams()
-  const [dataUser, setDataUser] = useState([])
+  const { id } = useParams();
+  const [dataUser, setDataUser] = useState([]);
 
-  const [isOpenModal, setIsOpenModal] = useState(false)
-  const [imgUrl, setImgUrl] = useState(null)
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [imgUrl, setImgUrl] = useState(null);
 
   const fetchDataUser = async (id) => {
     try {
       const response = await axios.get(
         `https://metatechvn.store/lovehistory/${id}`
-      )
-      setDataUser(response.data.sukien[0])
+      );
+      setDataUser(response.data.sukien[0]);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
-      setSticky(true)
+      setSticky(true);
     } else {
-      setSticky(false)
+      setSticky(false);
     }
-  }
+  };
 
   const modalShow = (imgUrl = null) => {
-    setIsOpenModal(true)
-    setImgUrl(imgUrl)
-  }
-  const modalHide = () => setIsOpenModal(false)
+    setIsOpenModal(true);
+    setImgUrl(imgUrl);
+  };
+  const modalHide = () => setIsOpenModal(false);
 
   useEffect(() => {
-    id && fetchDataUser(id)
+    id && fetchDataUser(id);
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <div
-      className="component-header"
-      style={{
-        background:
-          data?.background ||
-          'linear-gradient(91.12deg, #1a542f 21.71%, #355b42 78.53%)',
-      }}
-    >
-      <div className="component-header-top">
-        <div className="component-header-btn">
-          <ArrowCircleLeftIcon sx={{ fontSize: 40, color: '#FFFFFF33' }} />
-          <ArrowCircleRightIcon sx={{ fontSize: 40, color: '#FFFFFF33' }} />
-        </div>
+    <>
+      <SideBarMobile
+        openMenu={openSideBarMobile}
+        setOpenMenu={setOpenSideBarMobile}
+      />
+      <div
+        className="py-[28px] px-[16px] text-white flex flex-col gap-5"
+        style={{
+          background:
+            data?.background ||
+            "linear-gradient(91.12deg, #1a542f 21.71%, #355b42 78.53%)",
+        }}
+      >
+        <div className="flex justify-between items-center">
+          <div
+            className="block lg:hidden cursor-pointer"
+            onClick={() => setOpenSideBarMobile(true)}
+            onMouseEnter={() => {
+              setSideBarHover(true);
+            }}
+            onMouseLeave={() => {
+              setSideBarHover(false);
+            }}
+          >
+            <img
+              src={sideBarHover ? sideBarIconActive : sideBarIcon}
+              alt="Menu"
+              className="w-[32px] h-[32px]"
+            />
+          </div>
+          <div className="flex gap-2">
+            <ArrowCircleLeftIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
+            <ArrowCircleRightIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
+          </div>
 
-        <div className="component-header-user">
-          {data?.download && (
-            <Link to="/download-app">
-              <DownloadIcon />
-              Download app
+          <div className="flex gap-4 text-xl font-normal">
+            {data?.download && (
+              <Link to="/download-app" className="cursor-pointer">
+                <DownloadIcon
+                  xs={{ fontSize: 24, color: "#FFFFFF33" }}
+                  md={{ fontSize: 36 }}
+                />
+                Download app
+              </Link>
+            )}
+            <NotificationsIcon
+              xs={{ fontSize: 24, color: "#FFFFFF33", cursor: "pointer" }}
+              md={{ fontSize: 36 }}
+            />
+            <Link to="/profile">
+              <AccountCircleIcon
+                xs={{ fontSize: 24, color: "#FFFFFF33" }}
+                md={{ fontSize: 36 }}
+              />
             </Link>
-          )}
-          <NotificationsIcon />
-          <Link to="/profile">
-            <AccountCircleIcon />
-          </Link>
-        </div>
-      </div>
-      <div className="component-header-bottom">
-        {data?.title && (
-          <h2 className="component-header-title">{data.title}</h2>
-        )}
-        {data?.myCollection && (
-          <Link to="/videos/my-video">My collections</Link>
-        )}
-        {data?.myEvent && <Link to="/events">My eventss</Link>}
-      </div>
-
-      {data?.events && (
-        <div className="component-header-events pt-[40px]">
-          <div className="w-full events-header">
-            <div className="events-couple">
-              <div className="couple-item">
-                <div className="couple-icon couple-icon__male">
-                  <img src={boysmall} alt="" />
-                </div>
-
-                <div className="couple-image couple-image__boy">
-                  {dataUser?.link_nam_goc && (
-                    <img
-                      src={dataUser.link_nam_goc}
-                      alt="image boy root"
-                      onClick={() => modalShow(dataUser.link_nam_goc)}
-                    />
-                  )}
-                </div>
-              </div>
-
-              <div className="couple-item couple-item__female">
-                <div className="couple-icon couple-icon__female">
-                  <img src={girlsmall} alt="" />
-                </div>
-
-                <div className="couple-image couple-image__girl">
-                  {dataUser?.link_nu_goc && (
-                    <img
-                      src={dataUser.link_nu_goc}
-                      alt="image girl root"
-                      className="love-img"
-                      onClick={() => modalShow(dataUser.link_nu_goc)}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="events-time">
-              <Clock data={dataUser?.real_time} />
-            </div>
           </div>
         </div>
-      )}
-
-      <Modal
-        isOpen={isOpenModal}
-        onRequestClose={modalHide}
-        className="component-header-modal"
-        contentLabel="Example Modal"
-      >
-        <div className="component-header-modal-content">
-          <button onClick={modalHide}>close</button>
-          <img src={imgUrl} alt="This is a image!" />
+        <div className="flex justify-between items-center">
+          {data?.title && (
+            <h2 className="text-3xl font-bold uppercase">{data.title}</h2>
+          )}
+          {data?.myCollection && (
+            <Link to="/videos/my-video" className="text-4xl font-bold">
+              My collections
+            </Link>
+          )}
+          {data?.myEvent && (
+            <Link to="/events" className="text-4xl font-bold">
+              My eventss
+            </Link>
+          )}
         </div>
-      </Modal>
-    </div>
-  )
-}
 
-export default Header
+        {data?.events && (
+          <div className="component-header-events pt-[40px]">
+            <div className="w-full flex justify-between items-center">
+              <div className="flex">
+                <div className="relative">
+                  <div className="absolute top-0 left-0 w-[120px] h-[120px] rounded-full border-4 border-blue-400 bg-gray-400 cursor-pointer">
+                    {dataUser?.link_nam_goc && (
+                      <img
+                        src={dataUser.link_nam_goc}
+                        alt="boy root"
+                        onClick={() => modalShow(dataUser.link_nam_goc)}
+                        className="w-full h-full bg-cover"
+                      />
+                    )}
+                    <div className="w-[40px] h-[40px] absolute top-[80%] left-0">
+                      <img
+                        src={boysmall}
+                        alt="Boy"
+                        className="w-full h-full bg-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative min-h-[120px]">
+                  <div className="absolute top-0 left-[80px] w-[120px] h-[120px] rounded-full border-4 border-pink-500 bg-gray-400 cursor-pointer">
+                    {dataUser?.link_nu_goc && (
+                      <img
+                        src={dataUser.link_nu_goc}
+                        alt="boy root"
+                        onClick={() => modalShow(dataUser.link_nu_goc)}
+                        className="w-full h-full bg-cover"
+                      />
+                    )}
+                    <div className="w-[40px] h-[40px] absolute top-[80%] right-0 ">
+                      <img
+                        src={girlsmall}
+                        alt="Boy"
+                        className="w-full h-full bg-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="events-time">
+                <Clock data={dataUser?.real_time} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        <Modal
+          isOpen={isOpenModal}
+          onRequestClose={modalHide}
+          className="text-black"
+          contentLabel="Example Modal"
+        >
+          <div className="border-[15px] border-white rounded-xl relative h-max w-[500px]">
+            <button
+              onClick={modalHide}
+              className="absolute top-0 right-0 bg-red px-3 py-2 rounded-lg text-white font-semibold capitalize"
+            >
+              Close
+            </button>
+            <img
+              src={imgUrl}
+              alt="Close"
+              className="w-full max-h-[80vh] object-cover"
+            />
+          </div>
+        </Modal>
+      </div>
+    </>
+  );
+};
+
+export default Header;

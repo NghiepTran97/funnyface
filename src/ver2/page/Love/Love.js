@@ -1,252 +1,233 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   default as girl,
   default as girlM,
-} from '../../components/image/Component130.png'
+} from "../../components/image/Component130.png";
 import {
   default as boy,
   default as boyM,
-} from '../../components/image/Component131.png'
-import heart from '../../components/image/heart-double.png'
-import imgBg from '../../components/image/love-bg.png'
-import uilPlus from '../../components/image/uil_plus.png'
+} from "../../components/image/Component131.png";
+import heart from "../../components/image/heart-double.png";
+import imgBg from "../../components/image/love-bg.png";
+import uilPlus from "../../components/image/uil_plus.png";
 
-import boysmall from '../../components/image/boy-small.png'
-import girlsmall from '../../components/image/girl-small.png'
+import boysmall from "../../components/image/boy-small.png";
+import girlsmall from "../../components/image/girl-small.png";
 
-import g1 from '../../components/image/howto-1.jpeg'
-import g2 from '../../components/image/howto-2.jpg'
-import g3 from '../../components/image/howto-3.jpg'
-import g4 from '../../components/image/howto-4.png'
-import g5 from '../../components/image/howto-5.png'
-import g6 from '../../components/image/howto-6.png'
-import l1 from '../../components/image/loi-1.jpeg'
-import l2 from '../../components/image/loi-2.jpeg'
-import l3 from '../../components/image/loi-3.png'
-import l4 from '../../components/image/loi-4.png'
-import l5 from '../../components/image/loi-5.png'
-import l6 from '../../components/image/loi-6.jpg'
+import goodPhoto1 from "../../components/image/goodPhotos/goodPhoto1.png";
+import goodPhoto2 from "../../components/image/goodPhotos/goodPhoto2.png";
+import goodPhoto3 from "../../components/image/goodPhotos/goodPhoto3.png";
+import goodPhoto4 from "../../components/image/goodPhotos/goodPhoto4.png";
+import goodPhoto5 from "../../components/image/goodPhotos/goodPhoto5.png";
+import goodPhoto6 from "../../components/image/goodPhotos/goodPhoto6.png";
+import badPhoto1 from "../../components/image/badPhotos/badPhoto1.png";
+import badPhoto2 from "../../components/image/badPhotos/badPhoto2.png";
+import badPhoto3 from "../../components/image/badPhotos/badPhoto3.png";
+import badPhoto4 from "../../components/image/badPhotos/badPhoto4.png";
+import badPhoto5 from "../../components/image/badPhotos/badPhoto5.png";
+import badPhoto6 from "../../components/image/badPhotos/badPhoto6.png";
 
-import ReactLoading from 'react-loading'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import ReactLoading from "react-loading";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import * as faceapi from 'face-api.js'
-import RenderRandomWaitImage from '../../components/randomImages'
-import '../../css/AddEvent.css'
+import * as faceapi from "face-api.js";
+import RenderRandomWaitImage from "../../components/randomImages";
+import "../../css/AddEvent.css";
 
-import Swal from 'sweetalert2'
-import add from '../../components/image/add.png'
-import './Love.css'
-import Header from '../../components/Header/Header'
+import Swal from "sweetalert2";
+import add from "../../components/image/add.png";
+import "./Love.css";
+import Header from "../../components/Header/Header";
 
 function Love() {
-  const Api_key = 'ba35005b6d728bd9197bfd95d64e4e39'
-  const serverGenarateSK = 'https://thinkdiff.us'
+  const Api_key = "ba35005b6d728bd9197bfd95d64e4e39";
+  const serverGenarateSK = "https://thinkdiff.us";
 
-  const [showModal, setShowModal] = React.useState(false)
-  const [nam1, setBoy] = useState(boy)
-  const [nu1, setNu] = useState(girl)
-  const [nam2, setBoy2] = useState(boyM)
-  const [nu2, setNu2] = useState(girlM)
-  const [uil, setUil] = useState(uilPlus)
-  const [bsHeart, setHeart] = useState(heart)
-  const [image1, setImage1] = useState(null)
-  const [image2, setImage2] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-  const [showImg, setShowImg] = useState({ img1: null, img2: null })
-  const [randomImages, setRandomImages] = useState(null)
-  const [isModelWarning, setIsModelWarning] = useState(false)
+  const [showModal, setShowModal] = React.useState(false);
+  const [nam1, setBoy] = useState(boy);
+  const [nu1, setNu] = useState(girl);
+  const [nam2, setBoy2] = useState(boyM);
+  const [nu2, setNu2] = useState(girlM);
+  const [uil, setUil] = useState(uilPlus);
+  const [bsHeart, setHeart] = useState(heart);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const [showImg, setShowImg] = useState({ img1: null, img2: null });
+  const [randomImages, setRandomImages] = useState(null);
+  const [isModelWarning, setIsModelWarning] = useState(false);
 
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  const token = userInfo && userInfo.token
-  const [filled, setFilled] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const [hi, setHi] = useState(false)
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const token = userInfo && userInfo.token;
+  const [filled, setFilled] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [hi, setHi] = useState(false);
 
   useEffect(() => {
     if (filled < 100 && isRunning) {
-      setTimeout(() => setFilled((prev) => (prev += 2)), 1900)
+      setTimeout(() => setFilled((prev) => (prev += 2)), 1900);
     }
-  }, [filled, isRunning])
+  }, [filled, isRunning]);
 
   const [sameFace, setSameFace] = useState({
     img1: null,
     img2: null,
-  })
+  });
 
-  const [imgSucess] = React.useState([g1, g2, g6, g3, g4, g5])
-  const [imgError] = React.useState([l1, l2, l3, l4, l5, l6])
+  const [imgSucess] = React.useState([
+    goodPhoto1,
+    goodPhoto2,
+    goodPhoto3,
+    goodPhoto4,
+    goodPhoto5,
+    goodPhoto6,
+  ]);
+  const [imgError] = React.useState([
+    badPhoto1,
+    badPhoto2,
+    badPhoto3,
+    badPhoto4,
+    badPhoto5,
+    badPhoto6,
+  ]);
 
-  const images = [
-    {
-      url: l1,
-      description:
-        'Glasses are not allowed, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-    {
-      url: l2,
-      description:
-        'Do not turn your back on the lens, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-    {
-      url: l3,
-      description:
-        'Do not turn your back on the lens, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-    {
-      url: l4,
-      description:
-        'Photos with unclear faces, photos of people practicing yoga, or photos that are too far away with unclear faces are also not accepted, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-    {
-      url: l5,
-      description:
-        'Photos with unclear faces, photos of people practicing yoga, or photos that are too far away with unclear faces are also not accepted, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-    {
-      url: l6,
-      description:
-        'You must not grimace or cover your face with your hands, You must choose a photo with a clear face, only one face, no mask, no glasses, no backlight, no makeup',
-    },
-  ]
-
-  const [showModals22, setShowModals22] = React.useState(true)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [showModals22, setShowModals22] = React.useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageClick = (item) => {
-    setSelectedImage(item)
-    setIsModalVisible(true)
-  }
+    setSelectedImage(item);
+    setIsModalVisible(true);
+  };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false)
-  }
+    setIsModalVisible(false);
+  };
 
-  const [isModalVisible1, setModalVisible1] = useState(false)
+  const [isModalVisible1, setModalVisible1] = useState(false);
 
   const handleOpenModal = async () => {
     try {
-      await Images()
-      setModalVisible1(true)
+      await Images();
+      setModalVisible1(true);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const handleCloseModalne = () => {
-    setModalVisible1(false)
-  }
+    setModalVisible1(false);
+  };
 
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState("");
   const Images = async () => {
     try {
       const response = await axios.get(
         `https://metatechvn.store/images/${idUser}?type=video`
-      )
-      const message = 'Missing param!!!, your type is video'
+      );
+      const message = "Missing param!!!, your type is video";
       if (response.data === message) {
-        toast.warning('Missing param!!!, your type is video')
+        toast.warning("Missing param!!!, your type is video");
       }
-      setImage(response.data.image_links_video)
-      console.log(response.data.image_links_video)
+      setImage(response.data.image_links_video);
+      console.log(response.data.image_links_video);
     } catch (error) {
-      toast.warning(error)
+      toast.warning(error);
     }
-  }
+  };
 
   useEffect(() => {
-    loadModels()
-  }, [])
+    loadModels();
+  }, []);
 
   const loadModels = () => {
     Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-      faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-      faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-      faceapi.nets.faceExpressionNet.loadFromUri('/models'),
-      faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
-    ]).then(() => {})
-  }
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+      faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
+    ]).then(() => {});
+  };
 
   const closeUploadImg = async () => {
-    setImage1(null)
-    setImage2(null)
-    setShowModal(false)
-    setIsLoading(false)
-    setShowImg({ img1: null, img2: null })
+    setImage1(null);
+    setImage2(null);
+    setShowModal(false);
+    setIsLoading(false);
+    setShowImg({ img1: null, img2: null });
     setSameFace({
       img1: null,
       img2: null,
-    })
+    });
 
-    document.querySelector('#img1').value = ''
-    document.querySelector('#img2').value = ''
-    return
-  }
+    document.querySelector("#img1").value = "";
+    document.querySelector("#img2").value = "";
+    return;
+  };
 
   const validImage = async (image) => {
     try {
-      const imageElement = document.createElement('img')
-      imageElement.src = image
-      const netInput = imageElement
+      const imageElement = document.createElement("img");
+      imageElement.src = image;
+      const netInput = imageElement;
       // console.log(netInput); // object img with src = blob:....
       let detections = await faceapi
         .detectAllFaces(netInput, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
-        .withFaceExpressions()
+        .withFaceExpressions();
       const detections2 = await faceapi
         .detectAllFaces(netInput, new faceapi.SsdMobilenetv1Options())
         .withFaceLandmarks()
-        .withFaceExpressions()
+        .withFaceExpressions();
 
-      if (detections.length > 1) return detections
-      if (detections2.length == 0) return detections2
-      if (detections2.length == 1) return detections2
-      return detections
+      if (detections.length > 1) return detections;
+      if (detections2.length == 0) return detections2;
+      if (detections2.length == 1) return detections2;
+      return detections;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const [srcnam, Setsrcnam] = useState('')
-  const [srcnu, Setsrcnu] = useState('')
+  const [srcnam, Setsrcnam] = useState("");
+  const [srcnu, Setsrcnu] = useState("");
   const handleChangeImage = async (event, setImage, atImg) => {
-    let file = event.target.files[0]
+    let file = event.target.files[0];
     if (!file) {
-      return
+      return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      if (!URL.createObjectURL(file)) return setShowModal(true)
-      const res = await validImage(URL.createObjectURL(file))
+      if (!URL.createObjectURL(file)) return setShowModal(true);
+      const res = await validImage(URL.createObjectURL(file));
 
       if (res.length == 0) {
-        setIsLoading(false)
-        closeUploadImg()
+        setIsLoading(false);
+        closeUploadImg();
         return Swal.fire(
-          'Oops...',
-          'No faces can be recognized in the photo!',
-          'warning'
-        )
+          "Oops...",
+          "No faces can be recognized in the photo!",
+          "warning"
+        );
       }
 
       if (res.length > 1) {
-        setIsLoading(false)
-        closeUploadImg()
+        setIsLoading(false);
+        closeUploadImg();
         return Swal.fire(
-          'Oops...',
-          'Photos must contain only one face!',
-          'warning'
-        )
+          "Oops...",
+          "Photos must contain only one face!",
+          "warning"
+        );
       }
 
-      atImg === 'img1'
+      atImg === "img1"
         ? setSameFace({
             img1: res[0]?.detection?._score,
             img2: sameFace.img2,
@@ -254,80 +235,80 @@ function Love() {
         : setSameFace({
             img1: sameFace.img1,
             img2: res[0]?.detection?._score,
-          })
+          });
       if (
         sameFace.img1 === res[0]?.detection?._score ||
         sameFace.img2 === res[0]?.detection?._score
       ) {
-        setIsLoading(false)
-        closeUploadImg()
+        setIsLoading(false);
+        closeUploadImg();
 
-        return Swal.fire('Oops...', 'Photos cannot be the same', 'warning')
+        return Swal.fire("Oops...", "Photos cannot be the same", "warning");
       }
 
-      setIsLoading(false)
+      setIsLoading(false);
       // if (validateImgage(res) == undefined) return;
 
-      if (atImg == 'img1') {
-        let send = showImg
-        send.img1 = URL.createObjectURL(file)
-        setShowImg(send)
-        setImage(file)
-        const res1 = await uploadImage(file)
+      if (atImg == "img1") {
+        let send = showImg;
+        send.img1 = URL.createObjectURL(file);
+        setShowImg(send);
+        setImage(file);
+        const res1 = await uploadImage(file);
         if (!res1) {
-          closeUploadImg()
+          closeUploadImg();
         }
 
-        Setsrcnam(res1)
+        Setsrcnam(res1);
       } else {
-        let send = showImg
-        send.img2 = URL.createObjectURL(file)
-        setShowImg(send)
-        setImage(file)
-        const res2 = await uploadImageNu(file)
+        let send = showImg;
+        send.img2 = URL.createObjectURL(file);
+        setShowImg(send);
+        setImage(file);
+        const res2 = await uploadImageNu(file);
 
         if (!res2) {
-          closeUploadImg()
+          closeUploadImg();
         }
-        Setsrcnu(res2)
+        Setsrcnu(res2);
       }
     } catch (error) {
-      console.log(error)
-      setShowModal(true)
-      setIsLoading(false)
-      closeUploadImg()
+      console.log(error);
+      setShowModal(true);
+      setIsLoading(false);
+      closeUploadImg();
     }
-  }
+  };
 
   const getMyDetailUser = async () => {
     try {
-      const { data } = await axios.get('https://api.ipify.org/?format=json')
+      const { data } = await axios.get("https://api.ipify.org/?format=json");
 
       if (data.ip) {
-        const browser = window.navigator.userAgent
+        const browser = window.navigator.userAgent;
         return {
           browser: browser,
           ip: data.ip,
-          nameM: data.ip + ' ' + 'Boy',
-          nameF: data.ip + ' ' + 'Girl',
-        }
+          nameM: data.ip + " " + "Boy",
+          nameF: data.ip + " " + "Girl",
+        };
       }
-      return false
+      return false;
     } catch (error) {
-      console.log(error)
-      return false
+      console.log(error);
+      return false;
     }
-  }
+  };
 
-  const idUser = userInfo && userInfo.id_user
+  const idUser = userInfo && userInfo.id_user;
 
   const uploadImage = async (image) => {
     if (idUser === null) {
-      toast.warning('Login is required')
-      navigate('/login')
+      toast.warning("Login is required");
+      navigate("/login");
     }
-    const formData = new FormData()
-    formData.append('src_img', image)
+    const formData = new FormData();
+    formData.append("src_img", image);
     try {
       if (image) {
         const apiResponse = await axios.post(
@@ -336,26 +317,26 @@ function Love() {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
-        )
-        return apiResponse.data
+        );
+        return apiResponse.data;
       }
-      return null
+      return null;
     } catch (error) {
-      toast.error(error.response.data.message)
-      return null
+      toast.error(error.response.data.message);
+      return null;
     }
-  }
+  };
 
   const uploadImageNu = async (image) => {
     if (idUser === null) {
-      toast.warning('Login is required')
-      navigate('/login')
+      toast.warning("Login is required");
+      navigate("/login");
     }
-    const formData = new FormData()
-    formData.append('src_img', image)
+    const formData = new FormData();
+    formData.append("src_img", image);
     try {
       if (image) {
         const apiResponse = await axios.post(
@@ -364,43 +345,43 @@ function Love() {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
-        )
-        return apiResponse.data
+        );
+        return apiResponse.data;
       }
-      return null
+      return null;
     } catch (error) {
-      console.log(error)
-      return null
+      console.log(error);
+      return null;
     }
-  }
+  };
 
-  const [name, setName] = useState({ male: '', female: '' })
+  const [name, setName] = useState({ male: "", female: "" });
 
   const handleChangeName = (e) => {
-    setName({ ...name, [`${e.target.name}`]: e.target.value })
-  }
+    setName({ ...name, [`${e.target.name}`]: e.target.value });
+  };
 
   const fetchData = async () => {
-    const { male, female } = name
+    const { male, female } = name;
     try {
       if (image1 == null || image2 == null) {
-        return Swal.fire('Oops..., Please choose the image!!')
+        return Swal.fire("Oops..., Please choose the image!!");
       }
 
-      if (male == '' || female == '') {
+      if (male == "" || female == "") {
         return Swal.fire(
-          'Oops..., Please enter a male name and a female name!!!'
-        )
+          "Oops..., Please enter a male name and a female name!!!"
+        );
       }
 
-      setIsLoading(true)
-      setHi(true)
-      setIsRunning(true)
+      setIsLoading(true);
+      setHi(true);
+      setIsRunning(true);
 
-      const device = await getMyDetailUser()
+      const device = await getMyDetailUser();
 
       const res3 = await createEvent(
         srcnam,
@@ -409,18 +390,18 @@ function Love() {
         device.ip,
         device.nameM,
         device.nameF
-      )
+      );
 
       if (res3 && res3.error) {
-        toast.error(res3.error)
-        return
+        toast.error(res3.error);
+        return;
       }
 
-      setIsLoading(false)
-      toast.success('Upload and save data completed successfully')
-      const eventId = res3.success.sukien[0].id_toan_bo_su_kien
-      const folder = res3.success.sukien[0].folder
-      navigate(`/events/${eventId}/1`)
+      setIsLoading(false);
+      toast.success("Upload and save data completed successfully");
+      const eventId = res3.success.sukien[0].id_toan_bo_su_kien;
+      const folder = res3.success.sukien[0].folder;
+      navigate(`/events/${eventId}/1`);
 
       await createAnotherEvent(
         eventId,
@@ -429,18 +410,18 @@ function Love() {
         device.ip,
         device.nameM,
         device.nameF
-      )
+      );
     } catch (error) {
-      setRandomImages(null)
-      setIsLoading(false)
-      console.error(error)
+      setRandomImages(null);
+      setIsLoading(false);
+      console.error(error);
     }
-  }
+  };
 
   const createEvent = async (srcnam, srcnu, browser, ip, male, female) => {
     try {
-      const user = JSON.parse(window.localStorage.getItem('user-info'))
-      if (!user) throw new Error('User info not found')
+      const user = JSON.parse(window.localStorage.getItem("user-info"));
+      if (!user) throw new Error("User info not found");
 
       const response = await axios.get(`${serverGenarateSK}/getdata`, {
         params: {
@@ -456,16 +437,16 @@ function Love() {
           linknu: srcnu,
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
-      console.log(response.data)
-      return { success: response.data }
+      console.log(response.data);
+      return { success: response.data };
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       // console.error(error.message);
-      return { error: error.message }
+      return { error: error.message };
     }
-  }
+  };
 
   const createAnotherEvent = async (
     idTB,
@@ -475,9 +456,9 @@ function Love() {
     male,
     female
   ) => {
-    const user = JSON.parse(window.localStorage.getItem('user-info'))
+    const user = JSON.parse(window.localStorage.getItem("user-info"));
     if (!user) {
-      return false
+      return false;
     }
     try {
       const response = await axios.get(`${serverGenarateSK}/getdata/skngam`, {
@@ -495,21 +476,21 @@ function Love() {
           folder,
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
       toast.success(
-        'Created implicit event successfully. Please reload the page or the system will reload the page in 7 seconds!!'
-      )
+        "Created implicit event successfully. Please reload the page or the system will reload the page in 7 seconds!!"
+      );
       setTimeout(() => {
-        window.location.reload()
-      }, 7000)
-      return { success: response }
+        window.location.reload();
+      }, 7000);
+      return { success: response };
     } catch (error) {
-      console.log(error)
-      return error
+      console.log(error);
+      return error;
     }
-  }
+  };
 
-  useEffect(() => {}, [image1], [image2])
+  useEffect(() => {}, [image1], [image2]);
   const renderLoading = () => {
     if (isLoading) {
       return (
@@ -517,29 +498,29 @@ function Love() {
           <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'right',
-              alignItems: 'center',
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
             }}
             className="absolute z-20 opacity-100 -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
           >
-            <ReactLoading type={'bars'} color={'#C0C0C0'} />
+            <ReactLoading type={"bars"} color={"#C0C0C0"} />
           </div>
         </div>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <>
       <Header
         data={{
-          title: 'create love',
+          title: "create love",
         }}
       />
       <div
-        style={{ backgroundImage: `url(${imgBg})`, minHeight: '100vh' }}
+        style={{ backgroundImage: `url(${imgBg})`, minHeight: "100vh" }}
         className="bg-no-repeat bg-cover"
       >
         {/* <div className="flex justify-center mb-24 max-lg:mt-11">
@@ -551,24 +532,24 @@ function Love() {
             <div className="z-50 progressbar ">
               <div
                 style={{
-                  height: '100%',
+                  height: "100%",
                   width: `${filled}%`,
-                  backgroundColor: '#a66cff',
-                  transition: 'width 0.5s',
+                  backgroundColor: "#a66cff",
+                  transition: "width 0.5s",
                 }}
               ></div>
               <span className="progressPercent">{filled}%</span>
             </div>
           </div>
         ) : (
-          ''
+          ""
         )}
 
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
 
-        {isLoading ? renderLoading() : ''}
+        {isLoading ? renderLoading() : ""}
 
         <div className="love">
           <div className="flex justify-between love-content">
@@ -592,7 +573,7 @@ function Love() {
 
                   <input
                     onChange={(e) => {
-                      handleChangeImage(e, setImage1, 'img1')
+                      handleChangeImage(e, setImage1, "img1");
                     }}
                     type="file"
                     accept="image/*"
@@ -638,7 +619,7 @@ function Love() {
 
                   <input
                     onChange={(e) => {
-                      handleChangeImage(e, setImage2, 'img2')
+                      handleChangeImage(e, setImage2, "img2");
                     }}
                     type="file"
                     accept="image/*"
@@ -687,7 +668,7 @@ function Love() {
                 }
               ></div>
               <input
-                onChange={(e) => handleChangeImage(e, setImage1, 'img1')}
+                onChange={(e) => handleChangeImage(e, setImage1, "img1")}
                 id="img1"
                 style={
                   image1
@@ -698,8 +679,8 @@ function Love() {
                 accept="image/*"
                 className={
                   image1
-                    ? ' opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat bg-cover'
-                    : 'opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat'
+                    ? " opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat bg-cover"
+                    : "opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat"
                 }
               />
             </div>
@@ -752,7 +733,7 @@ function Love() {
                 }
               ></div>
               <input
-                onChange={(e) => handleChangeImage(e, setImage2, 'img2')}
+                onChange={(e) => handleChangeImage(e, setImage2, "img2")}
                 id="img2"
                 style={
                   image2
@@ -763,8 +744,8 @@ function Love() {
                 accept="image/*"
                 className={
                   image2
-                    ? ' opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat bg-cover'
-                    : 'opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat'
+                    ? " opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat bg-cover"
+                    : "opacity-0 cursor-pointer w-[95px] h-[95.5px] rounded-[50%] absolute bg-center bg-no-repeat"
                 }
               />
             </div>
@@ -800,7 +781,7 @@ function Love() {
                       className="text-[#FF2C61] slab hover:bg-[#ED709D] hover:text-white font-bold uppercase px-6 py-3 rounded-xl text-2xl outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                       onClick={() => {
-                        setIsModelWarning(false)
+                        setIsModelWarning(false);
                       }}
                     >
                       Continue
@@ -852,7 +833,7 @@ function Love() {
                       className="text-[#FF2C61] slab hover:bg-[#ED709D] hover:text-white font-bold uppercase px-6 py-3 rounded-xl text-2xl outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                       onClick={() => {
-                        closeUploadImg()
+                        closeUploadImg();
                       }}
                     >
                       Close
@@ -880,7 +861,7 @@ function Love() {
                             className="h-[30px]"
                             src="https://png.pngtree.com/png-vector/20221215/ourmid/pngtree-green-check-mark-png-image_6525691.png"
                             alt=""
-                          />{' '}
+                          />{" "}
                           Good photos
                         </h1>
                         <p className="w-[350px] max-lg:text-2xl">
@@ -916,7 +897,7 @@ function Love() {
                             className="h-[30px]"
                             src="https://i.ibb.co/bJ517B1/close-removebg-preview.png"
                             alt=""
-                          />{' '}
+                          />{" "}
                           Bad photos
                         </h1>
                         <p className="w-[350px] max-lg:text-2xl">
@@ -925,14 +906,14 @@ function Love() {
                         </p>
                       </div>
                       <div className="flex gap-3 overflow-x-scroll">
-                        {images?.map((item, index) => (
+                        {imgError?.map((item, index) => (
                           <div
                             key={index}
                             className="relative lg:w-[90px] lg:h-[90px] w-[60px] h-[60px] rounded-lg overflow-hidden"
                             onClick={() => handleImageClick(item)}
                           >
                             <img
-                              src={item.url}
+                              src={item}
                               alt=""
                               className="lg:w-[90px] lg:h-[90px] w-[60px] h-[60px] object-cover"
                             />
@@ -976,7 +957,7 @@ function Love() {
         {/* footer */}
       </div>
     </>
-  )
+  );
 }
 
-export default Love
+export default Love;

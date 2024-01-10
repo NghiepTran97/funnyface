@@ -1,59 +1,59 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import ReactLoading from 'react-loading'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import '../../../css/AddEvent.css'
-import RenderRandomWaitImage from '../../../components/randomImages'
-import './MyVideo.css'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import ReactLoading from "react-loading";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../css/AddEvent.css";
+import RenderRandomWaitImage from "../../../components/randomImages";
+import "./MyVideo.css";
 
-import { VideoItem } from '../../../components/VideoItem/VideoItem'
-import Header from '../../../components/Header/Header'
+import { VideoItem } from "../../../components/VideoItem/VideoItem";
+import Header from "../../../components/Header/Header";
 
 function MyVideo() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [randomImages, setRandomImages] = useState(null)
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  const token = userInfo && userInfo.token
+  const [isLoading, setIsLoading] = useState(false);
+  const [randomImages, setRandomImages] = useState(null);
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const token = userInfo && userInfo.token;
 
-  const totalPages = 100
+  const totalPages = 100;
 
   const handlePageChange = (page) => {
     // Kiểm tra giới hạn trang để đảm bảo rằng trang không vượt quá giới hạn
-    const newPage = Math.min(Math.max(1, page), totalPages)
-    setCount(newPage)
-  }
+    const newPage = Math.min(Math.max(1, page), totalPages);
+    setCount(newPage);
+  };
 
-  const idUser = userInfo && userInfo.id_user
-  const [apiKeys, setApiKeys] = useState([])
+  const idUser = userInfo && userInfo.id_user;
+  const [apiKeys, setApiKeys] = useState([]);
 
   useEffect(() => {
     fetch(
-      'https://raw.githubusercontent.com/sonnh7289/python3-download/main/key-ios.json?fbclid=IwAR0CQmAJ4L10gG-po0-LcEja-gNZoNaz01J9CLvGP4shGFnUhcmZvBw-3O0'
+      "https://raw.githubusercontent.com/sonnh7289/python3-download/main/key-ios.json?fbclid=IwAR0CQmAJ4L10gG-po0-LcEja-gNZoNaz01J9CLvGP4shGFnUhcmZvBw-3O0"
     )
       .then((response) => response.json())
       .then((data) => {
-        const keys = data.map((item) => item.APIKey)
-        setApiKeys(keys)
+        const keys = data.map((item) => item.APIKey);
+        setApiKeys(keys);
       })
-      .catch((error) => console.error('Lỗi:', error))
-  }, [])
+      .catch((error) => console.error("Lỗi:", error));
+  }, []);
 
   useEffect(() => {
     if (apiKeys.length > 0) {
-      const apiKey = chooseAPIKey()
+      const apiKey = chooseAPIKey();
     }
-  }, [apiKeys])
+  }, [apiKeys]);
 
   function chooseAPIKey() {
-    const randomIndex = Math.floor(Math.random() * apiKeys.length)
-    return apiKeys[randomIndex]
+    const randomIndex = Math.floor(Math.random() * apiKeys.length);
+    return apiKeys[randomIndex];
   }
 
   //
-  const [videos, setVideos] = useState([])
-  const [count, setCount] = useState(1)
+  const [videos, setVideos] = useState([]);
+  const [count, setCount] = useState(1);
 
   const getVideos = async () => {
     const { data, status } = await axios.get(
@@ -61,24 +61,24 @@ function MyVideo() {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       }
-    )
-    const errorMessage = 'exceed the number of pages!!!'
+    );
+    const errorMessage = "exceed the number of pages!!!";
 
     if (data === errorMessage) {
-      toast.error(errorMessage)
+      toast.error(errorMessage);
     }
 
     if (status === 200) {
-      setVideos(data.list_sukien_video)
+      setVideos(data.list_sukien_video);
     }
-  }
+  };
 
   useEffect(() => {
-    getVideos()
-  }, [count, token])
+    getVideos();
+  }, [count, token]);
 
   const renderLoading = () => {
     if (isLoading) {
@@ -87,25 +87,25 @@ function MyVideo() {
           <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'right',
-              alignItems: 'center',
+              display: "flex",
+              justifyContent: "right",
+              alignItems: "center",
             }}
             className="absolute -translate-x-2/4 opacity-100 -translate-y-2/4 left-2/4 top-2/4 z-20"
           >
-            <ReactLoading type={'bars'} color={'#C0C0C0'} />
+            <ReactLoading type={"bars"} color={"#C0C0C0"} />
           </div>
         </div>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <>
       <Header
         data={{
-          title: 'my collection',
+          title: "my collection",
           download: true,
         }}
       />
@@ -114,7 +114,7 @@ function MyVideo() {
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
-        {isLoading ? renderLoading() : ''}
+        {isLoading ? renderLoading() : ""}
 
         <div className="my-video-container">
           {videos &&
@@ -150,7 +150,7 @@ function MyVideo() {
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={`mx-1 text-white font-medium py-2 px-3 rounded ${
-                  count === index + 1 ? 'bg-red-700' : 'bg-[#ff9f9f]'
+                  count === index + 1 ? "bg-red-700" : "bg-[#ff9f9f]"
                 }`}
               >
                 {index + 1}
@@ -207,7 +207,7 @@ function MyVideo() {
       </div> */}
       </div>
     </>
-  )
+  );
 }
 
-export default MyVideo
+export default MyVideo;
