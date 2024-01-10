@@ -12,6 +12,7 @@ import EventListProfile from './EventListProfile'
 import HistoryCommentList from './HistoryCommentList'
 import ManagerAcount from './ManagerAcount'
 import {useForm} from 'react-hook-form'
+import profileApi from '../../api/profile'
 
 export default function Profile() {
   const { id } = useParams()
@@ -19,9 +20,9 @@ export default function Profile() {
   const token = user?.token
  
   const userId = id || user?.id_user
-
+ 
   const [data, setData] = useState([])
-  const [urlAvatar, setUrlAvatar] = useState([]);
+ 
   const {
     register,
     handleSubmit,
@@ -29,6 +30,7 @@ export default function Profile() {
   } = useForm({
     defaultValues: {
       name: '',
+      avatar:null
     }
   })
   // const [userName, setUserName] = useState([]);
@@ -43,8 +45,7 @@ export default function Profile() {
   const setUserName = (value) => {
     setData({ ...data, user_name: value })
   }
-  console.log(data);
-  console.log(data.link_avatar);
+  
   // const [showEvent, setShowEvent] = React.useState(false);
   const [listEvent, setListEvent] = useState([])
 
@@ -131,6 +132,7 @@ export default function Profile() {
   const closeModal = () => {
     setShowModal(false)
   }
+
   //uploadimage
   {/*const inputRef = useRef(null);
   const handleFileChange = (event) => {
@@ -146,20 +148,7 @@ export default function Profile() {
   const handleUploadImage = () => {
     inputRef.current.click();
   };*/}
-  const inputRef = useRef(null);
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        document.getElementById('imagePreview').src = reader.result;
-      };
-      reader.readAsDataURL(selectedFile);
-    }
-  };
-  const handleUploadImage = () => {
-    inputRef.current.click();
-  };
+  
   //changeCover
   const inputRefCover = useRef(null);
   const handleFileChangeCover = (event) => {
@@ -423,7 +412,6 @@ export default function Profile() {
       await toast.success('Upload and save avatar completed successfully')
       window.document.querySelector('.change_img_profile').src = res.link_img
       // window.location.reload();
-      closeModals()
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -460,14 +448,70 @@ export default function Profile() {
       setIsLoading(false)
     }
   }
-  //saveeditprofile
-  {/*const saveEditProfile = async() => {
-    handlePickAvatar();
-    handleUploadAvatar();
-  }*/}
-  const update = async () => {
-
+  const validUrl = (str) => {
+    return str && typeof str === 'string' && str.startsWith('http');
+  };
+  useEffect(() => {
+    if (validUrl(data.link_avatar)) {
+      setUrlAvatar(data.link_avatar);
+    }
+  }, [data.link_avatar]);
+  const [urlAvatar, setUrlAvatar] = useState();
+  const changeAvatar = (e) => {
+    const url = URL.createObjectURL(e.target.files[0]);
+    setUrlAvatar(url)
+    console.log(url);
   }
+  const update = async (data) => {
+    console.log(1);
+    const formData = new FormData();
+    formData.append('avatar', data.avatar[0]);
+    console.log(data.avatar[0]);
+    try {
+      const updateAvatarResponse = await profileApi.postAvatar(formData);
+      console.log(updateAvatarResponse.data);
+
+      if (updateAvatarResponse.success) {
+        toast.success(() => <p>Update profile success</p>)
+
+        return;
+      }
+    } catch (e) {
+      toast.error(() => <p>Update profile error</p>)
+    }
+  }
+  //saveeditprofile
+  {/*const saveEditProfile = async(data) => {
+      console.log(data);
+      const formData = new FormData();
+        formData.append('avatar', data.link_avatar);
+      try {
+          const updateProfileResponse = await axios.post(
+            `${server}/changeavatar/${userId}`,
+            JSON.stringify(data),
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Thêm token vào header
+              },
+            }
+          );
+    
+          if (updateProfileResponse.success) {
+              console.log(updateProfileResponse.data);
+
+              if (updateProfileResponse.success) {
+                  toast.success(() => <p>Update profile thành công</p>);
+
+                  return;
+              }
+              throw new Error();
+          }
+          throw new Error();
+      } catch (e) {
+          toast.error(() => <p>Update profile thất bại</p>)
+      }
+  }*/}
+
 
   // ---- END
 
@@ -614,7 +658,7 @@ export default function Profile() {
               )}
               {showModal ? (
                 <>
-                  <form className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+                  <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
                     onSubmit={handleSubmit(update)}
                   >
                     <div className="relative lg:w-[1000px] h-[600px] mt-60 max-w-3xl">
@@ -645,16 +689,13 @@ export default function Profile() {
                               </button>
                             </div>
                           </div>
-                          <div className="flex text-3xl text-black mt-14 ">
+                          <form className="flex text-3xl text-black mt-14 "
+                            onSubmit={handleSubmit(update)}>
                             <div className="w-1/3 ">
                               <img
                                 id="imagePreview"
                                 alt=""
-                                src={
-                                  data.link_avatar ===1
-                                    ? 'https://i.ibb.co/WHmrzPt/106287976-917734608745320-4594528301123064306-n.jpg'
-                                    : data.link_avatar
-                                }
+                                src={urlAvatar}
                                 className="lg:w-[130px] lg:h-[130px] w-{160px} h-{160px} mt-5 rounded-full object-cover m-auto change_img_profile"
                               ></img>
                             </div>
@@ -669,29 +710,22 @@ export default function Profile() {
                                 />
                               </div>
                               <div className="flex ">
-                                <button
-                                  onClick={handleUploadImage}
-                                  //onClick={() => openModals()}
-                                  className="w-1/2 mr-2 bg-white rounded-lg btn shadow-gray-500"
-                                >
-                                  Upload image
-                                </button>
+                                <input
+                                  className='w-1/2 ml-2 text-white rounded-lg btn shadow-gray-500'
+                                  type="file"
+                                  accept="image/*"
+                                  //onChange={handleFileChange}
+                                  {...register('avatar', {
+                                    onChange: (e) => changeAvatar(e)
+                                  })}
+                                />
                                 <button
                                   //onClick={() => saveEditProfile()}
                                   className="w-1/2 ml-2 text-white rounded-lg bg-lime-500 btn shadow-gray-500"
                                 >
                                   Save
                                 </button>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={handleFileChange}
-                                  style={{ display: 'none' }}
-                                  ref={inputRef}
-                                  {...register ('images', {
-                                  
-                                  })}
-                                />
+                                
                               </div>
                               {/*{showModals ? (
                                 <>
@@ -818,11 +852,11 @@ export default function Profile() {
                                 </>
                               ) : null}*/}
                             </div>
-                          </div>
+                          </form>
                         </div>
                       </div>
                     </div>
-                  </form>
+                  </div>
                   <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
                 </>
               ) : null}

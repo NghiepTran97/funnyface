@@ -3,7 +3,7 @@ import axios from "axios";
 const STATUS_SUCCESS = [200,201];
 const STATUS_INTERNAL_SERVER_ERROR = 500;
 const funnyFaceAxios = axios.create({
-    baseURL: 'https://metatechvn.store',
+    baseURL: 'https://sakaivn.online',
 });
 funnyFaceAxios.interceptors.response.use(
     (response) => {
