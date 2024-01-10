@@ -98,17 +98,29 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
 
   return (
     <div
-      className="fixed lg:hidden flex w-screen h-screen top-0 left-0 bg-black bg-opacity-40 z-20"
-      onClick={() => setOpenMenu(false)}
+      className="fixed lg:hidden flex w-screen h-screen top-0 left-0 bg-black bg-opacity-20 z-[100]"
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpenMenu(false);
+      }}
     >
-      <div className="bg-custom-gray w-[50vw] sm:w-[40vw] h-screen flex flex-col justify-between py-10 px-2">
+      <div className="relative bg-custom-gray w-[50vw] sm:w-[40vw] h-screen flex flex-col justify-between py-10 px-2">
+        <button
+          className="absolute top-6 right-8 text-white font-bold text-5xl"
+          onClick={() => setOpenMenu(false)}
+        >
+          x
+        </button>
         <div className="flex-col gap-10 flex-grow-1 rounded-xl p-8">
           <div className="flex justify-center items-center">
             <span className="text-3xl xl:text-4xl text-white font-bold starborn">
               Funny face
             </span>
           </div>
-          <div className="bg-gray-900 rounded-xl flex items-center gap-3 px-3 mt-4">
+          <div
+            className="bg-gray-900 rounded-xl flex items-center gap-3 px-3 mt-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <img
               src={searchIcon}
               alt="Search"
