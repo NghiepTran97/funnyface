@@ -45,47 +45,47 @@ const SideBar = (props) => {
       name: "Love",
       icon: heartIcon,
       iconActive: heartIconActive,
-      path: "love",
+      path: "/love",
     },
 
     {
       name: "Events",
       icon: eventIcon,
       iconActive: eventIconActive,
-      path: "events",
+      path: "/events",
     },
 
     {
       name: "Videos Playlist",
       icon: videoPlaylistIcon,
       iconActive: videoPlaylistIconActive,
-      path: "videos",
+      path: "/videos",
     },
     {
       name: "Images Playlist",
       icon: imagePlaylistIcon,
       iconActive: imagePlaylistIconActive,
-      path: "images",
+      path: "/images",
     },
     {
       name: "Create your video",
       icon: createVideoIcon,
       iconActive: createVideoIconActive,
-      path: "create-video",
+      path: "/create-video",
     },
 
     {
       name: "Create your image",
       icon: createImageIcon,
       iconActive: createImageIconActive,
-      path: "create-image",
+      path: "/create-image",
     },
 
     {
       name: "Baby generator",
       icon: babyIcon,
       iconActive: babyIconActive,
-      path: "genbaby",
+      path: "/genbaby",
     },
   ];
 
@@ -94,7 +94,7 @@ const SideBar = (props) => {
       name: "Help & getting started",
       icon: helpIcon,
       iconActive: helpIconActive,
-      path: "help",
+      path: "/help",
     },
   ];
 
