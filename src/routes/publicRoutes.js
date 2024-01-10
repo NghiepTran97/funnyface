@@ -26,10 +26,9 @@ import TiktokScandal from "../ver2/tiktok-scandal";
 import YoutubeScandal from "../ver2/YoutubeScandal";
 
 import Profile from "../ver2/components/Profile";
-import HomeMiddleware from "../middleware/HomeMiddleware";
 
 export const publicRoutes = (
-  <Route path="" element={<HomeMiddleware />}>
+  <>
     <Route path="/events">
       <Route index element={<Events />} />
       <Route path=":id/:stt" element={<EventResult />} />
@@ -62,5 +61,5 @@ export const publicRoutes = (
     <Route path="*" exact={true} element={<NotFound />} />
 
     <Route path="/profile" element={<Profile />} />
-  </Route>
+  </>
 );

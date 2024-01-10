@@ -100,6 +100,7 @@ export default function Login() {
       <div className="bg-gradient-to-b from-[#1A542F] to-[#000000] hidden lg:flex w-[55%] h-full justify-center items-center">
         <Swiper
           slidesPerView={1}
+          spaceBetween={30}
           modules={[Pagination]}
           pagination={{ dynamicBullets: true }}
           scrollbar={{ draggable: true }}

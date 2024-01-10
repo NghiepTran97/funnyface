@@ -1,26 +1,14 @@
-import { useState } from "react";
 import { Outlet } from "react-router";
-import SideBar from "../components/SideBar";
+import SideBar from "../components/SideBar/SideBar";
 
 const LayoutUser = () => {
-  const [width, setWidth] = useState("315px");
-
-  const getWidthSideBar = (data) => {
-    setWidth(data);
-  };
-
   return (
-    <>
-      <div className="flex min-h-screen bg-black body-main">
-        <SideBar onRecive={getWidthSideBar} />
-        <div
-          style={{ marginLeft: width }}
-          className="future-main flex flex-col mx-8 w-full pb-10"
-        >
-          <Outlet />
-        </div>
+    <div className="flex justify-center w-screen min-h-screen bg-black gap-4 p-8">
+      <SideBar />
+      <div className="flex flex-col flex-grow-1 pb-10">
+        <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 

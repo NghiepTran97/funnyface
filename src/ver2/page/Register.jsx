@@ -15,43 +15,19 @@ import { MdEmail } from "react-icons/md";
 import background from "../../ver2/components/image/login/background.png";
 import cameraIcon from "../../ver2/components/image/login/cameraIcon.svg";
 import imageIcon from "../../ver2/components/image/login/imageIcon.svg";
-import anh1 from "../../ver2/components/image/anhlogin1.png";
-import anh2 from "../../ver2/components/image/anhlogin2.png";
-import anh3 from "../../ver2/components/image/anhlogin3.png";
-import anh4 from "../../ver2/components/image/anhlogin4.png";
-import anh5 from "../../ver2/components/image/anhlogin5.png";
 
-function ListImgs() {
-  return (
-    <div className="overflow-x-scroll flex gap-[10px] mb-[20px] justify-center">
-      <img
-        src={anh1}
-        alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
-      />
-      <img
-        src={anh2}
-        alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
-      />
-      <img
-        src={anh3}
-        alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
-      />
-      <img
-        src={anh4}
-        alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
-      />
-      <img
-        src={anh5}
-        alt="example"
-        className="w-[calc(100%/5 - 10px/4)] max-h-[100px] lg:max-h-[150px]"
-      />
-    </div>
-  );
-}
+import goodPhoto1 from "../../ver2/components/image/goodPhotos/goodPhoto1.png";
+import goodPhoto2 from "../../ver2/components/image/goodPhotos/goodPhoto2.png";
+import goodPhoto3 from "../../ver2/components/image/goodPhotos/goodPhoto3.png";
+import goodPhoto4 from "../../ver2/components/image/goodPhotos/goodPhoto4.png";
+import goodPhoto5 from "../../ver2/components/image/goodPhotos/goodPhoto5.png";
+import goodPhoto6 from "../../ver2/components/image/goodPhotos/goodPhoto5.png";
+import badPhoto1 from "../../ver2/components/image/badPhotos/badPhoto1.png";
+import badPhoto2 from "../../ver2/components/image/badPhotos/badPhoto2.png";
+import badPhoto3 from "../../ver2/components/image/badPhotos/badPhoto3.png";
+import badPhoto4 from "../../ver2/components/image/badPhotos/badPhoto4.png";
+import badPhoto5 from "../../ver2/components/image/badPhotos/badPhoto5.png";
+import badPhoto6 from "../../ver2/components/image/badPhotos/badPhoto6.png";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -73,6 +49,38 @@ export default function Register() {
   const labelRef = useRef();
   const inputId = useId();
 
+  const goodPhotos = [
+    goodPhoto1,
+    goodPhoto2,
+    goodPhoto3,
+    goodPhoto4,
+    goodPhoto5,
+    goodPhoto6,
+  ];
+  const badPhotos = [
+    badPhoto1,
+    badPhoto2,
+    badPhoto3,
+    badPhoto4,
+    badPhoto5,
+    badPhoto6,
+  ];
+
+  const ListImgs = ({ photos }) => {
+    return (
+      <div className="overflow-x-scroll grid grid-cols-6 gap-4">
+        {photos.map((photo, index) => (
+          <img
+            key={index}
+            src={photo}
+            alt="example"
+            className="w-full h-[50px] sm:h-[100px] bg-cover rounded-lg"
+          />
+        ))}
+      </div>
+    );
+  };
+
   const signInWithGoogle = async (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -91,10 +99,6 @@ export default function Register() {
       return toast.error("Login false !!!");
     }
     setIsLoading(false);
-  };
-
-  const handleShow = (show) => {
-    setPasswordShow({ ...passwordShow, ...show });
   };
 
   const isValidate = () => {
@@ -206,6 +210,7 @@ export default function Register() {
         <div className="bg-gradient-to-b from-[#1A542F] to-[#000000] hidden lg:flex w-[55%] justify-center items-center">
           <Swiper
             slidesPerView={1}
+            spaceBetween={30}
             modules={[Pagination]}
             pagination={{ dynamicBullets: true }}
             scrollbar={{ draggable: true }}
@@ -500,7 +505,7 @@ export default function Register() {
                 Close-up selfies, same subject, variety of background,
                 expressions and face angles
               </span>
-              <ListImgs />
+              <ListImgs photos={goodPhotos} />
               <div className="flex gap-2 items-center">
                 <IoIosCloseCircle className="text-red-600" />
                 <span>Bad photos</span>
@@ -508,7 +513,7 @@ export default function Register() {
               <span className="text-3xl text-wrap">
                 Group pics, face small or not visible, sunglass, animal
               </span>
-              <ListImgs />
+              <ListImgs photos={badPhotos} />
             </div>
 
             <button

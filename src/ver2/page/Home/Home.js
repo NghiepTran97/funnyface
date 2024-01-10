@@ -69,7 +69,9 @@ function Home() {
 
             <div className="home-episodes-head">
               <h3 className="home-title">episodes for you</h3>
-              <Link to="/videos">Show all</Link>
+              <Link to="/videos" className="text-3xl">
+                Show all
+              </Link>
             </div>
 
             <div className="home-episodes-main">
