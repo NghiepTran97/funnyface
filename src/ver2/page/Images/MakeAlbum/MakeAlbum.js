@@ -12,12 +12,11 @@ import pen from "../../../components/image/edit-2.png";
 import "./MakeAlbum.css";
 import Swal from "sweetalert2";
 import Header from "../../../components/Header/Header";
-import Loading from "../../../../Loading/Loading";
+import useLoading from "../../../hooks/useLoading";
 import DetailAlbum from "../DetailAlbum/DetailAlbum";
 
 function MakeAlbum() {
   const [image1, setImage1] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [showImg, setShowImg] = useState({ img1: null });
   const randomImage = "";
   const [imageUpload, setImageUpload] = useState("");
@@ -25,6 +24,8 @@ function MakeAlbum() {
 
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
   const token = userInfo && userInfo.token;
+
+  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -120,9 +121,9 @@ function MakeAlbum() {
       }
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
       closeUploadImg();
     }
+    setIsLoading(false);
   };
 
   const [tenImage, setTenImage] = useState("");
@@ -193,8 +194,8 @@ function MakeAlbum() {
       toast.success("Swapped successful");
     } catch (error) {
       toast.warning(error.message);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   return !event ? (
@@ -202,13 +203,12 @@ function MakeAlbum() {
       <Header
         data={{
           title: "Create an album",
-          myCollection: true,
+          myCollection: "images/my-images",
           download: true,
         }}
       />
 
       <div className="make-album">
-        <Loading status={isLoading} />
         <div className="flex flex-col lg:flex-row lg:items-center">
           <div className="p-4 lg:w-1/2">
             <div className="flex items-center justify-center name-album">

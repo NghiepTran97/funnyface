@@ -30,7 +30,7 @@ import badPhoto4 from "../../components/image/badPhotos/badPhoto4.png";
 import badPhoto5 from "../../components/image/badPhotos/badPhoto5.png";
 import badPhoto6 from "../../components/image/badPhotos/badPhoto6.png";
 
-import ReactLoading from "react-loading";
+import useLoading from "../../hooks/useLoading";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -56,7 +56,6 @@ function Love() {
   const [bsHeart, setHeart] = useState(heart);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [showImg, setShowImg] = useState({ img1: null, img2: null });
   const [randomImages, setRandomImages] = useState(null);
@@ -67,6 +66,8 @@ function Love() {
   const [filled, setFilled] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [hi, setHi] = useState(false);
+
+  const { setIsLoading } = useLoading();
 
   useEffect(() => {
     if (filled < 100 && isRunning) {
@@ -491,26 +492,6 @@ function Love() {
   };
 
   useEffect(() => {}, [image1], [image2]);
-  const renderLoading = () => {
-    if (isLoading) {
-      return (
-        <div className="fixed top-0 min-w-[100%] h-[100vh] z-30">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-            }}
-            className="absolute z-20 opacity-100 -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
-          >
-            <ReactLoading type={"bars"} color={"#C0C0C0"} />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <>
@@ -548,9 +529,6 @@ function Love() {
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
-
-        {isLoading ? renderLoading() : ""}
-
         <div className="love">
           <div className="flex justify-between love-content">
             <div className="love-item">

@@ -7,7 +7,7 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import Loading from "../../Loading/Loading";
+import useLoading from "./../hooks/useLoading";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -42,8 +42,8 @@ export default function Register() {
     pass: false,
     confirm: false,
   });
-  const [isLoading, setIsLoading] = useState(false);
 
+  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
 
   const labelRef = useRef();
@@ -526,7 +526,6 @@ export default function Register() {
           </div>
         </div>
       )}
-      <Loading status={isLoading} />
     </div>
   );
 }

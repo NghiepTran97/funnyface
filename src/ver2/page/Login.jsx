@@ -7,6 +7,7 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
+import useLoading from "./../hooks/useLoading";
 import background from "../../ver2/components/image/login/background.png";
 import checkIcon from "../../ver2/components/image/login/checkIcon.svg";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -15,13 +16,12 @@ import { MdEmail } from "react-icons/md";
 // import { auth } from "./firebase";
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
 
+  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
 
   const signInWithGoogle = async (e) => {

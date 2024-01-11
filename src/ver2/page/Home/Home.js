@@ -74,15 +74,17 @@ function Home() {
               </Link>
             </div>
 
-            <div className="home-episodes-main">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[10px]">
               {videos &&
-                videos.map((video) => (
-                  <VideoItem
-                    {...video.sukien_video[0]}
-                    type="video swap"
-                    key={video.sukien_video[0].id_video}
-                  />
-                ))}
+                videos
+                  .slice(0, 4)
+                  .map((video) => (
+                    <VideoItem
+                      {...video.sukien_video[0]}
+                      type="video swap"
+                      key={video.sukien_video[0].id_video}
+                    />
+                  ))}
             </div>
           </div>
 

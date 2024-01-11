@@ -14,7 +14,7 @@ export const ImageItem = (props) => {
   }, [imageRef.current]);
 
   return (
-    <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:1/5 component-image">
+    <li className="component-image">
       <div className="component-image-wrap relative">
         <Link
           to={

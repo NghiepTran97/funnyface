@@ -77,7 +77,12 @@ const Header = ({ data }) => {
             "linear-gradient(91.12deg, #1a542f 21.71%, #355b42 78.53%)",
         }}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="flex gap-2 w-full lg:w-[fit-content] mb-4 lg:mb-0">
+            <ArrowCircleLeftIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
+            <ArrowCircleRightIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
+          </div>
+
           <div
             className="block lg:hidden cursor-pointer"
             onClick={() => setOpenSideBarMobile(true)}
@@ -94,29 +99,26 @@ const Header = ({ data }) => {
               className="w-[32px] h-[32px]"
             />
           </div>
-          <div className="flex gap-2">
-            <ArrowCircleLeftIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
-            <ArrowCircleRightIcon sx={{ fontSize: 40, color: "#FFFFFF33" }} />
-          </div>
 
           <div className="flex gap-4 text-xl font-normal">
             {data?.download && (
               <Link to="/download-app" className="cursor-pointer">
                 <DownloadIcon
-                  xs={{ fontSize: 24, color: "#FFFFFF33" }}
-                  md={{ fontSize: 36 }}
+                  sx={{ fontSize: { xs: 24, md: 36 }, color: "#fff" }}
                 />
                 Download app
               </Link>
             )}
             <NotificationsIcon
-              xs={{ fontSize: 24, color: "#FFFFFF33", cursor: "pointer" }}
-              md={{ fontSize: 36 }}
+              sx={{
+                fontSize: { xs: 24, md: 36 },
+                color: "#fff",
+                cursor: "pointer",
+              }}
             />
             <Link to="/profile">
               <AccountCircleIcon
-                xs={{ fontSize: 24, color: "#FFFFFF33" }}
-                md={{ fontSize: 36 }}
+                sx={{ fontSize: { xs: 24, md: 36 }, color: "#fff" }}
               />
             </Link>
           </div>
@@ -126,7 +128,7 @@ const Header = ({ data }) => {
             <h2 className="text-3xl font-bold uppercase">{data.title}</h2>
           )}
           {data?.myCollection && (
-            <Link to="/videos/my-video" className="text-4xl font-bold">
+            <Link to={`/${data.myCollection}`} className="text-4xl font-bold">
               My collections
             </Link>
           )}

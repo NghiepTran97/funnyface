@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ReactLoading from "react-loading";
+import useLoading from "../../../hooks/useLoading";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,8 +12,10 @@ import { VideoItem } from "../../../components/VideoItem/VideoItem";
 import Header from "../../../components/Header/Header";
 
 function MyVideo() {
-  const [isLoading, setIsLoading] = useState(false);
   const [randomImages, setRandomImages] = useState(null);
+
+  const { setIsLoading } = useLoading();
+
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
   const token = userInfo && userInfo.token;
 
@@ -56,50 +58,30 @@ function MyVideo() {
   const [count, setCount] = useState(1);
 
   const getVideos = async () => {
-    const { data, status } = await axios.get(
-      `https://metatechvn.store/lovehistory/video/${count}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+    setIsLoading(true);
+    try {
+      const { data, status } = await axios.get(
+        `https://metatechvn.store/lovehistory/video/${count}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (status === 200) {
+        setVideos(data.list_sukien_video);
       }
-    );
-    const errorMessage = "exceed the number of pages!!!";
-
-    if (data === errorMessage) {
-      toast.error(errorMessage);
+    } catch (err) {
+      toast.error(err.message);
     }
-
-    if (status === 200) {
-      setVideos(data.list_sukien_video);
-    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getVideos();
   }, [count, token]);
-
-  const renderLoading = () => {
-    if (isLoading) {
-      return (
-        <div className="fixed top-0 min-w-[100%] h-[100vh] z-30">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-            }}
-            className="absolute -translate-x-2/4 opacity-100 -translate-y-2/4 left-2/4 top-2/4 z-20"
-          >
-            <ReactLoading type={"bars"} color={"#C0C0C0"} />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <>
@@ -114,9 +96,7 @@ function MyVideo() {
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
-        {isLoading ? renderLoading() : ""}
-
-        <div className="my-video-container">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[10px]">
           {videos &&
             videos.map((video) => (
               <VideoItem
@@ -127,7 +107,7 @@ function MyVideo() {
             ))}
         </div>
 
-        <div className="overflow-x-auto d-none">
+        {/* <div className="overflow-x-auto d-none">
           <div className="pagination text-4xl flex justify-start items-center my-6">
             <button
               onClick={() => handlePageChange(count - 1)}
@@ -173,7 +153,7 @@ function MyVideo() {
               </svg>
             </button>
           </div>
-        </div>
+        </div> */}
         {/* <div className="pagination text-4xl flex justify-center my-6" >
         <button onClick={() => setCount(count - 1)} disabled={count === 1}
           className="py-2 px-3 bg-[#ff9f9f] rounded hover:bg-[#ff9f9f8c]">

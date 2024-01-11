@@ -45,14 +45,12 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
       iconActive: heartIconActive,
       path: "/love",
     },
-
     {
       name: "Events",
       icon: eventIcon,
       iconActive: eventIconActive,
       path: "/events",
     },
-
     {
       name: "Videos Playlist",
       icon: videoPlaylistIcon,
@@ -71,14 +69,12 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
       iconActive: createVideoIconActive,
       path: "/create-video",
     },
-
     {
       name: "Create your image",
       icon: createImageIcon,
       iconActive: createImageIconActive,
       path: "/create-image",
     },
-
     {
       name: "Baby generator",
       icon: babyIcon,
@@ -104,7 +100,7 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
         setOpenMenu(false);
       }}
     >
-      <div className="relative bg-custom-gray w-[50vw] sm:w-[40vw] h-screen flex flex-col justify-between py-10 px-2">
+      <div className="relative bg-custom-gray h-screen flex flex-col justify-between py-10 px-2">
         <button
           className="absolute top-6 right-8 text-white font-bold text-5xl"
           onClick={() => setOpenMenu(false)}
@@ -118,7 +114,7 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
             </span>
           </div>
           <div
-            className="bg-gray-900 rounded-xl flex items-center gap-3 px-3 mt-4"
+            className="bg-gray-900 rounded-xl flex items-center gap-3 px-3 mt-4 w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <img

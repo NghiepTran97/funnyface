@@ -2,11 +2,6 @@
   margin: 0 -6px;
 }
 
-.image-list-content {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .image-list-item {
   list-style: none;
   padding: 8px 6px;

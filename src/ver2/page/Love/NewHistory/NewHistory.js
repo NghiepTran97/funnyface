@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import Header from "../../../components/Header";
+import useLoading from "../../../hooks/useLoading";
 
 import axios from "axios";
 import { createBrowserHistory } from "history";
-import ReactLoading from "react-loading";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import CommonEvent from "../../app/CommonEvent";
@@ -17,15 +17,16 @@ import nu1 from "../../../components/image/nu1.png";
 export default function NewHistory() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-
-  const { id } = useParams();
-
   const [dataUser, setDataUser] = useState(null);
   const [dataUser1, setDataUser1] = useState(null);
   const [isActive, setIsActive] = useState(1);
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
-  const history = createBrowserHistory();
   const [dataComment, setDataComment] = useState([]);
+
+  const history = createBrowserHistory();
+  const { setIsLoading } = useLoading();
+
+  const { id } = useParams();
   const params = window.location.href;
   const arrayUrl = params.split("/");
   const stt_su_kien = arrayUrl[arrayUrl.length - 1];
@@ -71,6 +72,7 @@ export default function NewHistory() {
   }, [params]);
 
   const fetchDataUser = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `https://metatechvn.store/lovehistory/${id}`
@@ -81,6 +83,7 @@ export default function NewHistory() {
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   };
 
   const redirect = (e) => {
@@ -102,27 +105,6 @@ export default function NewHistory() {
   const handleOpenImagePopup = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsImagePopupOpen(true);
-  };
-
-  const renderLoading = (isLoading) => {
-    if (isLoading) {
-      return (
-        <div className="fixed top-0 min-w-[100%] h-[100vh] z-[99]">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-black opacity-70"></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-            }}
-            className="absolute -translate-x-2/4 opacity-100 -translate-y-2/4 left-2/4 top-2/4 z-20"
-          >
-            <ReactLoading type={"bars"} color={"#C0C0C0"} />
-          </div>
-        </div>
-      );
-    }
-    return null;
   };
 
   return (

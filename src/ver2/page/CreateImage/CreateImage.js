@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { saveAs } from "file-saver";
 import axios from "axios";
 
 import goodPhoto1 from "../../components/image/goodPhotos/goodPhoto1.png";
@@ -15,7 +16,7 @@ import badPhoto4 from "../../components/image/badPhotos/badPhoto4.png";
 import badPhoto5 from "../../components/image/badPhotos/badPhoto5.png";
 import badPhoto6 from "../../components/image/badPhotos/badPhoto6.png";
 
-import ReactLoading from "react-loading";
+import useLoading from "../../hooks/useLoading";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -31,10 +32,10 @@ function CreateImage() {
 
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const [showImg, setShowImg] = useState({ img1: null, img2: null });
+
+  const { setIsLoading } = useLoading();
+  const navigate = useNavigate();
 
   const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
   const token = userInfo && userInfo.token;
@@ -116,8 +117,8 @@ function CreateImage() {
         .withFaceExpressions();
 
       if (detections.length > 1) return detections;
-      if (detections2.length == 0) return detections2;
-      if (detections2.length == 1) return detections2;
+      if (detections2.length === 0) return detections2;
+      if (detections2.length === 1) return detections2;
       return detections;
     } catch (error) {
       console.log(error);
@@ -134,7 +135,7 @@ function CreateImage() {
 
     try {
       const res = await validImage(URL.createObjectURL(file));
-      if (res.length == 0) {
+      if (res.length === 0) {
         setIsLoading(false);
         closeUploadImg();
         return Swal.fire(
@@ -174,7 +175,7 @@ function CreateImage() {
       }
       setIsLoading(false);
 
-      if (atImg == "img1") {
+      if (atImg === "img1") {
         let send = showImg;
         send.img1 = URL.createObjectURL(file);
         setShowImg(send);
@@ -214,8 +215,8 @@ function CreateImage() {
         return {
           browser: browser,
           ip: data.ip,
-          nameM: data.ip + " " + "Boy",
-          nameF: data.ip + " " + "Girl",
+          nameM: data.ip + " Boy",
+          nameF: data.ip + " Girl",
         };
       }
       return false;
@@ -280,6 +281,19 @@ function CreateImage() {
       console.log(error);
       return null;
     }
+  };
+
+  const handleDownloadImage = async () => {
+    setIsLoading(true);
+    try {
+      const fileName = imageSwap.split("/").pop();
+
+      await saveAs(imageSwap, fileName);
+    } catch (error) {
+      toast.error("Error: " + error.message);
+      console.log({ err: error.message });
+    }
+    setIsLoading(false);
   };
 
   const handleChangeTitle = (e) => {
@@ -382,40 +396,18 @@ function CreateImage() {
   };
 
   useEffect(() => {}, [image1], [image2]);
-  const renderLoading = () => {
-    if (isLoading) {
-      return (
-        <div className="fixed left-0 top-0 min-w-[100%] h-[100vh] z-30">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-            }}
-            className="absolute z-20 opacity-100 -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
-          >
-            <ReactLoading type={"bars"} color={"#C0C0C0"} />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <>
       <Header
         data={{
           title: "create a video",
-          myCollection: true,
+          myCollection: "images/my-images",
           download: true,
         }}
       />
 
       <div className="createVideo">
-        {isLoading && renderLoading()}
-
         <div className="w-1/4 createVideo-upload">
           <form onSubmit={handleSubmitFrom} action="">
             <div className="createVideo-title">
@@ -510,6 +502,7 @@ function CreateImage() {
                 <button
                   type="button"
                   className="createVideo-btn createVideo-download"
+                  onClick={handleDownloadImage}
                 >
                   Download image
                 </button>

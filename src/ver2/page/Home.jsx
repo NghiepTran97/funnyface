@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import useLoading from "./../hooks/useLoading";
+
 import boy from "../components/image/nam.png";
 import boyM from "../components/image/Component131.png";
 import girlM from "../components/image/Component130.png";
@@ -24,7 +26,6 @@ import l6 from "../components/image/loi-6.jpg";
 
 import imgBg from "../components/image/backgroundLove.jpg";
 
-import ReactLoading from "react-loading";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Clock from "../components/clock";
@@ -47,7 +48,6 @@ function Home() {
   const [bsHeart, setHeart] = useState(heart);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [showImg, setShowImg] = useState({ img1: null, img2: null });
   const [randomImages, setRandomImages] = useState(null);
@@ -58,6 +58,9 @@ function Home() {
   const [filled, setFilled] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [hi, setHi] = useState(false);
+
+  const { setIsLoading } = useLoading();
+
   useEffect(() => {
     if (filled < 100 && isRunning) {
       setTimeout(() => setFilled((prev) => (prev += 2)), 1900);
@@ -470,26 +473,6 @@ function Home() {
   };
 
   useEffect(() => {}, [image1], [image2]);
-  const renderLoading = () => {
-    if (isLoading) {
-      return (
-        <div className="fixed top-0 min-w-[100%] h-[100vh] z-30">
-          <div className="absolute top-0 min-w-[100%] h-[100vh] bg-red-500 opacity-30 z-10"></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
-            }}
-            className="absolute -translate-x-2/4 opacity-100 -translate-y-2/4 left-2/4 top-2/4 z-20"
-          >
-            <ReactLoading type={"bars"} color={"#C0C0C0"} />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   const funcModelAlert = () => {
     if (modelAlert.status) {
@@ -552,7 +535,6 @@ function Home() {
       {randomImages !== null && (
         <RenderRandomWaitImage images1={randomImages} />
       )}
-      {isLoading ? renderLoading() : ""}
       {modelAlert.status ? funcModelAlert() : ""}
       <div className="lg:block hidden">
         <div className="flex justify-between lg:mx-52 pb-32">
