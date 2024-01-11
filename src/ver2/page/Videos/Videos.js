@@ -77,20 +77,29 @@ const Videos = () => {
       <Header
         data={{
           title: "videos",
-          myCollection: true,
+          myCollection: "videos/my-videos",
           download: true,
         }}
       />
-      <div className="max-h-[120vh] overflow-y-scroll rounded-lg">
-        <div className="video-list-main">
-          <div class="video-list-category flex justify-between items-center">
-            <div>
-              <div className="video-list-filterIcon">
-                <img src={filterApp} alt="" />
+      <div className="max-h-[100vh] overflow-y-scroll rounded-lg py-4">
+        <div className="flex flex-col gap-8">
+          <div class="flex justify-between items-center rounded-lg">
+            <div className="flex items-center rounded-lg bg-green-500 overflow-hidden text-white text-4xl px-3">
+              <div>
+                <img src={filterApp} alt="Filter" />
               </div>
 
               <Select
-                className="video-list-select"
+                sx={{
+                  width: "100%",
+                  fontSize: { xs: 16, md: 18 },
+                  color: "white",
+                  ".MuiOutlinedInput-notchedOutline": { borderStyle: "none" },
+                  ".MuiSelect-icon": {
+                    color: "white",
+                    fontSize: { xs: 16, md: 18 },
+                  },
+                }}
                 value={category}
                 onChange={handleChangeCategory}
               >
@@ -103,7 +112,9 @@ const Videos = () => {
               </Select>
             </div>
             <div className="flex gap-4 items-center">
-              <span className="text-white text-4xl font-semibold">Page:</span>
+              <span className="text-white text-2xl sm:text-4xl font-semibold">
+                Page:
+              </span>
               <Paginations
                 page={page}
                 setPage={setPage}
@@ -112,7 +123,7 @@ const Videos = () => {
             </div>
           </div>
 
-          <ul className="video-list-content">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[10px]">
             {listVideo &&
               listVideo
                 .slice(20 * (page - 1), 20 * page)

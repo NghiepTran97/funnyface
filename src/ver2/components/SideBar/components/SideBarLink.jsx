@@ -26,7 +26,7 @@ function SidebarLink({
         loading="lazy"
         src={isActive || isHovered ? iconActive : icon}
         alt={name}
-        className={sideBarHidden ? `min-w-[40px]` : `w-[36px] h-[36px]`}
+        className={sideBarHidden ? `min-w-[30px]` : `w-[36px] h-[36px]`}
       />
       {!sideBarHidden && (
         <div

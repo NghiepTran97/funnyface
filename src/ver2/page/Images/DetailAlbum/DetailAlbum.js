@@ -5,13 +5,13 @@ import JSZip from "jszip";
 import JSZipUtils from "jszip-utils";
 import { saveAs } from "file-saver";
 import "./DetailAlbum.css";
+import useLoading from "../../../hooks/useLoading";
 import Header from "../../../components/Header/Header";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../../../Loading/Loading";
 
 const DetailAlbum = ({ event }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useLoading();
   // const { id } = useParams();
   // const [data, setData] = useState("");
   // const [image, setImage] = useState("");
@@ -87,7 +87,7 @@ const DetailAlbum = ({ event }) => {
       <Header
         data={{
           title: "Create an album",
-          myCollection: true,
+          myCollection: "images/my-images",
           download: true,
         }}
       />
@@ -149,7 +149,6 @@ const DetailAlbum = ({ event }) => {
             })}
           </div>
         </div>
-        <Loading status={isLoading} />
       </div>
     </>
   );

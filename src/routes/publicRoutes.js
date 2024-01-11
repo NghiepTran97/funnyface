@@ -26,6 +26,7 @@ import TiktokScandal from "../ver2/tiktok-scandal";
 import YoutubeScandal from "../ver2/YoutubeScandal";
 
 import Profile from "../ver2/components/Profile";
+import Download from "../ver2/page/Download/Download";
 
 export const publicRoutes = (
   <>
@@ -40,7 +41,7 @@ export const publicRoutes = (
       <Route index element={<Videos />} />
       <Route path="make-video" element={<MakeVideo />} />
       <Route path="detail-video/:id" element={<DetailVideo />} />
-      <Route path="my-video" element={<MyVideo />} />
+      <Route path="my-videos" element={<MyVideo />} />
     </Route>
 
     <Route path="/images">
@@ -49,12 +50,14 @@ export const publicRoutes = (
       <Route path="make-album" element={<MakeAlbum />} />
       <Route path="detail-image/:id" element={<DetailImage />} />
       <Route path="detail-album/:id" element={<DetailAlbum />} />
-      <Route path="my-image" element={<MyImage />} />
+      <Route path="my-images" element={<MyVideo />} />
+      {/* <Route path="my-images" element={<MyImage />} /> */}
     </Route>
 
     <Route path="/create-video" element={<CreateVideo />} />
     <Route path="/create-image" element={<CreateImage />} />
     <Route path="/genbaby" element={<GenBaby />} />
+    <Route path="/download-app" element={<Download />} />
 
     <Route path="/youtube/:idVideo" element={<YoutubeScandal />} />
     <Route path="/tiktok/:idVideo" element={<TiktokScandal />} />

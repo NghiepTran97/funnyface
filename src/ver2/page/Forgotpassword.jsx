@@ -7,14 +7,15 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
+import useLoading from "./../hooks/useLoading";
 import background from "../../ver2/components/image/login/background.png";
 import backIcon from "../../ver2/components/image/login/backIcon.svg";
 import { MdEmail } from "react-icons/md";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
+  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
 
   const handleSendReset = async (e) => {

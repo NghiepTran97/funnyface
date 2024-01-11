@@ -99,7 +99,7 @@ const SideBar = (props) => {
   ];
 
   return (
-    <div className="h-[90vh] hidden lg:flex flex-col gap-5">
+    <div className="sticky top-0 left-0 h-[90vh] hidden lg:flex flex-col gap-5">
       <div className="flex-col gap-10 bg-custom-gray flex-grow-1 rounded-xl p-8">
         <div
           className={`flex ${

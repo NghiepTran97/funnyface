@@ -8,20 +8,22 @@ import { saveAs } from "file-saver";
 import Header from "../../../components/Header/Header";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../../../Loading/Loading";
+import useLoading from "../../../hooks/useLoading";
 
 const DetailVideo = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
   const [video, setVideo] = useState("");
   const [videoGoc, SetVideoGoc] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { setIsLoading } = useLoading();
 
   const zip = new JSZip();
 
   const [idUser, setIdUser] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `https://metatechvn.store/lovehistory/sukien/video/${id}`
@@ -36,6 +38,7 @@ const DetailVideo = () => {
       } catch (error) {
         console.error(error);
       }
+      setIsLoading(false);
     };
 
     fetchData();
@@ -59,7 +62,7 @@ const DetailVideo = () => {
       <Header
         data={{
           title: "create a video",
-          myCollection: true,
+          myCollection: "videos/my-videos",
           download: true,
         }}
       />
@@ -107,7 +110,6 @@ const DetailVideo = () => {
           </div>
         </div>
       </div>
-      <Loading status={isLoading} />
     </>
   );
 };

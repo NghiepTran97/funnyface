@@ -13,7 +13,7 @@ export const VideoItem = (props) => {
   }, [videoRef.current]);
 
   return (
-    <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:1/5 component-video">
+    <li className="component-video">
       <div className="component-video-wrap">
         <Link
           to={

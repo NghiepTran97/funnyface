@@ -14,13 +14,13 @@ export const AlbumItem = (props) => {
   }, [albumRef.current]);
 
   return (
-    <li className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 component-image">
-      <div className="component-image-wrap relative">
+    <li className="component-album">
+      <div className="component-album-wrap relative">
         <Link
           to={
             type === "swap"
               ? `/images/detail-album/${props.id_saved}`
-              : // : `/images/make-album?link=${props.image}&id=${props.id}`
+              : // : `/images/make-album?link=${props.album}&id=${props.id}`
                 `/images/make-album?link=${props.image}&id=${1}`
           }
         >

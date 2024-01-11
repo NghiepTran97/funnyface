@@ -68,13 +68,6 @@
   font-weight: 600;
 }
 
-.home-episodes-main {
-  display: flex;
-  flex-wrap: wrap;
-
-  margin: 0 -6px;
-}
-
 /* home-events */
 .home-recent {
   margin-top: 24px;

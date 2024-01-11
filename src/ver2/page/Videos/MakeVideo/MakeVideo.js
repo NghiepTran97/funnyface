@@ -13,17 +13,19 @@ import pen from "../../../components/image/edit-2.png";
 import "./MakeVideo.css";
 import Swal from "sweetalert2";
 import Header from "../../../components/Header/Header";
-import Loading from "../../../../Loading/Loading";
+import useLoading from "../../../hooks/useLoading";
 
 function MakeVideo() {
   const [image1, setImage1] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [showImg, setShowImg] = useState({ img1: null });
   const [randomImages, setRandomImages] = useState(null);
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const token = userInfo && userInfo.token;
+
+  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
+  const token = userInfo && userInfo.token;
 
   const ID_DEFAULT = 2;
   const VIDEO_DEFAULT =
@@ -221,7 +223,7 @@ function MakeVideo() {
       <Header
         data={{
           title: "create a video",
-          myCollection: true,
+          myCollection: "videos/my-videos",
           download: true,
         }}
       />
@@ -230,7 +232,6 @@ function MakeVideo() {
         {randomImages !== null && (
           <RenderRandomWaitImage images1={randomImages} />
         )}
-        <Loading status={isLoading} />
         <div className="flex flex-col lg:flex-row lg:items-center">
           <div className="p-4 lg:w-1/2">
             <div className="flex items-center justify-center name-video">

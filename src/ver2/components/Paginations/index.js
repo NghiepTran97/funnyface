@@ -8,7 +8,7 @@ const Paginations = ({ page, setPage, totalPages }) => {
 
   return (
     <Select
-      className="basic-single text-4xl font-semibold"
+      className="basic-single text-2xl sm:text-4xl font-semibold"
       style={{ width: 80 }}
       classNamePrefix="select"
       value={{ value: page, label: page }}

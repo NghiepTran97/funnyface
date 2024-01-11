@@ -37,7 +37,7 @@ const DetailImage = () => {
       <Header
         data={{
           title: "create a image",
-          myCollection: true,
+          myCollection: "images/my-images",
           download: true,
         }}
       />

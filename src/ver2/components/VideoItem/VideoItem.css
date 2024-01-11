@@ -1,5 +1,4 @@
 .component-video {
-  padding: 0 6px;
   list-style: none;
   margin-bottom: 24px;
 }
@@ -14,7 +13,7 @@
   text-align: center;
 }
 
-.component-video-wrap  video {
+.component-video-wrap video {
   width: 100%;
   object-fit: cover;
 }
