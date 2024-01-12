@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import axios from "axios";
+import useAuth from "../../hooks/useAuth";
+import useLoading from "../../hooks/useLoading";
 
 import goodPhoto1 from "../../components/image/goodPhotos/goodPhoto1.png";
 import goodPhoto2 from "../../components/image/goodPhotos/goodPhoto2.png";
@@ -16,7 +18,6 @@ import badPhoto4 from "../../components/image/badPhotos/badPhoto4.png";
 import badPhoto5 from "../../components/image/badPhotos/badPhoto5.png";
 import badPhoto6 from "../../components/image/badPhotos/badPhoto6.png";
 
-import useLoading from "../../hooks/useLoading";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,8 +38,8 @@ function CreateImage() {
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
 
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const token = userInfo && userInfo.token;
+  const { user } = useAuth();
+  const token = user.token;
 
   const [sameFace, setSameFace] = useState({
     img1: null,
@@ -226,7 +227,7 @@ function CreateImage() {
     }
   };
 
-  const idUser = userInfo && userInfo.id_user;
+  const idUser = user.id_user;
   const uploadImageNam = async (image) => {
     if (idUser === null) {
       toast.warning("Login is required");

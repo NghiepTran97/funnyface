@@ -15,7 +15,7 @@ import { publicRoutes } from "./routes/publicRoutes";
 import { getMyDetailUser } from "./utils/getDataCommon";
 
 function App() {
-  const isLoading = useSelector((state) => state.isLoading);
+  const isLoading = useSelector((state) => state.loading.isLoading);
 
   useEffect(() => {
     const getIPAddress = async () => {

@@ -1,10 +1,14 @@
-import React from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
-import { Auth } from '../utils/Auth'
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
+
+import useAuth from "../ver2/hooks/useAuth";
 
 const AuthMiddleware = () => {
-  const isLogin = new Auth().isLogin()
-  return isLogin ? <Navigate to="/" /> : <Outlet />
-}
+  const { user } = useAuth();
 
-export default AuthMiddleware
+  const isLogin = !!user.id_user;
+
+  return isLogin ? <Navigate to="/" /> : <Outlet />;
+};
+
+export default AuthMiddleware;

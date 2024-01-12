@@ -30,7 +30,7 @@ function OnBoard() {
         >
           <img src={logo} alt="Logo" />
           <span className="text-3xl lg:text-6xl text-white font-bold starborn">
-            Future Love
+            Funny Face
           </span>
         </div>
         <div className="bg-black flex border border-gray-400 rounded-3xl p-3 text-white font-semibold">
@@ -51,7 +51,7 @@ function OnBoard() {
 
       <div className="w-[80%] flex flex-col justify-between items-center text-white gap-5">
         <div className="w-full flex flex-col md:flex-row justify-between items-center  gap-4">
-          <span className="xl:max-w-[40%] text-6xl xl:text-8xl font-semibold">
+          <span className="xl:max-w-[40%] text-5xl xl:text-7xl font-semibold">
             Bring any image to video.
           </span>
           <div className="flex flex-col items-center md:items-start gap-4 xl:max-w-[30%]">
@@ -60,7 +60,7 @@ function OnBoard() {
               Predict the future of your journey and love.
             </span>
             <button
-              className="text-4xl rounded-xl bg-green-400 p-4 font-semibold"
+              className="text-3xl rounded-xl bg-green-400 p-3 font-semibold"
               onClick={redirectLogin}
             >
               Get Started
@@ -129,11 +129,11 @@ function OnBoard() {
 
       <div className="bg-gradient-to-t from-[#32323280] to-[#000000] w-full px-10 flex flex-col lg:flex-row justify-center items-center gap-5 pt-10 md:pt-20">
         <div className="flex flex-col items-center lg:items-start gap-5 font-[Quicksand] text-white">
-          <span className="text-5xl xl:text-8xl font-semibold">
+          <span className="text-4xl xl:text-6xl font-semibold">
             Predict your future events in love
           </span>
           <button
-            className="bg-green-400 rounded-xl text-3xl xl:text-4xl py-4 w-[200px] xl:w-[400px] font-semibold"
+            className="bg-green-400 rounded-xl text-2xl xl:text-3xl py-3 w-[200px] xl:w-[400px] font-semibold"
             onClick={redirectLogin}
           >
             Try now!

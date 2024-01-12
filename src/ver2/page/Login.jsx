@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import useLoading from "./../hooks/useLoading";
+import useAuth from "../hooks/useAuth";
 import background from "../../ver2/components/image/login/background.png";
 import checkIcon from "../../ver2/components/image/login/checkIcon.svg";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -21,8 +22,10 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
 
-  const { setIsLoading } = useLoading();
   const navigate = useNavigate();
+
+  const { setIsLoading } = useLoading();
+  const { login } = useAuth();
 
   const signInWithGoogle = async (e) => {
     setIsLoading(true);
@@ -67,14 +70,22 @@ export default function Login() {
         "https://metatechvn.store/login",
         formData
       );
-      if (response.data.message) {
-        toast.error(response.data.message);
-      } else {
+
+      if (response.data.message === "Invalid Password!!")
+        throw new Error(response.data.message);
+
+      if (response.status === 200) {
+        const data = response.data;
+        login({
+          ...data,
+          link_avatar: data.link_avatar.replace(
+            "/var/www/build_futurelove/",
+            "https://futurelove.online/"
+          ),
+        });
+        localStorage.setItem("accessToken", data.token);
         toast.success("Login success");
         navigate("/");
-        window.location.reload();
-        response.data = JSON.stringify(response.data);
-        localStorage.setItem("user-info", response.data);
       }
     } catch (error) {
       return toast.error("Account or password is incorrect !!!");
@@ -130,31 +141,29 @@ export default function Login() {
         </Swiper>
       </div>
 
-      <div className="w-full lg:w-[45%] flex flex-col justify-center items-center gap-5 py-14">
+      <div className="w-full lg:w-[45%] flex flex-col justify-center items-center gap-5 py-4">
         <div
-          className="w-[80%] text-5xl md:text-8xl text-white text-center items-center"
+          className="w-[80%] text-4xl md:text-6xl text-white text-center items-center"
           style={{ fontFamily: "Starborn" }}
         >
           Funny Face
         </div>
 
         <form
-          className="w-[80%] flex flex-col text-white gap-5 mt-20"
+          className="w-[80%] flex flex-col text-white gap-5"
           onSubmit={handleLogin}
         >
-          <span className="text-3xl md:text-5xl font-semibold">Login</span>
-          <span className="text-2xl md:text-4xl">
-            Log in with email address
-          </span>
+          <span className="text-2xl md:text-3xl font-semibold">Login</span>
+          <span className="text-xl md:text-2xl">Log in with email address</span>
 
           <div className="border_input border border-gray-400 pl-4 rounded-lg">
             <div className="text-white flex justify-items-center items-center gap-2">
-              <MdEmail className="text-white text-2xl md:text-4xl items-start mr-2" />
+              <MdEmail className="text-white text-lg md:text-2xl items-start mr-2" />
               <input
                 type="text"
                 value={email}
                 placeholder="Email or username"
-                className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-4xl"
+                className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-2xl"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -162,12 +171,12 @@ export default function Login() {
 
           <div className="flex justify-between border_pass text-white border border-gray-400 pl-4 rounded-lg">
             <div className="relative flex items-center gap-2 flex-grow-1">
-              <FaLock className="text-white text-2xl md:text-4xl mr-2" />
+              <FaLock className="text-white text-lg md:text-2xl mr-2" />
               <input
                 type={passwordShow ? "text" : "password"}
                 value={password}
                 placeholder="Password"
-                className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-4xl"
+                className="py-3 h-full flex-grow-1 border-none outline-none bg-inherit text-2xl"
                 onChange={(e) => setPassword(e.target.value)}
               />
               <span
@@ -175,9 +184,9 @@ export default function Login() {
                 className="h-full flex justify-center items-center absolute top-0 right-4"
               >
                 {passwordShow ? (
-                  <FaEye className="text-white text-3xl" />
+                  <FaEye className="text-white text-xl" />
                 ) : (
-                  <FaEyeSlash className="text-white text-3xl" />
+                  <FaEyeSlash className="text-white text-xl" />
                 )}
               </span>
             </div>
@@ -194,7 +203,7 @@ export default function Login() {
                 onChange={() => setRememberMe(!rememberMe)}
                 className="hidden rounded-lg p-3 text-white bg-inherit border boder-gray-400 mr-4 cursor-pointer"
               />
-              <div className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] border boder-gray-400 rounded-lg bg-inherit">
+              <div className="w-[20px] h-[20px] md:w-[28px] md:h-[28px] border boder-gray-400 rounded-lg bg-inherit">
                 {rememberMe && (
                   <img
                     src={checkIcon}
@@ -203,14 +212,14 @@ export default function Login() {
                   />
                 )}
               </div>
-              <span className="text-2xl md:text-4xl text-white">
+              <span className="text-lg md:text-2xl text-white">
                 Remember me
               </span>
             </div>
 
             <button
               type="button"
-              className="text-2xl md:text-4xl text-green-400"
+              className="text-lg md:text-2xl text-green-400"
               onClick={() => navigate("/forgot")}
             >
               Forgot password?
@@ -218,7 +227,7 @@ export default function Login() {
           </div>
 
           <button
-            className="bg-green-400 text-white rounded-lg py-4 font-semibold text-3xl"
+            className="bg-green-400 text-white rounded-lg py-3 font-semibold text-2xl"
             onClick={(e) => handleLogin(e)}
           >
             Login
@@ -226,17 +235,17 @@ export default function Login() {
 
           <div className="flex items-center w-full mt-4">
             <div className="flex-grow-1 bg-gray-800 h-[1px]" />
-            <span className="mx-4 text-white text-3xl font-semibold">Or</span>
+            <span className="mx-4 text-white text-xl font-semibold">Or</span>
             <div className="flex-grow-1 bg-gray-800 h-[1px]" />
           </div>
 
           <div className="flex flex-col justify-center items-center text-white gap-3">
-            <span className="text-3xl font-semibold">Log in with</span>
+            <span className="text-xl font-semibold">Log in with</span>
             <div className="flex justify-center gap-3">
               <button
                 type="button"
                 onClick={signInWithGoogle}
-                className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
+                className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-base py-3 px-5 flex items-center text-center"
               >
                 <svg
                   width="25"
@@ -285,11 +294,11 @@ export default function Login() {
                     </clipPath>
                   </defs>
                 </svg>
-                <span className="text-2xl md:text-4xl">Google</span>
+                <span className="text-lg md:text-2xl">Google</span>
               </button>
               <button
                 type="button"
-                className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-lg py-3 px-5 flex items-center text-center"
+                className="rounded-xl bg-[#FCFCFC] text-[#1A1D1F] text-base py-3 px-5 flex items-center text-center"
               >
                 <svg
                   width="26"
@@ -304,16 +313,14 @@ export default function Login() {
                     fill="#1877F2"
                   />
                 </svg>
-                <span className="text-2xl md:text-4xl">Facebook</span>
+                <span className="text-lg md:text-2xl">Facebook</span>
               </button>
             </div>
             <div className="flex justify-center items-center gap-3">
-              <span className="text-3xl text-gray-400">
-                Don't have account?
-              </span>
+              <span className="text-xl text-gray-400">Don't have account?</span>
               <button
                 type="button"
-                className="text-3xl text-green-400"
+                className="text-xl text-green-400"
                 onClick={() => navigate("/register")}
               >
                 Sign up

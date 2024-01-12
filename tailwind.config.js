@@ -10,9 +10,12 @@ module.exports = {
         ...colors.green,
       },
       "custom-gray": "#32323280",
+      "modal-gray": "#323232",
       ...colors,
     },
-    fontFamily: { sans: ["Quicksan", "ui-sans-serif", "system-ui"] },
+    fontFamily: {
+      sans: ["Quicksan", "Lilita One", "ui-sans-serif", "system-ui"],
+    },
     extend: {
       colors: {
         "custom-pink": "#FF9F9F",

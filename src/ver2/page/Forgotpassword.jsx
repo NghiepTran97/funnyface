@@ -86,7 +86,7 @@ export default function ForgotPassword() {
 
         <div className="w-full lg:w-[45%] h-full flex flex-col justify-center items-center gap-10">
           <div
-            className="text-8xl text-white text-center items-center"
+            className="text-4xl md:text-6xl text-white text-center items-center"
             style={{ fontFamily: "Starborn" }}
           >
             Funny Face
@@ -96,26 +96,28 @@ export default function ForgotPassword() {
             className="w-[80%] flex flex-col text-white gap-5 mt-20"
             onSubmit={handleSendReset}
           >
-            <span className="text-5xl font-semibold">Forgot Password</span>
-            <span className="text-4xl">
+            <span className="text-2xl md:text-3xl font-semibold">
+              Forgot Password
+            </span>
+            <span className="text-xl md:text-2xl">
               Don't worry, we'll send you the password reset via email.
             </span>
 
             <div className="border_input border border-gray-400 px-4 py-3 rounded-lg">
               <div className="text-white flex justify-items-center items-center gap-2">
-                <MdEmail className="text-white text-4xl items-start mr-2" />
+                <MdEmail className="text-white text-xl md:text-2xl items-start mr-2" />
                 <input
                   type="email"
                   value={email}
                   placeholder="Email"
-                  className="flex-grow-1 border-none outline-none bg-inherit text-4xl"
+                  className="flex-grow-1 border-none outline-none bg-inherit text-2xl"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
 
             <button
-              className="bg-green-400 text-white rounded-lg py-4 font-semibold text-3xl"
+              className="bg-green-400 text-white rounded-lg py-3 font-semibold text-2xl"
               onClick={(e) => handleSendReset(e)}
             >
               Reset password
@@ -123,13 +125,13 @@ export default function ForgotPassword() {
 
             <button
               type="button"
-              className="flex items-center text-4xl font-semibold text-white self-center gap-2"
+              className="flex items-center text-3xl font-semibold text-white self-center gap-2"
               onClick={() => navigate("/login")}
             >
               <img
                 src={backIcon}
                 alt="Back"
-                className="w-[28px] h-[28px] md:w-[32px] md:h-[32px]"
+                className="w-[24px] h-[24px] md:w-[28px] md:h-[28px]"
               />
               <span>Back to login</span>
             </button>

@@ -1,7 +1,7 @@
-import React from 'react'
-import Button from './Button';
-import { Link } from 'react-scroll';
-import img from '../image/bg-1.png'
+import React from "react";
+import Button from "./Button";
+import { Link } from "react-scroll";
+import img from "../image/bg-1.png";
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
       <div className=" md:w-2/4 text-center">
         <h2 className=" text-5xl font-semibold leading-tight">
           Start with
-          <span className="text-brightGreen"> Future Love</span>
+          <span className="text-brightGreen">Funny Face</span>
         </h2>
         <p className=" text-lightText mt-5 text-start text-4xl">
           You want to know the future of you and your lover?, you want to have
@@ -33,6 +33,6 @@ const Home = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

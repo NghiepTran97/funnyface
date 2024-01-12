@@ -1,8 +1,10 @@
 @import "./styles/marvel-devices.scss";
+@import "~@fontsource/lilita-one";
 
 .App {
   overflow: hidden;
   background-color: var(--color-primary);
+  font-family: "Open Sans", sans-serif;
 }
 .img-love {
   // background-image: url(../image/Screenshot_1.png);

@@ -1,7 +1,18 @@
-// reducers.js
 const initialState = {
   responseData: null,
   isLoading: false,
+  user: {
+    id_user: "",
+    link_avatar: "",
+    user_name: "",
+    ip_register: "",
+    device_register: "",
+    email: "",
+    count_sukien: 0,
+    count_comment: 0,
+    count_view: 0,
+    token: "",
+  },
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -16,6 +27,15 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: action.payload,
+      };
+
+    case "UPDATE_PROFILE_USER":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
       };
 
     default:

@@ -25,7 +25,7 @@ import NotFound from "../ver2/components/NotFound";
 import TiktokScandal from "../ver2/tiktok-scandal";
 import YoutubeScandal from "../ver2/YoutubeScandal";
 
-import Profile from "../ver2/components/Profile";
+import Profile from "../ver2/page/Profile/Profile";
 import Download from "../ver2/page/Download/Download";
 
 export const publicRoutes = (
@@ -61,8 +61,8 @@ export const publicRoutes = (
 
     <Route path="/youtube/:idVideo" element={<YoutubeScandal />} />
     <Route path="/tiktok/:idVideo" element={<TiktokScandal />} />
-    <Route path="*" exact={true} element={<NotFound />} />
-
     <Route path="/profile" element={<Profile />} />
+
+    <Route path="*" exact={true} element={<NotFound />} />
   </>
 );

@@ -23,6 +23,8 @@ import babyIcon from "../../components/image/sideBar/BabyIcon.svg";
 import babyIconActive from "../../components/image/sideBar/BabyIconActive.svg";
 import helpIcon from "../../components/image/sideBar/HelpIcon.svg";
 import helpIconActive from "../../components/image/sideBar/HelpIconActive.svg";
+import logoutIcon from "../../components/image/sideBar/LogoutIcon.svg";
+import logoutIconActive from "../../components/image/sideBar/LogoutIconActive.svg";
 
 const SideBar = (props) => {
   const [sideBarHidden, setSideBarHidden] = useState(false);
@@ -96,6 +98,12 @@ const SideBar = (props) => {
       iconActive: helpIconActive,
       path: "/help",
     },
+    {
+      name: "Logout",
+      icon: logoutIcon,
+      iconActive: logoutIconActive,
+      path: "logout",
+    },
   ];
 
   return (
@@ -107,7 +115,7 @@ const SideBar = (props) => {
           } items-center`}
         >
           {!sideBarHidden && (
-            <span className="text-3xl xl:text-4xl text-white font-bold starborn">
+            <span className="text-xl xl:text-2xl text-white font-bold starborn">
               Funny face
             </span>
           )}
@@ -137,7 +145,7 @@ const SideBar = (props) => {
               name="search"
               id="search"
               value={searchKey}
-              className="h-full py-3 outline-none border-none bg-inherit text-3xl text-white"
+              className="h-full py-3 outline-none border-none bg-inherit text-xl text-white"
               onChange={(e) => setSearchKey(e.target.value)}
             />
           </div>
@@ -156,7 +164,7 @@ const SideBar = (props) => {
           ))}
         </div>
       </div>
-      <div className="bg-custom-gray rounded-xl flex flex-col py-4 px-8">
+      <div className="bg-custom-gray rounded-xl flex flex-col py-2 px-8">
         {botMenus.map((item, index) => (
           <SidebarLink
             key={index}

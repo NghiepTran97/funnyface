@@ -21,6 +21,8 @@ import babyIcon from "../../components/image/sideBar/BabyIcon.svg";
 import babyIconActive from "../../components/image/sideBar/BabyIconActive.svg";
 import helpIcon from "../../components/image/sideBar/HelpIcon.svg";
 import helpIconActive from "../../components/image/sideBar/HelpIconActive.svg";
+import logoutIcon from "../../components/image/sideBar/LogoutIcon.svg";
+import logoutIconActive from "../../components/image/sideBar/LogoutIconActive.svg";
 
 const SideBarMobile = ({ openMenu, setOpenMenu }) => {
   const [searchKey, setSearchKey] = useState("");
@@ -90,6 +92,12 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
       iconActive: helpIconActive,
       path: "/help",
     },
+    {
+      name: "Logout",
+      icon: logoutIcon,
+      iconActive: logoutIconActive,
+      path: "logout",
+    },
   ];
 
   return (
@@ -107,7 +115,7 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
         >
           x
         </button>
-        <div className="flex-col gap-10 flex-grow-1 rounded-xl p-8">
+        <div className="flex-col gap-10 flex-grow-1 rounded-xl p-4">
           <div className="flex justify-center items-center">
             <span className="text-3xl xl:text-4xl text-white font-bold starborn">
               Funny face
@@ -129,7 +137,7 @@ const SideBarMobile = ({ openMenu, setOpenMenu }) => {
               name="search"
               id="search"
               value={searchKey}
-              className="h-full py-3 outline-none border-none bg-inherit text-3xl text-white"
+              className="h-full py-3 outline-none border-none bg-inherit text-lg sm:text-xl text-white"
               onChange={(e) => setSearchKey(e.target.value)}
             />
           </div>

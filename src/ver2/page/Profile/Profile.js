@@ -1,238 +1,166 @@
-import "../Profile/ProfileScss/Profile.scss"
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useEffect, useId, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
-export default function Profile() {
-    return (
-        <>
-            <div className="profile-wrapper d-flex">
-                <div className="profile-sidebar col-3">
-                    <div className="title-group">
-                        <div className="title">
-                            <p>FUNNY FACE</p>
-                            <div className="bar">
-                                <img src="./images/profile/icon-bar-sidebar.png"/>
-                            </div>
-                        </div>
-                        <div className="sidebar-main">
-                            <div className="search-box">
-                                <button>
-                                    <img src="./images/profile/search-normal.png"/>
-                                </button>
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                />
-                            </div>
-                            <div className="menu">
-                                <div className="menu-items">
-                                    <img src="./images/profile/icon-home.png"/>
-                                    <p>Home</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/icon-love.png"/>
-                                    <p>Love</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/icon-event.png"/>
-                                    <p>Events</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/icon-video.png"/>
-                                    <p>Videos playlist</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/icon-image.png"/>
-                                    <p>Images playlist</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/play-add.png"/>
-                                    <p>Create your video</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/addimage.png"/>
-                                    <p>Create your image</p>
-                                </div>
-                                <div className="menu-items">
-                                    <img src="./images/profile/baby.png"/>
-                                    <p>Baby generator</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sidebar-footer">
-                        <img src="./images/profile/message-question.png"/>
-                        <p>Help & getting started</p>
-                    </div>
-                </div>
-                <div className="profile-body col-9">
-                    <div className="cover">
-                        <img src="./images/profile/Rectangle 3320.png"/>
-                        
-                        <div className="update-image-box">
-                            <img src="./images/profile/camera.png"/>
-                            <p>Upload image</p>
-                        </div>
-                        <div className="change-cover-box d-flex">
-                            <img src="./images/profile/Vector.png"/>
-                            <p>Change cover</p>
-                        </div>
-                    </div>
-                    <div className="information-profile">
-                        <div className="information-profile-box">
-                            <div className="information">
-                                <p>@Trung Hiếu</p>
-                                <div className="setting">
-                                    <button>Edit profile</button>
-                                    <div>
-                                        <img src="./images/profile/setting-2.png"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="interraction">
-                                <div className="interraction-items">
-                                    <p>4</p>
-                                    <span>events</span>
-                                </div>
-                                <div className="interraction-items">
-                                    <p>10</p>
-                                    <span>veiws</span>
-                                </div>
-                                <div className="interraction-items">
-                                    <p>22</p>
-                                    <span>comments</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="events-wrapper">
-                        <div className="conntent">
-                            <p>EVENTS</p>
-                            <div className="event-items">
-                                <div className="user-info">
-                                    <div className="user">
-                                        <div className="avatar-box">
-                                            <img src="./images/profile/Mask group.png"/>
-                                        </div>
-                                        <p className="user-name">trunghieu</p>
-                                    </div>
-                                    <div className="extend">
-                                        <img src="./images/profile/more-dot.png"/>
-                                    </div>
-                                </div>
-                                <div className="content-event">
-                                    <div className="content">
-                                        <h2>FIRST DATE</h2>
-                                        <p>Our first date was a mix of nervousness and excitement. We shared stories, laughed, and felt a growing connection</p>
-                                        <div className="iteraction-content-event">
-                                            <div className="items">
-                                                <img src="./images/profile/comment.png"/>
-                                                <p>15</p>
-                                            </div>
-                                            <div className="items">
-                                                <img src="./images/profile/carbon_view-filled.png"/>
-                                                <p>2.3</p>
-                                                <span>k</span>
-                                            </div>
-                                        </div>
-                                        <div className="date">
-                                            <p>12/10/2023</p>
-                                        </div>
-                                    </div>
-                                    <div className="image-content">
-                                        <img src="./images/profile/image-event.png"/>
-                                    </div>
-                                </div>
-                                <div className="interaction-event">
-                                    <div className="interaction-event-items">
-                                        <img src="./images/profile/messages-2.png"/>
-                                        <p>Comment</p>
-                                    </div>
-                                    <div className="interaction-event-items">
-                                        <img src="./images/profile/follow.png"/>
-                                        <p>Follow</p>
-                                    </div>
-                                    <div className="interaction-event-items">
-                                        <img src="./images/profile/share.png"/>
-                                        <p>Share</p>
-                                    </div>
-                                </div>
-                                <div className="comment-box">
-                                    <div className="box-user">
-                                        <img src="./images/profile/unsplash_ZHvM3XIOHoE.png"/>
-                                    </div>
-                                    <div className="input-comment-group">
-                                        <input
-                                            type="text"
-                                            placeholder="Comment"
-                                        />
-                                        <div className="send-group">
-                                            <img src="./images/profile/addimagecm.png"/>
-                                            <img src="./images/profile/send.png"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="line-bottom-events"></div>
-                            </div>
-                            <div className="pagination-event">
-                                <div className="prev not-active">
-                                    <FaChevronLeft className="icon-btn-change"/>
-                                </div>
-                                <div className="pagination-page active-page">
-                                    1
-                                </div>
-                                <div className="pagination-page">
-                                    2
-                                </div>
-                                <div className="pagination-page">
-                                    3
-                                </div>
-                                <div className="next">
-                                    <FaChevronRight className="icon-btn-change"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="comment-bar">
-                            <p>COMMENTS</p>
-                            <div className="comment-item-group">
-                                <div className="comment-items">
-                                    <div className="box-comments">
-                                        <div className="avatar-users-box">
-                                            <img src="./images/profile/unsplash_ZHvM3XIOHoE.png"/>
-                                        </div>
-                                        <div className="group-content-comment">
-                                            <h2>trunghieu</h2>
-                                            <p>Love is the melody that fills our days, harmonizing even the simplest of moments</p>
-                                            <span className="times">12m</span>
-                                        </div>
-                                    </div>
-                                    <div className="box-more">
-                                        <img src="./images/profile/more-dots.png"/>
-                                    </div>
-                                </div>
-                            </div>
+import useLoading from "../../hooks/useLoading";
+import useAuth from "../../hooks/useAuth";
+import useProfile from "../../hooks/useProfile";
+import { uploadImg, changeAvatar } from "../../services/user.service";
 
-                            <div className="pagination-event pagination-comments">
-                                <div className="prev not-active">
-                                    <FaChevronLeft className="icon-btn-change"/>
-                                </div>
-                                <div className="pagination-page active-page">
-                                    1
-                                </div>
-                                <div className="pagination-page">
-                                    2
-                                </div>
-                                <div className="pagination-page">
-                                    3
-                                </div>
-                                <div className="next">
-                                    <FaChevronRight className="icon-btn-change"/>
-                                </div>
-                            </div>
+import SideBarMobile from "../../components/SideBar/SideBarMobile";
+import EditModal from "./components/EditModal";
+import sideBarIcon from "../../components/image/sideBar/SideBarIcon.svg";
+import sideBarIconActive from "../../components/image/sideBar/SideBarIconActive.svg";
+import settingIcon from "../../components/image/profile/SettingIcon.svg";
+import settingIconActive from "../../components/image/profile/SettingIconActive.svg";
 
-                        </div>
-                    </div>
-                </div>
+const MAX_FILE_SIZE = 10485760;
+
+function Profile() {
+  const [openSideBarMobile, setOpenSideBarMobile] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [hover, setHover] = useState({
+    sideBar: false,
+    edit: false,
+    setting: false,
+  });
+
+  const navigate = useNavigate();
+  const labelRef = useRef();
+  const inputId = useId();
+
+  const { setIsLoading } = useLoading();
+  const { user } = useAuth();
+  const { updateProfileAvatar } = useProfile();
+
+  const setHoverChange = (item) => {
+    setHover({ ...hover, ...item });
+  };
+
+  const handleAvatarChange = async (e) => {
+    setIsLoading(true);
+    try {
+      const file = e.target.files[0];
+
+      if (!file) throw new Error("Avatar not found");
+
+      if (file.size > MAX_FILE_SIZE) throw new Error("Max file size is 10MB");
+
+      const formData = new FormData();
+      formData.append("src_img", file);
+
+      const uploadResponse = await uploadImg(formData);
+      const imgUploadSrc = uploadResponse.data;
+
+      if (imgUploadSrc?.message) throw new Error(imgUploadSrc.message);
+
+      formData.append("link_img", imgUploadSrc);
+      formData.append("check_img", "upload");
+
+      const response = await changeAvatar(user.id_user, formData);
+
+      if (!response) throw new Error("Change avatar fail");
+
+      const avatarUrl = response.data.link_img;
+      updateProfileAvatar(avatarUrl);
+      toast.success("Update avatar success");
+    } catch (error) {
+      toast.error("Error: " + error.message);
+    }
+    setIsLoading(false);
+  };
+
+  const checkUser = () => {
+    if (!user.id_user) {
+      toast.warn("Login to view your profile");
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  return (
+    <div className="relative bg-custom-gray flex flex-col items-center gap-4 rounded-lg overflow-hidden font-[Quicksand] gap-3 pb-6">
+      <label htmlFor={inputId} ref={labelRef} className="hidden" />
+      <input
+        id={inputId}
+        className="hidden"
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={handleAvatarChange}
+      />
+      <SideBarMobile
+        openMenu={openSideBarMobile}
+        setOpenMenu={setOpenSideBarMobile}
+      />
+      <div
+        className="block lg:hidden absolute top-6 left-6 cursor-pointer"
+        onClick={() => setOpenSideBarMobile(true)}
+        onMouseEnter={() => setHoverChange({ sideBar: true })}
+        onMouseLeave={() => setHoverChange({ sideBar: false })}
+      >
+        <img
+          src={hover.sideBar ? sideBarIconActive : sideBarIcon}
+          alt="Menu"
+          className="w-[32px] h-[32px]"
+        />
+      </div>
+
+      <div className="w-full h-[35vh] flex justify-center md:justify-start items-end bg-gray-400 ">
+        <div
+          className="relative w-[100px] h-[100px] rounded-full overflow-hidden hover:bg-neutral-800 cursor-pointer md:ml-12 mb-5"
+          onClick={() => labelRef.current?.click()}
+        >
+          <img
+            src={user.link_avatar}
+            alt="Avatar"
+            className="w-full h-full hover:opacity-50"
+          />
+          <div className="absolute opacity-50 bottom-0 left-0 flex justify-center items-center w-full bg-neutral-600 text-white">
+            Edit
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col px-4">
+        <div className="flex justify-between text-white">
+          <span className="text-4xl font-semibold">@{user.user_name}</span>
+          <div className="flex items-center gap-4">
+            <button
+              className={`py-3 px-6 text-2xl font-semibold rounded-xl ${
+                hover.edit ? "bg-green-400 text-white" : "bg-white text-black"
+              }`}
+              onClick={() => setOpenEditModal(true)}
+              onMouseEnter={() => setHoverChange({ edit: true })}
+              onMouseLeave={() => setHoverChange({ edit: false })}
+            >
+              Edit profile
+            </button>
+            <div
+              className="w-12 h-12 cursor-pointer"
+              onMouseEnter={() => setHoverChange({ setting: true })}
+              onMouseLeave={() => setHoverChange({ setting: false })}
+            >
+              <img
+                src={hover.setting ? settingIconActive : settingIcon}
+                alt="Setting"
+                className="w-full g-full bg-cover"
+              />
             </div>
-        </>
-    )
+          </div>
+        </div>
+      </div>
+      <EditModal
+        openEditModal={openEditModal}
+        setOpenEditModal={setOpenEditModal}
+        user={user}
+        labelRef={labelRef}
+      />
+    </div>
+  );
 }
+
+export default Profile;
