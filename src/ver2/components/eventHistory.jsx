@@ -1,165 +1,171 @@
-import React, { useEffect, useState } from 'react'
-import ReactLoading from 'react-loading'
-import { format } from 'date-fns'
-import { createBrowserHistory } from 'history'
-import '../css/Header.css'
-import img1 from '../components/image/finish.png'
-import bg1 from '../components/image/bg-1.png'
-import bg2 from '../components/image/bg-2.png'
-import bg4 from '../components/image/bg4.jpeg'
-import vec1 from '../components/image/Vector1.png'
-import vec2 from '../components/image/Vector2.png'
-import vec3 from '../components/image/hoa.png'
-import vec4 from '../components/image/tron2.png'
-import moment from 'moment'
+import React, { useEffect, useState } from "react";
+import ReactLoading from "react-loading";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { format } from "date-fns";
+import { createBrowserHistory } from "history";
+import "../css/Header.css";
 
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import useAuth from "../hooks/useAuth";
+import img1 from "../components/image/finish.png";
+import bg1 from "../components/image/bg-1.png";
+import bg2 from "../components/image/bg-2.png";
+import bg4 from "../components/image/bg4.jpeg";
+import vec1 from "../components/image/Vector1.png";
+import vec2 from "../components/image/Vector2.png";
+import vec3 from "../components/image/hoa.png";
+import vec4 from "../components/image/tron2.png";
+import moment from "moment";
 
 function EventHistory(props) {
-  const { id } = useParams()
+  const { id } = useParams();
 
-  const [data, setData] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [loadingType, setLoadingType] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const location = useLocation()
-  const history = createBrowserHistory()
-  const navigate = useNavigate()
-  const [count, setCount] = useState(1)
-  const userInfo = JSON.parse(window.localStorage.getItem('user-info'))
-  let idUser = userInfo && userInfo.id_user
-  if (idUser === null) {
-    idUser = 0
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  const history = createBrowserHistory();
+  const navigate = useNavigate();
+  const [count, setCount] = useState(1);
+
+  const { user } = useAuth();
+
+  let idUser = user.id_user;
+  if (!idUser) {
+    idUser = 0;
   }
-  const totalPages1 = 40
+  const totalPages1 = 40;
 
   const handlePageChange = (page) => {
     // Kiểm tra giới hạn trang để đảm bảo rằng trang không vượt quá giới hạn
-    const newPage = Math.min(Math.max(1, page), totalPages)
-    setCount(newPage)
-  }
+    const newPage = Math.min(Math.max(1, page), totalPages);
+    setCount(newPage);
+  };
 
-  const resultsPerPage = 3
+  const resultsPerPage = 3;
 
   const fetchData = async () => {
     if (!id) {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         const response = await fetch(
           `https://metatechvn.store/lovehistory/page/${count}?id_user=${idUser}`
-        )
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch data')
+          throw new Error("Failed to fetch data");
         }
-        const jsonData = await response.json()
-        console.log(jsonData.list_sukien)
+        const jsonData = await response.json();
+        console.log(jsonData.list_sukien);
         const updatedData = jsonData.list_sukien.map((item) => {
           if (item.sukien.length === 0) {
-            return { ...item, nodata: true }
+            return { ...item, nodata: true };
           }
-          return item
-        })
-        setData(updatedData)
-        setIsLoading(false)
+          return item;
+        });
+        setData(updatedData);
+        setIsLoading(false);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     } else {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         const response = await fetch(
           `https://metatechvn.store/lovehistory/page/${id}?id_user=${idUser}`
-        )
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch data')
+          throw new Error("Failed to fetch data");
         }
-        const jsonData = await response.json()
-        console.log(jsonData.list_sukien)
+        const jsonData = await response.json();
+        console.log(jsonData.list_sukien);
         const updatedData = jsonData.list_sukien.map((item) => {
           if (item.sukien.length === 0) {
-            return { ...item, nodata: true }
+            return { ...item, nodata: true };
           }
-          return item
-        })
-        setData(updatedData)
-        setIsLoading(false)
+          return item;
+        });
+        setData(updatedData);
+        setIsLoading(false);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-  }
+  };
 
   const changePageUp = () => {
     if (!id) {
       if (count < 200) {
-        const newCount = count + 1
-        setCount(newCount)
-        navigate(`/event/${newCount}`)
+        const newCount = count + 1;
+        setCount(newCount);
+        navigate(`/event/${newCount}`);
       }
     } else {
-      const numericId = parseInt(id, 10) // Chuyển đổi id thành số nguyên
+      const numericId = parseInt(id, 10); // Chuyển đổi id thành số nguyên
       if (!isNaN(numericId) && numericId < 200) {
-        const newId = numericId + 1
-        setCount(newId)
-        navigate(`/event/${newId}`)
+        const newId = numericId + 1;
+        setCount(newId);
+        navigate(`/event/${newId}`);
       }
     }
-  }
+  };
   const changePageDown = () => {
     if (!id) {
       if (count > 1) {
-        const newCount = count - 1
-        setCount(newCount)
-        navigate(`/event/${newCount}`)
+        const newCount = count - 1;
+        setCount(newCount);
+        navigate(`/event/${newCount}`);
       }
     } else {
-      const numericId = parseInt(id, 10)
+      const numericId = parseInt(id, 10);
       if (!isNaN(numericId) && numericId > 1) {
-        const newId = numericId - 1
-        setCount(newId)
-        navigate(`/event/${newId}`)
+        const newId = numericId - 1;
+        setCount(newId);
+        navigate(`/event/${newId}`);
       }
     }
-  }
+  };
   useEffect(() => {
-    fetchData()
-  }, [count, id])
+    fetchData();
+  }, [count, id]);
 
   useEffect(() => {
     const loadingTypes = [
-      'bars',
-      'bubbles',
-      'spinningBubbles',
-      'spin',
-      'cubes',
-      'balls',
-      'spokes',
-      'cylon',
-    ]
-    fetchData()
-    const randomIndex = Math.floor(Math.random() * loadingTypes.length)
-    const randomType = loadingTypes[randomIndex]
-    setLoadingType(randomType)
-  }, [])
+      "bars",
+      "bubbles",
+      "spinningBubbles",
+      "spin",
+      "cubes",
+      "balls",
+      "spokes",
+      "cylon",
+    ];
+    fetchData();
+    const randomIndex = Math.floor(Math.random() * loadingTypes.length);
+    const randomType = loadingTypes[randomIndex];
+    setLoadingType(randomType);
+  }, []);
 
   const handleEventHistory = (idsk) => {
     history.push({
       pathname: `/detail/${idsk}/1`,
-    })
-    
-    window.location.reload()
-  }
+    });
+
+    window.location.reload();
+  };
 
   const sortedData = data.sort((a, b) => {
-    const dateA = new Date(a.real_time)
-    const dateB = new Date(b.real_time)
-    return dateB - dateA
-  })
+    const dateA = new Date(a.real_time);
+    const dateB = new Date(b.real_time);
+    return dateB - dateA;
+  });
 
-  const indexOfLastResult = currentPage * resultsPerPage
-  const indexOfFirstResult = indexOfLastResult - resultsPerPage
-  const currentResults = sortedData.slice(indexOfFirstResult, indexOfLastResult)
-  const totalPages = Math.ceil(sortedData.length / resultsPerPage)
+  const indexOfLastResult = currentPage * resultsPerPage;
+  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+  const currentResults = sortedData.slice(
+    indexOfFirstResult,
+    indexOfLastResult
+  );
+  const totalPages = Math.ceil(sortedData.length / resultsPerPage);
 
   if (isLoading) {
     return (
@@ -169,7 +175,7 @@ function EventHistory(props) {
           <p className="mt-4 text-gray-500 text-3xl">Loading...</p>
         </div>
       </div>
-    )
+    );
   }
   return (
     <>
@@ -207,7 +213,7 @@ function EventHistory(props) {
                       </p>
                       <div className="my-4 slab font-semibold lg:text-[16px]">
                         <span
-                          style={{ fontStyle: 'normal', marginTop: 100 }}
+                          style={{ fontStyle: "normal", marginTop: 100 }}
                           className="text-time"
                         >
                           {array.sukien[array.sukien.length - 1].real_time}
@@ -266,7 +272,7 @@ function EventHistory(props) {
 
                       <div className="my-4 slab font-semibold lg:text-[16px]">
                         <span
-                          style={{ fontStyle: 'normal', marginTop: 100 }}
+                          style={{ fontStyle: "normal", marginTop: 100 }}
                           className="text-time"
                         >
                           {array.sukien[array.sukien.length - 1].real_time}
@@ -310,7 +316,7 @@ function EventHistory(props) {
 
                     <div className="my-4 slab font-semibold lg:text-[16px]">
                       <span
-                        style={{ fontStyle: 'normal', marginTop: 100 }}
+                        style={{ fontStyle: "normal", marginTop: 100 }}
                         className="text-time"
                       >
                         {array.sukien[array.sukien.length - 1].real_time}
@@ -338,7 +344,7 @@ function EventHistory(props) {
             >
               {array.nodata ? (
                 <span
-                  style={{ marginLeft: '50%' }}
+                  style={{ marginLeft: "50%" }}
                   className=" z-99 text-3xl text-center"
                 >
                   No data
@@ -368,7 +374,7 @@ function EventHistory(props) {
 
                       <div className="my-4 slab font-semibold lg:text-[16px]">
                         <span
-                          style={{ fontStyle: 'normal', marginTop: 100 }}
+                          style={{ fontStyle: "normal", marginTop: 100 }}
                           className="text-time"
                         >
                           {array.sukien[array.sukien.length - 1].real_time}
@@ -404,7 +410,7 @@ function EventHistory(props) {
                         <div
                           style={{
                             backgroundImage: `url(${vec3})`,
-                            marginTop: '20%',
+                            marginTop: "20%",
                           }}
                           className="bg-no-repeat bg-cover lg:w-96 lg:h-96 w-48 h-48 z-10"
                         ></div>
@@ -413,11 +419,11 @@ function EventHistory(props) {
                             backgroundImage: `url(${
                               array.sukien[array.sukien.length - 1].link_nam_goc
                             })`,
-                            borderRadius: '50%',
-                            backgroundSize: 'cover',
+                            borderRadius: "50%",
+                            backgroundSize: "cover",
 
-                            marginTop: '20%', // Thay đổi khoảng cách dọc giữa các ảnh
-                            backgroundPosition: 'center',
+                            marginTop: "20%", // Thay đổi khoảng cách dọc giữa các ảnh
+                            backgroundPosition: "center",
                           }}
                           className="bg-no-repeat bg-cover lg:w-72 lg:h-72 w-36 h-36 absolute"
                         ></div>
@@ -445,7 +451,7 @@ function EventHistory(props) {
 
                       <div className="my-4 slab font-semibold lg:text-[16px]">
                         <span
-                          style={{ fontStyle: 'normal', marginTop: 100 }}
+                          style={{ fontStyle: "normal", marginTop: 100 }}
                           className="text-time"
                         >
                           {/* {array.sukien[array.sukien.length - 1].real_time} */}
@@ -458,7 +464,7 @@ function EventHistory(props) {
                         <div
                           style={{
                             backgroundImage: `url(${vec3})`,
-                            marginTop: '20%',
+                            marginTop: "20%",
                           }}
                           className="bg-no-repeat bg-cover lg:w-96 lg:h-96 w-48 h-48 z-10"
                         ></div>
@@ -467,11 +473,11 @@ function EventHistory(props) {
                             backgroundImage: `url(${
                               array.sukien[array.sukien.length - 1].link_nu_goc
                             })`,
-                            borderRadius: '50%',
-                            backgroundSize: 'cover',
+                            borderRadius: "50%",
+                            backgroundSize: "cover",
 
-                            marginTop: '20%', // Thay đổi khoảng cách dọc giữa các ảnh
-                            backgroundPosition: 'center',
+                            marginTop: "20%", // Thay đổi khoảng cách dọc giữa các ảnh
+                            backgroundPosition: "center",
                           }}
                           className="bg-no-repeat bg-cover lg:w-72 lg:h-72 w-36 h-36 absolute"
                         ></div>
@@ -490,7 +496,7 @@ function EventHistory(props) {
                         <div
                           style={{
                             backgroundImage: `url(${vec4})`,
-                            marginTop: '20%',
+                            marginTop: "20%",
                           }}
                           className="bg-no-repeat bg-cover lg:w-96 lg:h-96 w-48 h-48 z-10"
                         ></div>
@@ -499,11 +505,11 @@ function EventHistory(props) {
                             backgroundImage: `url(${
                               array.sukien[array.sukien.length - 1].link_nam_goc
                             })`,
-                            borderRadius: '50%',
-                            backgroundSize: 'cover',
+                            borderRadius: "50%",
+                            backgroundSize: "cover",
 
-                            marginTop: '20%', // Thay đổi khoảng cách dọc giữa các ảnh
-                            backgroundPosition: 'center',
+                            marginTop: "20%", // Thay đổi khoảng cách dọc giữa các ảnh
+                            backgroundPosition: "center",
                           }}
                           className="bg-no-repeat bg-cover lg:w-72 lg:h-72 w-36 h-36 absolute"
                         ></div>
@@ -531,7 +537,7 @@ function EventHistory(props) {
 
                       <div className="my-4 slab font-semibold lg:text-[16px]">
                         <span
-                          style={{ fontStyle: 'normal', marginTop: 100 }}
+                          style={{ fontStyle: "normal", marginTop: 100 }}
                           className="text-time"
                         >
                           {/* {array.sukien[array.sukien.length - 1].real_time} */}
@@ -544,7 +550,7 @@ function EventHistory(props) {
                         <div
                           style={{
                             backgroundImage: `url(${vec4})`,
-                            marginTop: '20%',
+                            marginTop: "20%",
                           }}
                           className="bg-no-repeat bg-cover lg:w-96 lg:h-96 w-48 h-48 z-10"
                         ></div>
@@ -553,11 +559,11 @@ function EventHistory(props) {
                             backgroundImage: `url(${
                               array.sukien[array.sukien.length - 1].link_nu_goc
                             })`,
-                            borderRadius: '50%',
-                            backgroundSize: 'cover',
+                            borderRadius: "50%",
+                            backgroundSize: "cover",
 
-                            marginTop: '20%', // Thay đổi khoảng cách dọc giữa các ảnh
-                            backgroundPosition: 'center',
+                            marginTop: "20%", // Thay đổi khoảng cách dọc giữa các ảnh
+                            backgroundPosition: "center",
                           }}
                           className="bg-no-repeat bg-cover lg:w-72 lg:h-72 w-36 h-36 absolute"
                         ></div>
@@ -610,7 +616,7 @@ function EventHistory(props) {
         </button>
       </div>
     </>
-  )
+  );
 }
 
-export default EventHistory
+export default EventHistory;

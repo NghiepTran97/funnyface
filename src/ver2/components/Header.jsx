@@ -7,27 +7,23 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineNotification } from "react-icons/ai";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import axios from "axios";
-// const userInfo = window.localStorage.getItem("user-info");
-const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-const idUser = userInfo && userInfo.id_user;
-console.log(idUser);
-// function reverseSortByDateTime(notifications) {
-//   return notifications.slice().sort((a, b) => {
-//     const timeA = new Date(a.time);
-//     const timeB = new Date(b.time);
-//     return timeB - timeA;
-//   });
-// }
+
+import useAuth from "../hooks/useAuth";
 
 function Header({ onSearchChange, onSearch, onClick }) {
   const [showMenu, setShowMenu] = useState(false);
-  const version = useEvenStore((state) => state.version);
-  const setVersion = useEvenStore((state) => state.setVersion);
-  const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
   const [fetchSuccess, setFetchSuccess] = useState(false);
+
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const version = useEvenStore((state) => state.version);
+  const setVersion = useEvenStore((state) => state.setVersion);
+
+  const idUser = user.id_user;
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
@@ -48,13 +44,11 @@ function Header({ onSearchChange, onSearch, onClick }) {
       });
   }, []);
 
-  const user = window.localStorage.getItem("user-info");
   const BackHome = () => {
     navigate("/");
   };
 
   const handleLogout = () => {
-    localStorage.clear();
     navigate("/");
     window.location.reload();
   };

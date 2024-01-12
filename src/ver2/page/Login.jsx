@@ -83,6 +83,7 @@ export default function Login() {
             "https://futurelove.online/"
           ),
         });
+        localStorage.setItem("user-info", JSON.stringify(data));
         localStorage.setItem("accessToken", data.token);
         toast.success("Login success");
         navigate("/");

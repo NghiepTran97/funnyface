@@ -4,12 +4,18 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+
+import useAuth from "../hooks/useAuth";
+
 const ChangePassword = () => {
   const [isActive1, setIsActive1] = useState(false);
   const [isActive2, setIsActive2] = useState(false);
   const [isActive3, setIsActive3] = useState(false);
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const token = userInfo && userInfo.token;
+
+  const { user } = useAuth();
+
+  const token = user.token;
+
   const navigate = useNavigate();
 
   const handleClick1 = () => {
@@ -30,7 +36,7 @@ const ChangePassword = () => {
     formState: { errors },
     reset,
   } = useForm();
-  const user = JSON.parse(window.localStorage.getItem("user-info"));
+
   const server = "https://metatechvn.store";
   const onSubmit = async (data) => {
     if (data.newpassword === data.oldpassword)
@@ -43,14 +49,15 @@ const ChangePassword = () => {
         data.newpassword,
         user.user_name,
         server,
-        user.id_user
+        user.id_user,
+        user.token
       );
       console.log(res);
       if (res.data.ketqua) return toast.error(res.data.ketqua);
       await toast.success("Change password was successful");
       // window.location.reload();
       reset();
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

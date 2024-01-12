@@ -9,6 +9,7 @@ import HistoryCommentList from "./HistoryCommentList";
 import EventListProfile from "./EventListProfile";
 import NotFound from "./NotFound";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
 const ProfileGuest = () => {
   const id = useParams().id;
   const navigate = useNavigate();
@@ -16,7 +17,8 @@ const ProfileGuest = () => {
   const [listEvent, setListEvent] = useState([]);
   const [showEvent, setShowEvent] = useState(false);
   const server = "https://sakaivn.online";
-  const user = JSON.parse(window.localStorage.getItem("user-info"));
+
+  const user = useAuth();
   const idUser1 = user && user.id_user;
 
   const getUser = async (idUser) => {
@@ -118,10 +120,11 @@ const ProfileGuest = () => {
               <div>
                 <img
                   src={
-                    data.link_avatar == "1"
+                    data.link_avatar === "1"
                       ? "https://i.ibb.co/WHmrzPt/106287976-917734608745320-4594528301123064306-n.jpg"
                       : data.link_avatar
                   }
+                  alt="Avatar"
                   className="lg:ml-1 ml-40 lg:w-[130px] lg:h-[130px] w-[100px] h-[100px] border border-white rounded-full object-cover"
                 />
                 <div className="w-full text-center">

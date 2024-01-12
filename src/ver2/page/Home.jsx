@@ -24,16 +24,16 @@ import l4 from "../components/image/loi-4.png";
 import l5 from "../components/image/loi-5.png";
 import l6 from "../components/image/loi-6.jpg";
 
-import imgBg from "../components/image/backgroundLove.jpg";
-
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Clock from "../components/clock";
-
-import * as faceapi from "face-api.js";
-import "../css/AddEvent.css";
-import RenderRandomWaitImage from "../components/randomImages";
 import { useId } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import * as faceapi from "face-api.js";
+import { toast } from "react-toastify";
+import "../css/AddEvent.css";
+
+import useAuth from "../hooks/useAuth";
+import Clock from "../components/clock";
+import imgBg from "../components/image/backgroundLove.jpg";
+import RenderRandomWaitImage from "../components/randomImages";
 
 function Home() {
   const Api_key = "ba35005b6d728bd9197bfd95d64e4e39";
@@ -53,8 +53,8 @@ function Home() {
   const [randomImages, setRandomImages] = useState(null);
   const [isModelWarning, setIsModelWarning] = useState(false);
   const [modelAlert, setModelAlert] = useState({ status: false, message: "" });
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const token = userInfo && userInfo.token;
+  const user = useAuth();
+  const token = user.token;
   const [filled, setFilled] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [hi, setHi] = useState(false);
@@ -186,8 +186,8 @@ function Home() {
         .withFaceExpressions();
 
       if (detections.length > 1) return detections;
-      if (detections2.length == 0) return detections2;
-      if (detections2.length == 1) return detections2;
+      if (detections2.length === 0) return detections2;
+      if (detections2.length === 1) return detections2;
       return detections;
     } catch (error) {
       console.log(error);
@@ -205,7 +205,7 @@ function Home() {
     try {
       if (!URL.createObjectURL(file)) return setShowModal(true);
       const res = await validImage(URL.createObjectURL(file));
-      if (res.length == 0) {
+      if (res.length === 0) {
         setIsLoading(false);
         closeUploadImg();
         return setModelAlert({
@@ -244,7 +244,7 @@ function Home() {
       setIsLoading(false);
       // if (validateImgage(res) == undefined) return;
 
-      if (atImg == "img1") {
+      if (atImg === "img1") {
         let send = showImg;
         send.img1 = URL.createObjectURL(file);
         setShowImg(send);
@@ -283,8 +283,8 @@ function Home() {
         return {
           browser: browser,
           ip: data.ip,
-          nameM: data.ip + " " + "Boy",
-          nameF: data.ip + " " + "Girl",
+          nameM: data.ip + " Boy",
+          nameF: data.ip + " Girl",
         };
       }
       return false;
@@ -294,7 +294,7 @@ function Home() {
     }
   };
 
-  const idUser = userInfo && userInfo.id_user;
+  const idUser = user.id_user;
 
   const uploadImage = async (image) => {
     if (idUser === null) {
@@ -403,7 +403,6 @@ function Home() {
 
   const createEvent = async (srcnam, srcnu, browser, ip, male, female) => {
     try {
-      const user = JSON.parse(window.localStorage.getItem("user-info"));
       if (!user) throw new Error("User info not found");
 
       const response = await axios.get(`${serverGenarateSK}/getdata`, {
@@ -438,7 +437,6 @@ function Home() {
     male,
     female
   ) => {
-    const user = JSON.parse(window.localStorage.getItem("user-info"));
     if (!user) {
       return false;
     }

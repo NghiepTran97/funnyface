@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import { Input, Modal } from 'antd';
+import useAuth from "../hooks/useAuth";
+import { Input, Modal } from "antd";
 
 const { confirm } = Modal;
 
 const RemoveAccount = (props) => {
   const [timeDelete, setTimeDelete] = useState(10);
   const server = "https://metatechvn.store";
-  const user = JSON.parse(window.localStorage.getItem("user-info"));
+
+  const { user } = useAuth();
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (timeDelete > 0) {
@@ -21,67 +24,68 @@ const RemoveAccount = (props) => {
     }, 1000);
     return () => clearInterval(intervalId);
   }, [timeDelete]);
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const token = userInfo && userInfo.token;
 
-
+  const token = user.token;
 
   const onHandleRemove = async () => {
-    let password = '';
+    let password = "";
 
     confirm({
-        title: 'Enter your password',
-        icon: null,
-        content: (
-            <Input.Password
-                onChange={(e) => {
-                    password = e.target.value;
-                }}
-            />
-        ),
-        okButtonProps: { 
-          style: {
-            backgroundColor: 'red', // Set your desired background color
-            borderColor: 'red', // Set border color if needed
-            // Add any other styles you want to customize
-          }
+      title: "Enter your password",
+      icon: null,
+      content: (
+        <Input.Password
+          onChange={(e) => {
+            password = e.target.value;
+          }}
+        />
+      ),
+      okButtonProps: {
+        style: {
+          backgroundColor: "red", // Set your desired background color
+          borderColor: "red", // Set border color if needed
+          // Add any other styles you want to customize
         },
-        onOk() {
-            if (password !== '') {
-                const formData = new FormData();
-                formData.append('password', password);
+      },
+      onOk() {
+        if (password !== "") {
+          const formData = new FormData();
+          formData.append("password", password);
 
-                try {
-                    // Your axios request here
-                    // Assuming you're using `axios`
-                    axios.post(`${server}/deleteuser/${user.id_user}`, formData, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }).then(res => {
-                        if (res.data.message) {
-                            // Xóa thành công
-                            toast.success("Successful account deleted !");
-                            window.localStorage.clear();
-                            setTimeout(() => {
-                                window.location.href = "/login";
-                            }, 2000);
-                        } else {
-                            // Handle case where the password was incorrect
-                            toast.error("Incorrect password. Please try again.");
-                        }
-                    }).catch(error => {
-                        console.log(error);
-                    });
-                } catch (error) {
-                    console.log(error);
+          try {
+            // Your axios request here
+            // Assuming you're using `axios`
+            axios
+              .post(`${server}/deleteuser/${user.id_user}`, formData, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((res) => {
+                if (res.data.message) {
+                  // Xóa thành công
+                  toast.success("Successful account deleted !");
+                  window.localStorage.clear();
+                  setTimeout(() => {
+                    window.location.href = "/login";
+                  }, 2000);
+                } else {
+                  // Handle case where the password was incorrect
+                  toast.error("Incorrect password. Please try again.");
                 }
-            }
-        },
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      },
     });
-};
-return (
+  };
+  return (
     <div className="max-lg:mb-10">
       <div role="alert" className="text-3xl lg:w-[80%] m-auto">
         <div className="bg-red-500 text-white text-4xl rounded-t px-4 py-3">
@@ -97,7 +101,7 @@ return (
           >
             Cancel
           </button>
-          {timeDelete == 0 && (
+          {timeDelete === 0 && (
             <button
               onClick={() => onHandleRemove()}
               className="my-3 py-2 px-5 bg-red-600 hover:bg-red-500 text-white text-3xl mx-3 rounded-lg transition-all"

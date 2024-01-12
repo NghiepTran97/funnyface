@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ChangePassword from "./ChangePassword";
 import RemoveAccount from "./RemoveAccount";
+import useAuth from "../hooks/useAuth";
 
 const ManagerAcount = (props) => {
-  
   const [switchOutlet, setSwitchOutlet] = useState("changePassword");
-  const user = JSON.parse(window.localStorage.getItem("user-info"));
+
+  const { user } = useAuth();
+
   if (!user)
     return <div className="text-xl text-center py-3">Loadding ...</div>;
   return (

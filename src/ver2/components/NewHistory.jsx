@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import { createBrowserHistory } from "history";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Header from "./Header";
 
-import axios from "axios";
+import useAuth from "../hooks/useAuth";
 import CommonEvent from "../page/app/CommonEvent";
 import nam1 from "./image/nam1.png";
 import nu1 from "./image/nu1.png";
 import { useParams } from "react-router";
 import ReactLoading from "react-loading";
 import noAvatar from "./image/no-avatar.png";
-import { createBrowserHistory } from "history";
 import no_avatar from "./image/no-avatar.png";
 import ImagePopup from "../page/app/ImagePopup";
-import { Link } from "react-router-dom";
 import EmptyTemplate from "../page/app/template/EmptyTemplate";
 
 export default function NewHistory() {
@@ -51,8 +52,9 @@ export default function NewHistory() {
     }
   };
 
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  const id_user = userInfo && userInfo.id_user;
+  const { user } = useAuth();
+
+  const id_user = user.id_user;
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {

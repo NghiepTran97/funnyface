@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import no_avatar from "./image/no-avatar.png";
 import useEventStore from "../../utils/store";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
 import { toast } from "react-toastify";
+
+import useAuth from "../hooks/useAuth";
 
 function Comments() {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,12 +23,12 @@ function Comments() {
 
   // };
 
-  const userInfo = JSON.parse(window.localStorage.getItem("user-info"));
-  let idUser = userInfo && userInfo.id_user;
+  const { user } = useAuth();
+
+  let idUser = user.id_user;
   if (idUser === null) {
     idUser = 0;
   }
-
 
   function getTime(time_core) {
     const providedTime = new Date(time_core); // Lưu ý: Tháng bắt đầu từ 0 (0 - 11)
@@ -109,13 +110,11 @@ function Comments() {
 
       setIsLoading(false);
     } catch (error) {
-      console.error('Có lỗi khi lấy dữ liệu:', error.message);
+      console.error("Có lỗi khi lấy dữ liệu:", error.message);
       // Thêm mã xử lý lỗi nếu cần thiết
       setIsLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     fetchData();
@@ -132,7 +131,7 @@ function Comments() {
 
     return dateB - dateA;
   });
-  
+
   const visitProfile = (idsk, so_thu_tu_su_kien) => {
     navigate(`/detail/${idsk}/${so_thu_tu_su_kien}`);
   };
@@ -140,7 +139,7 @@ function Comments() {
   // const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   // const currentResults = dataSort.slice(indexOfFirstResult, indexOfLastResult);
   // const totalPages = Math.ceil(dataSort.length / resultsPerPage);
-  const totalPages = 100
+  const totalPages = 100;
   // Show cmt
   const [showMoreStates, setShowMoreStates] = useState({});
   const showCmt = (id) => {
@@ -246,7 +245,7 @@ function Comments() {
           );
         })}
       </ul>
-      
+
       <div className="overflow-x-auto d-none">
         <div className="pagination text-4xl flex justify-start items-center my-6">
           <button
@@ -269,8 +268,9 @@ function Comments() {
             <button
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
-              className={`mx-1 text-white font-medium py-2 px-3 rounded ${countCM === index + 1 ? 'bg-red-700' : 'bg-[#ff9f9f]'
-                }`}
+              className={`mx-1 text-white font-medium py-2 px-3 rounded ${
+                countCM === index + 1 ? "bg-red-700" : "bg-[#ff9f9f]"
+              }`}
             >
               {index + 1}
             </button>
